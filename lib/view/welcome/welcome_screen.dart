@@ -1,109 +1,143 @@
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
+import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
 
-import '../../components/constants.dart';
-import '../../components/native_clipper.dart';
-
-class WelcomeScreen extends StatefulWidget {
+class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<WelcomeScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<WelcomeScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DoubleBackToCloseApp(
-        snackBar: const SnackBar(content: Text('Tap back again to exit')),
-        child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(color: primaryColor),
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const SizedBox(
-                  height: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 400,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(150),
-                              topRight: Radius.circular(150),
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
+      body: Padding(
+        padding: const EdgeInsets.all(
+          defaultPadding,
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 1.25,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.grey,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "gambar pelengkap",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 16,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Text(
+                      "Alternatif Pesan Vaksinasi",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text("Make The World",
-                              style: TextStyle(
-                                  color: Color(0xFFCC8899),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text("100%",
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center),
-                        ],
+                    ),
+                    const Text(
+                      "Pesan Vaksinasi",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
-                      const Text("Vaccinated",
-                          style: TextStyle(
-                              color: Color(0xFFCC8899),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center),
-                      const SizedBox(
-                        height: 30,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      "Dapat dilakukan di mana pun dan kapan pun dengan mudah",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
                       ),
-                      const Text(
-                          "Vaccination is a simple, safe & effective way of protecting you against COVID19",
-                          style: TextStyle(
-                              color: Colors.black26,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 64,
+              ),
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Colors.black,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(NavigatorSlideTransition(
+                        child: const RegisterScreen(),
+                        direction: AxisDirection.right));
+                  },
+                  child: const Text(
+                    "Register",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                ClipPath(
-                  clipper: NativeClipper(),
-                  child: Container(
-                    height: 100,
-                    width: 300,
-                    decoration: const BoxDecoration(
-                      color: secondColor,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Sudah punya akun?",
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.arrow_forward,
-                          size: 40,
-                          color: Colors.white,
-                        )),
                   ),
-                )
-              ],
-            ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        NavigatorSlideTransition(
+                          child: const LoginScreen(),
+                          direction: AxisDirection.right,
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

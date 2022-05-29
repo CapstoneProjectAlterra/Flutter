@@ -1,60 +1,84 @@
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:vaccine_booking/component/constans.dart';
-// import 'package:vaccine_booking/component/navigator_fade_transition.dart';
-// import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
+import 'package:flutter/material.dart';
 
-// class SplashScreen extends StatefulWidget {
-//   const SplashScreen({Key? key}) : super(key: key);
+import '../view/welcome/welcome_screen.dart';
+import 'constants.dart';
+import 'navigator_fade_transition.dart';
 
-//   @override
-//   State<SplashScreen> createState() => _SplashScreenState();
-// }
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
-// class _SplashScreenState extends State<SplashScreen> {
-//   startTime() async {
-//     await Future.delayed(const Duration(seconds: 3), () {
-//       Navigator.of(context).pushReplacement(
-//           NavigatorFadeTransition(child: const WelcomeScreen()));
-//     });
-//   }
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     startTime();
-//   }
+class _SplashScreenState extends State<SplashScreen> {
+  startTime() async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        Navigator.of(context).pushReplacement(
+          NavigatorFadeTransition(
+            child: const WelcomeScreen(),
+          ),
+        );
+      },
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         width: double.infinity,
-//         height: double.infinity,
-//         decoration: const BoxDecoration(
-//             gradient: LinearGradient(
-//                 begin: Alignment.topCenter,
-//                 end: Alignment.bottomCenter,
-//                 colors: [Color(0xff0072FF), Color(0xff68F3F8)])),
-//         child: SafeArea(
-//           child: Padding(
-//             padding: const EdgeInsets.all(defaultPadding),
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 SizedBox(
-//                     width: 70,
-//                     height: 70,
-//                     child: Image.asset("assets/images/logo.png")),
-//                 Text("Vaccine Booking",
-//                     style: GoogleFonts.fjallaOne(
-//                         color: Colors.white, fontSize: 22)),
-//                 const SizedBox(height: 22)
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  void initState() {
+    super.initState();
+    startTime();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(
+            defaultPadding,
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+              ),
+              Container(
+                width: 200,
+                height: 200,
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      100,
+                    ),
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    "logo",
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                "Vaccine Booking",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                "versi 1.0",
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

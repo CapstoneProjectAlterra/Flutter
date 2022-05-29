@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'view/welcome/welcome_screen.dart';
+import 'package:vaccine_booking/components/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +10,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+            color: Colors.white,
+            elevation: 0,
+            iconTheme: IconThemeData(color: Colors.black)),
+      ),
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
