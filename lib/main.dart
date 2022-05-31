@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaccine_booking/components/botnavbar.dart';
 import 'package:vaccine_booking/components/splash_screen.dart';
 
 void main() {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {'/botnavbar': (context) => const BotNavBar()},
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
             color: Colors.white,

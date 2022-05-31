@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vaccine_booking/components/botnavbar.dart';
 
 import '../../components/constants.dart';
 import '../../components/navigator_slide_transition.dart';
-import '../home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -153,11 +153,12 @@ class _RegisterState extends State<LoginScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).pushAndRemoveUntil(
                             NavigatorSlideTransition(
-                              child: const HomeScreen(),
+                              child: const BotNavBar(),
                               direction: AxisDirection.left,
                             ),
+                            ModalRoute.withName('/botnavbar'),
                           );
                         }
                       },
