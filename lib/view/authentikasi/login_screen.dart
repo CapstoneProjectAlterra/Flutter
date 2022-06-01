@@ -158,7 +158,7 @@ class _RegisterState extends State<LoginScreen> {
                               child: const BotNavBar(),
                               direction: AxisDirection.left,
                             ),
-                            ModalRoute.withName('/botnavbar'),
+                            ModalRoute.withName('/home'),
                           );
                         }
                       },

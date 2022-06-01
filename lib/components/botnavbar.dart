@@ -2,7 +2,9 @@ import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/home/home_screen.dart';
+import 'package:vaccine_booking/view/profile/profile_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_screen.dart';
 
 class BotNavBar extends StatefulWidget {
@@ -13,103 +15,104 @@ class BotNavBar extends StatefulWidget {
 }
 
 class _BotNavBarState extends State<BotNavBar> {
+  final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> thirdTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fourthTabNavKey = GlobalKey<NavigatorState>();
+
+  late CupertinoTabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = CupertinoTabController(initialIndex: 0);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final listOfKeys = [
+      firstTabNavKey,
+      secondTabNavKey,
+      thirdTabNavKey,
+      fourthTabNavKey
+    ];
+    List listScreen = [
+      const HomeScreen(),
+      const VaksinasiScreen(),
+      const HistoryScreen(),
+      const ProfileScreen()
+    ];
     return SafeArea(
-      child: DoubleBack(
-        message: "Press back again to exit",
+      child: WillPopScope(
+        onWillPop: () async {
+          return !await listOfKeys[tabController.index]
+              .currentState!
+              .maybePop();
+        },
         child: CupertinoTabScaffold(
-          tabBar: CupertinoTabBar(
-            height: 70,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.home,
-                  color: Colors.black,
+            controller: tabController,
+            tabBar: CupertinoTabBar(
+              height: 70,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.home,
+                    color: Colors.black,
+                  ),
+                  icon: Icon(
+                    Icons.home_outlined,
+                    color: Colors.grey,
+                  ),
+                  label: 'Home',
                 ),
-                icon: Icon(
-                  Icons.home_outlined,
-                  color: Colors.grey,
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    LineIcons.syringe,
+                    color: Colors.black,
+                  ),
+                  icon: Icon(
+                    LineIcons.syringe,
+                    color: Colors.grey,
+                  ),
+                  label: 'Vaksinasi',
                 ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  LineIcons.syringe,
-                  color: Colors.black,
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.receipt_long,
+                    color: Colors.black,
+                  ),
+                  icon: Icon(
+                    Icons.receipt_long_outlined,
+                    color: Colors.grey,
+                  ),
+                  label: 'History',
                 ),
-                icon: Icon(
-                  LineIcons.syringe,
-                  color: Colors.grey,
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.account_circle,
+                    color: Colors.black,
+                  ),
+                  icon: Icon(
+                    Icons.account_circle_outlined,
+                    color: Colors.grey,
+                  ),
+                  label: 'Profile',
                 ),
-                label: 'Vaksinasi',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.receipt_long,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.receipt_long_outlined,
-                  color: Colors.grey,
-                ),
-                label: 'History',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.account_circle,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.account_circle_outlined,
-                  color: Colors.grey,
-                ),
-                label: 'Profile',
-              ),
-            ],
-            activeColor: Colors.black,
-            inactiveColor: Colors.grey,
-          ),
-          tabBuilder: (BuildContext context, int index) {
-            switch (index) {
-              case 0:
-                return CupertinoTabView(
+              ],
+              activeColor: Colors.black,
+              inactiveColor: Colors.grey,
+            ),
+            tabBuilder: (BuildContext context, int index) {
+              return DoubleBack(
+                message: "Press back again to exit",
+                child: CupertinoTabView(
+                  navigatorKey: listOfKeys[index],
                   builder: (context) {
-                    return const CupertinoPageScaffold(
-                      child: HomeScreen(),
-                    );
+                    return listScreen[index];
                   },
-                );
-              case 1:
-                return CupertinoTabView(
-                  builder: (context) {
-                    return const CupertinoPageScaffold(
-                        child: VaksinasiScreen());
-                  },
-                );
-              case 2:
-                return CupertinoTabView(
-                  builder: (context) {
-                    return const CupertinoPageScaffold(
-                      child: Center(
-                        child: Text("History"),
-                      ),
-                    );
-                  },
-                );
-              default:
-                return CupertinoTabView(
-                  builder: (context) {
-                    return const CupertinoPageScaffold(
-                      child: Center(
-                        child: Text("Profile"),
-                      ),
-                    );
-                  },
-                );
-            }
-          },
-        ),
+                ),
+              );
+            }),
       ),
     );
   }

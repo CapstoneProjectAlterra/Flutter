@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 color: Colors.black,
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.20,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Column(
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Text(
                         "Home",
                         style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 24,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             "Halo,",
                             style: TextStyle(
-                                fontSize: 18, color: Colors.grey.shade100),
+                                fontSize: 20, color: Colors.grey.shade100),
                           ),
                           const SizedBox(
                             width: 4,
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const Text(
                             "Nama User!",
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -79,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Container(
                           height: 180,
                           width: MediaQuery.of(context).size.width * 0.85,
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.all(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(20),
                             ),
                           ),
@@ -128,6 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: MediaQuery.of(context).size.height * 0.68,
                         child: newsListView(),
                       ),
+                      const SizedBox(
+                        height: 64,
+                      ),
                     ],
                   ),
                 ),
@@ -153,9 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 80,
               width: 80,
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade400,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
