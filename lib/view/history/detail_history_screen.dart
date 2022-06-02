@@ -92,7 +92,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                       ],
                     ),
                     Positioned(
-                      bottom: 31,
+                      bottom: 30,
                       child: DottedBorder(
                         customPath: (size) {
                           return Path()
@@ -120,7 +120,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                         },
                         color: Colors.black,
                         dashPattern: const [8, 5],
-                        strokeWidth: 2,
+                        strokeWidth: 1,
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.84,
                           height: 250,

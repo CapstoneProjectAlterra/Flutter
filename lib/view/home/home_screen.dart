@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/view/history/history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -129,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: newsListView(),
                       ),
                       const SizedBox(
-                        height: 64,
+                        height: 95,
                       ),
                     ],
                   ),
@@ -151,71 +153,79 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.vertical,
       itemCount: 6,
       itemBuilder: (context, index) {
-        return Row(
-          children: [
-            Container(
-              height: 80,
-              width: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              NavigatorSlideTransition(
+                  child: const HistoryScreen(), direction: AxisDirection.right),
+            );
+          },
+          child: Row(
+            children: [
+              Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Judul",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 28,
-                ),
-                Row(
-                  children: [
-                    LineIcon(
-                      LineIcons.clock,
-                      size: 18,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    const Text(
-                      "waktu dipublikasikan",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        LineIcon(
-                          LineIcons.pencilRuler,
-                          size: 18,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        const Text(
-                          "nama penulis",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(
+                width: 8,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Judul",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  const SizedBox(
+                    height: 28,
+                  ),
+                  Row(
+                    children: [
+                      LineIcon(
+                        LineIcons.clock,
+                        size: 18,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      const Text(
+                        "waktu dipublikasikan",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          LineIcon(
+                            LineIcons.pencilRuler,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          const Text(
+                            "nama penulis",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );

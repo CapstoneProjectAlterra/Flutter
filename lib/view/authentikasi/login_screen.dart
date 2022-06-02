@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/components/botnavbar.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
+import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
 
 import '../../components/constants.dart';
 import '../../components/navigator_slide_transition.dart';
@@ -13,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _RegisterState extends State<LoginScreen> {
+  bool isLoading = false;
   final _passwordEditingController = TextEditingController();
   final _nikEditingController = TextEditingController();
 
@@ -128,7 +132,9 @@ class _RegisterState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(
+                  height: 32,
+                ),
                 Center(
                   child: SizedBox(
                     height: 50,
@@ -144,22 +150,42 @@ class _RegisterState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        "LOGIN",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () {
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              "LOGIN",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                      onPressed: () async {
+                        if (isLoading) return;
+                        setState(() => isLoading = true);
+                        await Future.delayed(
+                          const Duration(seconds: 2),
+                        );
+                        setState(() => isLoading = false);
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          Navigator.of(context).pushAndRemoveUntil(
-                            NavigatorSlideTransition(
-                              child: const BotNavBar(),
-                              direction: AxisDirection.left,
-                            ),
-                            ModalRoute.withName('/home'),
-                          );
+
+                          await Future.delayed(
+                            const Duration(seconds: 2),
+                          )
+                              .then(
+                                (value) async =>
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                  NavigatorFadeTransition(
+                                    child: const BotNavBar(),
+                                  ),
+                                  ModalRoute.withName('/home'),
+                                ),
+                              )
+                              .then(
+                                (_) => Fluttertoast.showToast(
+                                    msg: "Berhasil Login"),
+                              );
                         }
                       },
                     ),
@@ -167,6 +193,37 @@ class _RegisterState extends State<LoginScreen> {
                 ),
                 const SizedBox(
                   height: 32,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Belum punya akun?",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          NavigatorSlideTransition(
+                            child: const RegisterScreen(),
+                            direction: AxisDirection.right,
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
