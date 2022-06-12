@@ -34,39 +34,64 @@ const IconThemeData iconTheme = IconThemeData(color: Colors.white, size: 28);
 
 ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
   style: ButtonStyle(
-    textStyle: MaterialStateProperty.resolveWith<TextStyle?>(
+    foregroundColor: MaterialStateProperty.resolveWith(
+      (states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Colors.grey;
+        }
+        if (states.contains(MaterialState.pressed)) {
+          return Colors.orange;
+        }
+        return Colors.white;
+      },
+    ),
+    textStyle: MaterialStateProperty.resolveWith(
       (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Poppins',
+          );
+        }
         if (states.contains(MaterialState.pressed)) {
           return const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: primaryColor);
-        }
-        return const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
-            color: Colors.white);
+          );
+        }
+        return const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'Poppins',
+        );
       },
     ),
     side: MaterialStateProperty.resolveWith<BorderSide?>(
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) {
-          return const BorderSide(color: buttonColorSecondary);
+        if (states.contains(MaterialState.disabled)) {
+          return BorderSide(width: 2, color: Colors.grey.shade600);
         }
+        if (states.contains(MaterialState.pressed)) {
+          return const BorderSide(width: 2, color: buttonColorSecondary);
+        }
+
         return null;
       },
     ),
     overlayColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) return buttonColorSecondary;
+        if (states.contains(MaterialState.pressed)) return Colors.white;
         return primaryColor;
       },
     ),
     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) return buttonColorSecondary;
+        if (states.contains(MaterialState.disabled)) {
+          return Colors.grey.shade600;
+        }
+        if (states.contains(MaterialState.pressed)) return Colors.white;
         return primaryColor;
       },
     ),

@@ -245,12 +245,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget lengkapiDataButton() {
     return ElevatedButton(
       onPressed: () {},
-      child: Text(
+      child: const Text(
         "Lengkapi Data Diri",
-        style: Theme.of(context)
-            .textTheme
-            .headline5!
-            .copyWith(color: Colors.white),
+        style: TextStyle(fontSize: 12),
       ),
     );
   }

@@ -137,12 +137,8 @@ class _RegisterState extends State<LoginScreen> {
               ? const CircularProgressIndicator(
                   color: Colors.white,
                 )
-              : Text(
+              : const Text(
                   "LOGIN",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(color: Colors.white),
                 ),
           onPressed: () async {
             if (isLoading) return;

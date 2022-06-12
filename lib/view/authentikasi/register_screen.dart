@@ -91,12 +91,8 @@ class _RegisterState extends State<RegisterScreen> {
                                   ? const CircularProgressIndicator(
                                       color: Colors.white,
                                     )
-                                  : Text(
+                                  : const Text(
                                       "REGISTER",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4!
-                                          .copyWith(color: Colors.white),
                                     ),
                               onPressed: () async {
                                 _formKey.currentState!.save();
