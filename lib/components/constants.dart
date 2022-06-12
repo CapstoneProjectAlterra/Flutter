@@ -40,7 +40,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
           return Colors.grey;
         }
         if (states.contains(MaterialState.pressed)) {
-          return Colors.orange;
+          return Colors.white;
         }
         return Colors.white;
       },
@@ -71,10 +71,10 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
     side: MaterialStateProperty.resolveWith<BorderSide?>(
       (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return BorderSide(width: 2, color: Colors.grey.shade600);
+          return BorderSide(width: 1, color: Colors.grey.shade600);
         }
         if (states.contains(MaterialState.pressed)) {
-          return const BorderSide(width: 2, color: buttonColorSecondary);
+          return const BorderSide(width: 1, color: buttonColorLight);
         }
 
         return null;
@@ -82,7 +82,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
     ),
     overlayColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) return Colors.white;
+        if (states.contains(MaterialState.pressed)) return buttonColorPrimary;
         return primaryColor;
       },
     ),
@@ -91,7 +91,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
         if (states.contains(MaterialState.disabled)) {
           return Colors.grey.shade600;
         }
-        if (states.contains(MaterialState.pressed)) return Colors.white;
+        if (states.contains(MaterialState.pressed)) return buttonColorPrimary;
         return primaryColor;
       },
     ),
