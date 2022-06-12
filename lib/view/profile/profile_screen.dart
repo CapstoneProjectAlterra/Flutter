@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
+import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/view/splash/splash_screen.dart';
+import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
+import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -10,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final deleteToken = Provider.of<AuthViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -171,9 +179,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushReplacement(
+                              NavigatorFadeTransition(
+                                child: const SplashScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.logout),
+                        TextButton(
+                          onPressed: () {
+                            deleteToken.deleteToken();
+                            Navigator.of(context, rootNavigator: true)
+                                .pushReplacement(
+                              NavigatorSlideTransition(
+                                  child: const WelcomeScreen(),
+                                  direction: AxisDirection.right),
+                            );
+                            Fluttertoast.showToast(msg: "Berhasil Keluar");
+                          },
+                          child: Text(
+                            "keluar akun",
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 100,

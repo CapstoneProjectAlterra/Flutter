@@ -151,7 +151,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context, rootNavigator: true).push(
                           NavigatorSlideTransition(
                               child: const VaksinasiBookingScreen(),
                               direction: AxisDirection.right),
@@ -191,7 +191,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                             height: 20,
                             width: 20,
                             child: SvgPicture.asset(
-                                "assets/icon/document_search.svg")),
+                                "assets/icons/document_search.svg")),
                         const SizedBox(
                           width: 4,
                         ),

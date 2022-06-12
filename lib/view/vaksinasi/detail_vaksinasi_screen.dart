@@ -137,7 +137,7 @@ class _DetailVaksinasiScreenState extends State<DetailVaksinasiScreen> {
               SizedBox(
                 height: 30,
                 child: customDetailVaksinasiRow2(
-                    icon: SvgPicture.asset("assets/icon/syringe.svg"),
+                    icon: SvgPicture.asset("assets/icons/syringe.svg"),
                     title: "Vaksin A, Dosis Pertama"),
               ),
               const SizedBox(
@@ -146,7 +146,7 @@ class _DetailVaksinasiScreenState extends State<DetailVaksinasiScreen> {
               SizedBox(
                 height: 30,
                 child: customDetailVaksinasiRow2(
-                    icon: SvgPicture.asset("assets/icon/datetime.svg"),
+                    icon: SvgPicture.asset("assets/icons/datetime.svg"),
                     title: "Hari, tanggal, jam sesi"),
               ),
               const SizedBox(

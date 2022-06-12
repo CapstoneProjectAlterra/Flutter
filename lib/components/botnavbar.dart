@@ -1,5 +1,7 @@
+import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:vaccine_booking/components/constants.dart';
 
 import 'tab_navigator.dart';
 
@@ -30,102 +32,110 @@ class _BotNavBarState extends State<BotNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
-      },
-      child: Scaffold(
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            _buildOffstageNavigator("Screen1"),
-            _buildOffstageNavigator("Screen2"),
-            _buildOffstageNavigator("Screen3"),
-            _buildOffstageNavigator("Screen4"),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0)),
-                boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0.0, 1.00),
-                      blurRadius: 15,
-                      color: Colors.grey,
-                      spreadRadius: 1.00),
-                ],
-              ),
-              height: 80,
-              child: ClipRRect(
-                clipBehavior: Clip.hardEdge,
-                borderRadius: const BorderRadius.only(
+    return DoubleBack(
+      message: "Press back again to exit",
+      child: WillPopScope(
+        onWillPop: () async {
+          return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        },
+        child: Scaffold(
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              _buildOffstageNavigator("Screen1"),
+              _buildOffstageNavigator("Screen2"),
+              _buildOffstageNavigator("Screen3"),
+              _buildOffstageNavigator("Screen4"),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(0)),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0.0, 1.00),
+                        blurRadius: 15,
+                        color: Colors.grey,
+                        spreadRadius: 1.00),
+                  ],
+                ),
+                height: 80,
+                child: ClipRRect(
+                  clipBehavior: Clip.hardEdge,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),
                     bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0)),
-                child: BottomNavigationBar(
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  backgroundColor: const Color.fromRGBO(255, 255, 255, 50),
-                  selectedItemColor: Colors.black,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (int index) {
-                    _selectTab(pageKeys[index], index);
-                  },
-                  currentIndex: _selectedIndex,
-                  items: const [
-                    BottomNavigationBarItem(
-                      activeIcon: Icon(
-                        Icons.home,
-                        color: Colors.black,
+                    bottomRight: Radius.circular(0),
+                  ),
+                  child: BottomNavigationBar(
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    backgroundColor: const Color.fromRGBO(255, 255, 255, 50),
+                    selectedItemColor: primaryColor,
+                    unselectedItemColor: Colors.grey,
+                    onTap: (int index) {
+                      _selectTab(pageKeys[index], index);
+                    },
+                    currentIndex: _selectedIndex,
+                    items: [
+                      const BottomNavigationBarItem(
+                        activeIcon: Icon(
+                          Icons.home,
+                          color: primaryColor,
+                        ),
+                        icon: Icon(
+                          Icons.home_outlined,
+                          color: Colors.grey,
+                        ),
+                        label: 'Home',
                       ),
-                      icon: Icon(
-                        Icons.home_outlined,
-                        color: Colors.grey,
+                      BottomNavigationBarItem(
+                        activeIcon: SvgPicture.asset(
+                          'assets/icons/syringe.svg',
+                          height: 30,
+                          width: 30,
+                          color: primaryColor,
+                        ),
+                        icon: SvgPicture.asset(
+                          'assets/icons/syringe.svg',
+                          height: 30,
+                          width: 30,
+                          color: Colors.grey,
+                        ),
+                        label: 'Vaksinasi',
                       ),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon: Icon(
-                        LineIcons.syringe,
-                        color: Colors.black,
+                      const BottomNavigationBarItem(
+                        activeIcon: Icon(
+                          Icons.receipt_long,
+                          color: primaryColor,
+                        ),
+                        icon: Icon(
+                          Icons.receipt_long_outlined,
+                          color: Colors.grey,
+                        ),
+                        label: 'History',
                       ),
-                      icon: Icon(
-                        LineIcons.syringe,
-                        color: Colors.grey,
-                      ),
-                      label: 'Vaksinasi',
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon: Icon(
-                        Icons.receipt_long,
-                        color: Colors.black,
-                      ),
-                      icon: Icon(
-                        Icons.receipt_long_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: 'History',
-                    ),
-                    BottomNavigationBarItem(
-                      activeIcon: Icon(
-                        Icons.account_circle,
-                        color: Colors.black,
-                      ),
-                      icon: Icon(
-                        Icons.account_circle_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: 'Profile',
-                    )
-                  ],
+                      const BottomNavigationBarItem(
+                        activeIcon: Icon(
+                          Icons.account_circle,
+                          color: primaryColor,
+                        ),
+                        icon: Icon(
+                          Icons.account_circle_outlined,
+                          color: Colors.grey,
+                        ),
+                        label: 'Profile',
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
