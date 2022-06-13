@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vaccine_booking/components/navigator_slide_transition.dart';
-import 'package:vaccine_booking/view/history/history_vaccine_screen.dart';
+import 'package:vaccine_booking/view/history/detail_history_screen.dart';
 
 import '../../components/constants.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+class HistoryVaccineScreen extends StatelessWidget {
+  const HistoryVaccineScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,9 +95,9 @@ class HistoryScreen extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context, rootNavigator: true).push(
                   NavigatorSlideTransition(
-                      child: const HistoryVaccineScreen(),
+                      child: const DetailHistoryScreen(),
                       direction: AxisDirection.right),
                 );
               },
@@ -107,7 +107,7 @@ class HistoryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Udin Sedunia",
+                      "Vaksin Pertama",
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),
@@ -124,7 +124,7 @@ class HistoryScreen extends StatelessWidget {
           ),
         );
       },
-      itemCount: 3,
+      itemCount: 1,
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_slide_transition.dart';
-import '../welcome/welcome_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -40,11 +39,7 @@ class _RegisterState extends State<RegisterScreen> {
                     height: 16,
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      NavigatorSlideTransition(
-                          child: const WelcomeScreen(),
-                          direction: AxisDirection.left),
-                    ),
+                    onTap: () => Navigator.pop(context),
                     child: SvgPicture.asset(
                       'assets/icons/arrow_back.svg',
                       width: 36,

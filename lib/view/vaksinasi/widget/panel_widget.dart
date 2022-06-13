@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 
-import '../../components/navigator_slide_transition.dart';
-import 'detail_vaksinasi_screen.dart';
+import '../../../components/navigator_slide_transition.dart';
+import '../detail_vaksinasi_screen.dart';
 
 class PanelWidget extends StatefulWidget {
   final PanelController panelController;

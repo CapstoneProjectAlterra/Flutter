@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:vaccine_booking/components/constants.dart';
@@ -35,14 +36,15 @@ class NewsScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    IconButton(
-                      iconSize: 30,
-                      icon: const Icon(Icons.arrow_back),
-                      color: Colors.black,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: SvgPicture.asset(
+                        'assets/icons/arrow_back.svg',
+                        color: Colors.white,
+                        width: 40,
+                        height: 40,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -115,9 +117,6 @@ class NewsScreen extends StatelessWidget {
                 news.content,
                 style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-              )
             ],
           ),
         ),

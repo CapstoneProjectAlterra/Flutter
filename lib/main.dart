@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeScreen(),
         },
         theme: ThemeData(
+          appBarTheme: appBarTheme,
           textTheme: textTheme,
           elevatedButtonTheme: elevatedButtonTheme,
         ),

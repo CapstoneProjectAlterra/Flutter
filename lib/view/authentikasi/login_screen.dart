@@ -7,7 +7,6 @@ import 'package:vaccine_booking/components/botnavbar.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/model/authentikasi/login_model.dart';
 import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
-import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 import '../../components/constants.dart';
@@ -52,11 +51,7 @@ class _RegisterState extends State<LoginScreen> {
                   height: 16,
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    NavigatorSlideTransition(
-                        child: const WelcomeScreen(),
-                        direction: AxisDirection.left),
-                  ),
+                  onTap: () => Navigator.pop(context),
                   child: SvgPicture.asset(
                     'assets/icons/arrow_back.svg',
                     width: 36,

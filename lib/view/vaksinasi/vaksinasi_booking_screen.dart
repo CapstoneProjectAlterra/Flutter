@@ -3,7 +3,7 @@ import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/view/vaksinasi/panel_widget.dart';
+import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
 
 class VaksinasiBookingScreen extends StatefulWidget {
   const VaksinasiBookingScreen({Key? key}) : super(key: key);

@@ -220,19 +220,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      viewModel.newsList[index].judul.length > 17
-                          ? '${viewModel.newsList[index].judul.substring(0, 30)}...'
-                          : viewModel.newsList[index].judul,
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(color: Colors.white),
-                    ),
-                  ],
+                child: Container(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    viewModel.newsList[index].judul.length > 17
+                        ? '${viewModel.newsList[index].judul.substring(0, 30)}...'
+                        : viewModel.newsList[index].judul,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(color: Colors.white),
+                  ),
                 ),
               ),
             ),
