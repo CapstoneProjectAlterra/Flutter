@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
 class MoreFacilityScreen extends StatelessWidget {
-  const MoreFacilityScreen({Key? key}) : super(key: key);
+  final String image;
+  const MoreFacilityScreen({Key? key, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +20,39 @@ class MoreFacilityScreen extends StatelessWidget {
           leadingWidth: 35,
           title: Row(
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SvgPicture.asset(
-                      'assets/icons/arrow_back.svg',
-                      height: 35,
-                      width: 35,
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 16),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: SvgPicture.asset(
+                        'assets/icons/arrow_back.svg',
+                        height: 35,
+                        width: 35,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Text(
-                    "Fasilitas Kesehatan",
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                ],
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      "Fasilitas Kesehatan",
+                      style: Theme.of(context).textTheme.headline2,
+                    ),
+                  ],
+                ),
               ),
               const Spacer(),
-              Material(
-                color: Colors.white,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    CupertinoIcons.search,
-                    size: 32,
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0, right: 12),
+                child: Material(
+                  color: Colors.white,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      CupertinoIcons.search,
+                      size: 32,
+                    ),
                   ),
                 ),
               ),
@@ -60,11 +69,139 @@ class MoreFacilityScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              location(context)
+              location(context),
+              const SizedBox(
+                height: 16,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height,
+                child: listFacility(),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget listFacility() {
+    return ListView.separated(
+        scrollDirection: Axis.vertical,
+        separatorBuilder: (context, index) {
+          return const SizedBox(
+            height: 16,
+          );
+        },
+        itemBuilder: (context, index) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.17,
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1.8,
+                  blurRadius: 2,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(image), fit: BoxFit.cover),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                    ),
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.3,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "RS AMC",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2!
+                                  .copyWith(color: Colors.black),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/reserve.svg',
+                                    width: 16, height: 16, color: primaryColor),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "Kuota Tersedia",
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        left: MediaQuery.of(context).size.width * 0.3,
+                        bottom: 0,
+                        right: 0,
+                        child: buttonText(context),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+        itemCount: 6);
+  }
+
+  Widget buttonText(context) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              NavigatorSlideTransition(
+                  child: const VaksinasiBookingScreen(),
+                  direction: AxisDirection.right),
+            );
+          },
+          child: Text(
+            'Selengkapnya',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2!
+                .copyWith(color: primaryColor),
+          ),
+        ),
+        const Icon(
+          Icons.keyboard_arrow_right,
+          color: primaryColor,
+          size: 14,
+        ),
+      ],
     );
   }
 
@@ -73,8 +210,10 @@ class MoreFacilityScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: defaultPadding),
       child: Row(
         children: [
-          const Icon(
-            Icons.location_on,
+          SvgPicture.asset(
+            'assets/icons/location.svg',
+            width: 24,
+            height: 24,
             color: primaryColor,
           ),
           const SizedBox(

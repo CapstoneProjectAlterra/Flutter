@@ -12,6 +12,8 @@ const statusSuccess = Color(0XFF52C41A);
 const statusDanger = Color(0XFFF5222D);
 const statusWarning = Color(0XFFFFAD14);
 const statusInfo = Color(0XFF1890FF);
+const pressedColor = Color(0xff03484E);
+const lowPressedColor = Color(0xffCDE9EB);
 
 const LinearGradient gradientVertical = LinearGradient(
   begin: Alignment.topCenter,
@@ -33,18 +35,19 @@ const InputDecorationTheme inputDecorationTheme = InputDecorationTheme();
 const IconThemeData iconTheme = IconThemeData(color: Colors.white, size: 28);
 
 AppBarTheme appBarTheme = const AppBarTheme(
+    titleSpacing: 0,
     iconTheme: IconThemeData(color: Colors.black),
     elevation: 0,
     backgroundColor: Colors.white);
 
-ButtonStyle lowButtonStyle = ButtonStyle(
+ButtonStyle secondStateButton = ButtonStyle(
   foregroundColor: MaterialStateProperty.resolveWith(
     (states) {
       if (states.contains(MaterialState.disabled)) {
         return Colors.grey;
       }
       if (states.contains(MaterialState.pressed)) {
-        return Colors.white;
+        return pressedColor;
       }
       return primaryColor;
     },
@@ -53,20 +56,20 @@ ButtonStyle lowButtonStyle = ButtonStyle(
     (Set<MaterialState> states) {
       if (states.contains(MaterialState.disabled)) {
         return const TextStyle(
-          fontSize: 10.0,
+          fontSize: 16.0,
           fontWeight: FontWeight.w400,
           fontFamily: 'Poppins',
         );
       }
       if (states.contains(MaterialState.pressed)) {
         return const TextStyle(
-          fontSize: 10.0,
+          fontSize: 16.0,
           fontWeight: FontWeight.w600,
           fontFamily: 'Poppins',
         );
       }
       return const TextStyle(
-        fontSize: 10.0,
+        fontSize: 16.0,
         fontWeight: FontWeight.w600,
         fontFamily: 'Poppins',
       );
@@ -78,16 +81,16 @@ ButtonStyle lowButtonStyle = ButtonStyle(
         return BorderSide(width: 1, color: Colors.grey.shade600);
       }
       if (states.contains(MaterialState.pressed)) {
-        return const BorderSide(width: 1, color: primaryColor);
+        return const BorderSide(width: 2, color: pressedColor);
       }
 
-      return const BorderSide(width: 1, color: primaryColor);
+      return const BorderSide(width: 2, color: primaryColor);
     },
   ),
   overlayColor: MaterialStateProperty.resolveWith<Color?>(
     (Set<MaterialState> states) {
-      if (states.contains(MaterialState.pressed)) return primaryColor;
-      return primaryColor;
+      if (states.contains(MaterialState.pressed)) return lowPressedColor;
+      return Colors.white;
     },
   ),
   backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -95,7 +98,7 @@ ButtonStyle lowButtonStyle = ButtonStyle(
       if (states.contains(MaterialState.disabled)) {
         return Colors.grey.shade600;
       }
-      if (states.contains(MaterialState.pressed)) return primaryColor;
+      if (states.contains(MaterialState.pressed)) return lowPressedColor;
       return Colors.white;
     },
   ),
@@ -148,7 +151,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
           return BorderSide(width: 1, color: Colors.grey.shade600);
         }
         if (states.contains(MaterialState.pressed)) {
-          return const BorderSide(width: 1, color: buttonColorLight);
+          return const BorderSide(width: 1, color: pressedColor);
         }
 
         return null;
@@ -156,7 +159,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
     ),
     overlayColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) return buttonColorPrimary;
+        if (states.contains(MaterialState.pressed)) return pressedColor;
         return primaryColor;
       },
     ),
@@ -165,7 +168,7 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
         if (states.contains(MaterialState.disabled)) {
           return Colors.grey.shade600;
         }
-        if (states.contains(MaterialState.pressed)) return buttonColorPrimary;
+        if (states.contains(MaterialState.pressed)) return pressedColor;
         return primaryColor;
       },
     ),

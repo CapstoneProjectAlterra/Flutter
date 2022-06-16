@@ -7,7 +7,8 @@ import 'package:vaccine_booking/view/vaksinasi/more_facility_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
 class VaksinasiScreen extends StatefulWidget {
-  const VaksinasiScreen({Key? key}) : super(key: key);
+  final String? image;
+  const VaksinasiScreen({Key? key, this.image}) : super(key: key);
 
   @override
   State<VaksinasiScreen> createState() => _VaksinasiScreenState();
@@ -77,7 +78,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                               height: 32,
                             ),
                             SizedBox(
-                              height: 55,
+                              height: 50,
                               child: searchTextField(),
                             ),
                             const SizedBox(
@@ -96,7 +97,11 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                                           fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                    height: 25, width: 100, child: moreButton())
+                                  height: 25,
+                                  width: 100,
+                                  child: moreButton(
+                                      'https://i.postimg.cc/RFM34wYb/a.png'),
+                                )
                               ],
                             ),
                           ],
@@ -120,13 +125,14 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     );
   }
 
-  Widget moreButton() {
+  Widget moreButton(image) {
     return ElevatedButton(
-      style: lowButtonStyle,
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push(
           NavigatorSlideTransition(
-              child: const MoreFacilityScreen(),
+              child: MoreFacilityScreen(
+                image: image,
+              ),
               direction: AxisDirection.right),
         );
       },
@@ -142,6 +148,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
       autofocus: false,
       controller: searchController,
       decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
         hintStyle: Theme.of(context)
             .textTheme
             .bodyText1!

@@ -219,16 +219,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.only(left: 12.0, bottom: 8.0, right: 8),
                 child: Container(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    viewModel.newsList[index].judul.length > 17
-                        ? '${viewModel.newsList[index].judul.substring(0, 30)}...'
-                        : viewModel.newsList[index].judul,
+                    viewModel.newsList[index].judul,
                     style: Theme.of(context)
                         .textTheme
-                        .subtitle1!
+                        .subtitle2!
                         .copyWith(color: Colors.white),
                   ),
                 ),

@@ -32,12 +32,12 @@ class _BotNavBarState extends State<BotNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBack(
-      message: "Press back again to exit",
-      child: WillPopScope(
-        onWillPop: () async {
-          return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+      },
+      child: DoubleBack(
+        message: "Press back again to exit",
         child: Scaffold(
           body: Stack(
             alignment: Alignment.bottomCenter,
@@ -82,13 +82,17 @@ class _BotNavBarState extends State<BotNavBar> {
                     },
                     currentIndex: _selectedIndex,
                     items: [
-                      const BottomNavigationBarItem(
-                        activeIcon: Icon(
-                          Icons.home,
+                      BottomNavigationBarItem(
+                        activeIcon: SvgPicture.asset(
+                          'assets/icons/home.svg',
+                          height: 24,
+                          width: 24,
                           color: primaryColor,
                         ),
-                        icon: Icon(
-                          Icons.home_outlined,
+                        icon: SvgPicture.asset(
+                          'assets/icons/home.svg',
+                          height: 24,
+                          width: 24,
                           color: Colors.grey,
                         ),
                         label: 'Home',
@@ -96,14 +100,14 @@ class _BotNavBarState extends State<BotNavBar> {
                       BottomNavigationBarItem(
                         activeIcon: SvgPicture.asset(
                           'assets/icons/syringe.svg',
-                          height: 30,
-                          width: 30,
+                          height: 24,
+                          width: 24,
                           color: primaryColor,
                         ),
                         icon: SvgPicture.asset(
                           'assets/icons/syringe.svg',
-                          height: 30,
-                          width: 30,
+                          height: 24,
+                          width: 24,
                           color: Colors.grey,
                         ),
                         label: 'Vaksinasi',
@@ -119,14 +123,18 @@ class _BotNavBarState extends State<BotNavBar> {
                         ),
                         label: 'History',
                       ),
-                      const BottomNavigationBarItem(
-                        activeIcon: Icon(
-                          Icons.account_circle,
+                      BottomNavigationBarItem(
+                        activeIcon: SvgPicture.asset(
+                          'assets/icons/user.svg',
                           color: primaryColor,
+                          width: 24,
+                          height: 24,
                         ),
-                        icon: Icon(
-                          Icons.account_circle_outlined,
+                        icon: SvgPicture.asset(
+                          'assets/icons/user.svg',
                           color: Colors.grey,
+                          width: 24,
+                          height: 24,
                         ),
                         label: 'Profile',
                       )

@@ -44,7 +44,7 @@ class NewsScreen extends StatelessWidget {
                         width: 40,
                         height: 40,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
