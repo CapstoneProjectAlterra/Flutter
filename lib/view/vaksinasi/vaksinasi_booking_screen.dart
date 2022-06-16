@@ -202,9 +202,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       int? tahap,
       String? time,
       double? widthBorder}) {
-    return AnimatedContainer(
-      curve: Curves.bounceOut,
-      duration: const Duration(seconds: 2),
+    return Container(
       width: dateCtl.text.isNotEmpty
           ? MediaQuery.of(context).size.width * 0.39
           : 0,

@@ -136,8 +136,12 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
               direction: AxisDirection.right),
         );
       },
-      child: const Text(
+      child: Text(
         "Lihat Semua",
+        style: Theme.of(context)
+            .textTheme
+            .caption!
+            .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }

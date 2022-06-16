@@ -27,15 +27,25 @@ class _PanelWidgetState extends State<PanelWidget> {
       child: Column(
         children: [
           const SizedBox(
-            height: 16,
+            height: 20,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
           ),
           Row(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.34,
+                width: MediaQuery.of(context).size.width * 0.38,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.53,
+                width: MediaQuery.of(context).size.width * 0.49,
                 child: const Text(
                   "Pilih Anggota",
                   style: TextStyle(
