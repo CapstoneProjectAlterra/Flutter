@@ -106,7 +106,93 @@ class _PanelWidgetState extends State<PanelWidget> {
                       .headline4!
                       .copyWith(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.55,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Icon(Icons.close,
+                                        color: primaryColor, size: 32),
+                                  ),
+                                ),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/successBooking.png'),
+                                        fit: BoxFit.fill),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  "Pemesanan Sukses!",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(color: primaryColor),
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 32, right: 32),
+                                  child: Text(
+                                    "Tiket vaksin kamu sudah dapat dilihat di halaman tiket.",
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: Colors.grey.shade500),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Center(
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                        child: const Text(
+                                          "Lihat Tiket",
+                                        ),
+                                        onPressed: () {}),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ),
