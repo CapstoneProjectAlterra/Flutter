@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
+
+import '../edit_data_screen.dart';
 
 class PanelWidget extends StatefulWidget {
   final PanelController panelController;
@@ -179,10 +183,17 @@ class _PanelWidgetState extends State<PanelWidget> {
                                     height: 50,
                                     width: double.infinity,
                                     child: ElevatedButton(
-                                        child: const Text(
-                                          "Lihat Tiket",
-                                        ),
-                                        onPressed: () {}),
+                                      child: const Text(
+                                        "Lihat Tiket",
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          NavigatorFadeTransition(
+                                            child: const HistoryScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
@@ -232,12 +243,26 @@ class _PanelWidgetState extends State<PanelWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Nama Lengkap",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(color: Colors.black),
+                    Row(
+                      children: [
+                        Text(
+                          "Nama Lengkap",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.black),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Saya",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(color: Colors.grey.shade700),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 4,
@@ -266,12 +291,31 @@ class _PanelWidgetState extends State<PanelWidget> {
                   ],
                 ),
                 const Spacer(),
-                Material(
-                  color: secondColorLow,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.delete),
-                  ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        NavigatorFadeTransition(
+                          child: const EditDataScreen(),
+                        ),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/edit.svg',
+                        color: Colors.black,
+                        width: 25,
+                        height: 25,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: SvgPicture.asset(
+                        'assets/icons/delete.svg',
+                        color: Colors.black,
+                        width: 25,
+                        height: 25,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

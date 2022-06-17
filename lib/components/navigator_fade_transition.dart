@@ -4,8 +4,8 @@ class NavigatorFadeTransition extends PageRouteBuilder {
   final Widget child;
   NavigatorFadeTransition({required this.child})
       : super(
-            reverseTransitionDuration: const Duration(milliseconds: 1000),
-            transitionDuration: const Duration(milliseconds: 1000),
+            reverseTransitionDuration: const Duration(milliseconds: 300),
+            transitionDuration: const Duration(milliseconds: 300),
             pageBuilder: (context, animation, secondaryAnimation) => child);
 
   @override
