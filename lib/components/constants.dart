@@ -44,7 +44,7 @@ ButtonStyle secondStateButton = ButtonStyle(
   foregroundColor: MaterialStateProperty.resolveWith(
     (states) {
       if (states.contains(MaterialState.disabled)) {
-        return Colors.grey;
+        return Colors.grey.shade300;
       }
       if (states.contains(MaterialState.pressed)) {
         return pressedColor;

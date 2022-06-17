@@ -180,6 +180,13 @@ class ProfileScreen extends StatelessWidget {
         SizedBox(
           height: 45,
           child: customProfile(
+              icon: 'assets/icons/address.svg',
+              title: "Tempat Lahir",
+              context: context),
+        ),
+        SizedBox(
+          height: 45,
+          child: customProfile(
               icon: 'assets/icons/datetime.svg',
               title: "Tanggal Lahir",
               context: context),
