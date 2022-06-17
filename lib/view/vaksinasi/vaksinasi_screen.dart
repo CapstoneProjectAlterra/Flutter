@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/more_facility_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
@@ -129,11 +129,11 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push(
-          NavigatorSlideTransition(
-              child: MoreFacilityScreen(
-                image: image,
-              ),
-              direction: AxisDirection.right),
+          NavigatorFadeTransition(
+            child: MoreFacilityScreen(
+              image: image,
+            ),
+          ),
         );
       },
       child: Text(
@@ -211,9 +211,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
-                            NavigatorSlideTransition(
-                                child: const VaksinasiBookingScreen(),
-                                direction: AxisDirection.right),
+                            NavigatorFadeTransition(
+                              child: const VaksinasiBookingScreen(),
+                            ),
                           );
                         },
                         child: Container(

@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
-import '../../components/navigator_slide_transition.dart';
+import '../../components/navigator_fade_transition.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -106,9 +106,8 @@ class _RegisterState extends State<RegisterScreen> {
                                     ).then(
                                       (value) async => Navigator.of(context)
                                           .pushAndRemoveUntil(
-                                        NavigatorSlideTransition(
+                                        NavigatorFadeTransition(
                                           child: const BotNavBar(),
-                                          direction: AxisDirection.left,
                                         ),
                                         ModalRoute.withName('/home'),
                                       ),

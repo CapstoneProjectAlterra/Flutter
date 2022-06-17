@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
 class MoreFacilityScreen extends StatelessWidget {
@@ -183,9 +183,9 @@ class MoreFacilityScreen extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).push(
-              NavigatorSlideTransition(
-                  child: const VaksinasiBookingScreen(),
-                  direction: AxisDirection.right),
+              NavigatorFadeTransition(
+                child: const VaksinasiBookingScreen(),
+              ),
             );
           },
           child: Text(

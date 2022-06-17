@@ -10,7 +10,6 @@ import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 import '../../components/constants.dart';
-import '../../components/navigator_slide_transition.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -104,9 +103,8 @@ class _RegisterState extends State<LoginScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context).push(
-                          NavigatorSlideTransition(
+                          NavigatorFadeTransition(
                             child: const RegisterScreen(),
-                            direction: AxisDirection.right,
                           ),
                         );
                       },

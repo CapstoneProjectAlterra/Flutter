@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/profile/edit_profile.dart';
 import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
@@ -80,9 +80,9 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               Navigator.of(context, rootNavigator: true).push(
-                                NavigatorSlideTransition(
-                                    child: const EditProfileScreen(),
-                                    direction: AxisDirection.right),
+                                NavigatorFadeTransition(
+                                  child: const EditProfileScreen(),
+                                ),
                               );
                             },
                           ),
@@ -101,9 +101,9 @@ class ProfileScreen extends StatelessWidget {
                               deleteToken.deleteToken();
                               Navigator.of(context, rootNavigator: true)
                                   .pushReplacement(
-                                NavigatorSlideTransition(
-                                    child: const WelcomeScreen(),
-                                    direction: AxisDirection.right),
+                                NavigatorFadeTransition(
+                                  child: const WelcomeScreen(),
+                                ),
                               );
                               Fluttertoast.showToast(msg: "Berhasil Keluar");
                             },

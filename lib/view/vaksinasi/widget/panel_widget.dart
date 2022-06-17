@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
 
@@ -87,9 +86,9 @@ class _PanelWidgetState extends State<PanelWidget> {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(
-                    NavigatorSlideTransition(
-                        child: const RegisterFamilyScreen(),
-                        direction: AxisDirection.right),
+                    NavigatorFadeTransition(
+                      child: const RegisterFamilyScreen(),
+                    ),
                   );
                 },
               ),
@@ -280,7 +279,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                           width: 4,
                         ),
                         Text(
-                          "3205415605604560".replaceAll(RegExp(r"."), "*"),
+                          "3205415605604560",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!

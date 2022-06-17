@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/news/news_screen.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 
@@ -199,11 +199,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return GestureDetector(
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(
-              NavigatorSlideTransition(
+              NavigatorFadeTransition(
                 child: NewsScreen(
                   news: viewModel.newsList[index],
                 ),
-                direction: AxisDirection.right,
               ),
             );
           },
@@ -245,8 +244,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context).push(
-          NavigatorSlideTransition(
-              child: const EditProfileScreen(), direction: AxisDirection.right),
+          NavigatorFadeTransition(
+            child: const EditProfileScreen(),
+          ),
         );
       },
       child: const Text(

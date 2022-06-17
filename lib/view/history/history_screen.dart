@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/history/history_vaccine_screen.dart';
 
 import '../../components/constants.dart';
@@ -96,9 +96,9 @@ class HistoryScreen extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  NavigatorSlideTransition(
-                      child: const HistoryVaccineScreen(),
-                      direction: AxisDirection.right),
+                  NavigatorFadeTransition(
+                    child: const HistoryVaccineScreen(),
+                  ),
                 );
               },
               child: Padding(

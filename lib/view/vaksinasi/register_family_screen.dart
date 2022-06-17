@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
-import '../../components/navigator_slide_transition.dart';
+import '../../components/navigator_fade_transition.dart';
 
 class RegisterFamilyScreen extends StatefulWidget {
   const RegisterFamilyScreen({Key? key}) : super(key: key);
@@ -146,9 +146,8 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                     ).then(
                                       (value) async => Navigator.of(context)
                                           .pushAndRemoveUntil(
-                                        NavigatorSlideTransition(
+                                        NavigatorFadeTransition(
                                           child: const BotNavBar(),
-                                          direction: AxisDirection.left,
                                         ),
                                         ModalRoute.withName('/home'),
                                       ),

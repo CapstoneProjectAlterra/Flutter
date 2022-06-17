@@ -112,7 +112,7 @@ class DetailHistoryScreen extends StatelessWidget {
           height: 8,
         ),
         Text(
-          "$subtitle".replaceAll(RegExp(r"."), "*"),
+          subtitle!,
           style: Theme.of(context)
               .textTheme
               .subtitle1!

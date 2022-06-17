@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vaccine_booking/components/navigator_slide_transition.dart';
+import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
@@ -81,9 +81,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         InkWell(
           onTap: () {
             Navigator.of(context).push(
-              NavigatorSlideTransition(
+              NavigatorFadeTransition(
                 child: const LoginScreen(),
-                direction: AxisDirection.right,
               ),
             );
           },
@@ -97,8 +96,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context).push(
-          NavigatorSlideTransition(
-              child: const RegisterScreen(), direction: AxisDirection.right),
+          NavigatorFadeTransition(
+            child: const RegisterScreen(),
+          ),
         );
       },
       child: const Text(
