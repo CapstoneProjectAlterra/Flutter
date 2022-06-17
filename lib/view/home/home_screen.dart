@@ -5,6 +5,8 @@ import 'package:vaccine_booking/components/navigator_slide_transition.dart';
 import 'package:vaccine_booking/view/news/news_screen.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 
+import '../profile/edit_profile.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -241,7 +243,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget lengkapiDataButton() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(
+          NavigatorSlideTransition(
+              child: const EditProfileScreen(), direction: AxisDirection.right),
+        );
+      },
       child: const Text(
         "Lengkapi Data Diri",
         style: TextStyle(fontSize: 12),
