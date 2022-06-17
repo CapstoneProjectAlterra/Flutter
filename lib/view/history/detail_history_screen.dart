@@ -18,7 +18,7 @@ class DetailHistoryScreen extends StatelessWidget {
                 height: 32,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.472,
+                height: MediaQuery.of(context).size.height * 0.431,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 36),
                   child: Stack(
@@ -34,7 +34,7 @@ class DetailHistoryScreen extends StatelessWidget {
                             height: 16,
                           ),
                           Text(
-                            "Nama Pemesan",
+                            "Tiket Vaksin",
                             style:
                                 Theme.of(context).textTheme.headline1!.copyWith(
                                       color: Colors.white,
@@ -54,9 +54,9 @@ class DetailHistoryScreen extends StatelessWidget {
                               ..moveTo(20, 0)
                               ..lineTo(size.width - 20, 0);
                           },
-                          color: tertiary,
-                          dashPattern: const [8, 5],
-                          strokeWidth: 1,
+                          color: Colors.grey.shade500,
+                          dashPattern: const [4, 2],
+                          strokeWidth: 2,
                           child: containerProgramVaccine(context),
                         ),
                       ),
@@ -86,13 +86,12 @@ class DetailHistoryScreen extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Text("$subtitle",
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(color: Colors.black)),
-        Divider(
-          color: Colors.grey.shade400,
+        Text(
+          "$subtitle",
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(color: Colors.black),
         ),
       ],
     );
@@ -112,13 +111,12 @@ class DetailHistoryScreen extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Text("$subtitle".replaceAll(RegExp(r"."), "*"),
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(color: Colors.black)),
-        Divider(
-          color: Colors.grey.shade400,
+        Text(
+          "$subtitle".replaceAll(RegExp(r"."), "*"),
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(color: Colors.black),
         ),
       ],
     );
@@ -152,7 +150,7 @@ class DetailHistoryScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Vaksin Pertama",
+              "Berliana Bjorn",
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!
@@ -171,11 +169,11 @@ class DetailHistoryScreen extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  "1234567",
+                  "000012",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2!
-                      .copyWith(color: Colors.black),
+                      .headline3!
+                      .copyWith(color: primaryColor),
                 ),
               ],
             ),
@@ -190,70 +188,137 @@ class DetailHistoryScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
       ),
       width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 32,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 32),
+            child: Text(
+              "Detail Tiket",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(color: Colors.black),
             ),
-            Text("Detail Tiket",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline2!
-                    .copyWith(color: Colors.black)),
-            const SizedBox(
-              height: 28,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Divider(
+            color: Colors.grey.shade500,
+            height: 10,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 32, right: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket(
+                      title: "Nama Lengkap",
+                      subtitle: "Nama Lengkap Pemesan",
+                      context: context),
+                ),
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket2(
+                      title: "NIK",
+                      subtitle: "3210504864521345",
+                      context: context),
+                ),
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket(
+                      title: "Tanggal Lahir",
+                      subtitle: "YY-MM-DD",
+                      context: context),
+                ),
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket(
+                      title: "Jenis Kelamin",
+                      subtitle: "Perempuan",
+                      context: context),
+                ),
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket(
+                      title: "No. HP",
+                      subtitle: "083905456024",
+                      context: context),
+                ),
+                SizedBox(
+                  height: 75,
+                  child: customColumnDetailTicket(
+                      title: "Alamat",
+                      subtitle: "Jl. sentosa",
+                      context: context),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.79,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 75,
+                        child: customColumnDetailTicket(
+                            title: "Jenis Vaksin",
+                            subtitle: "Astra Zaneca",
+                            context: context),
+                      ),
+                      SizedBox(
+                        height: 75,
+                        child: customColumnDetailTicket(
+                            title: "Dosis ke", subtitle: "1", context: context),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      child: customColumnDetailTicket(
+                          title: "Tanggal Vaksinasi",
+                          subtitle: "Kamis, 16 Juli 2022",
+                          context: context),
+                    ),
+                    SizedBox(
+                      height: 75,
+                      child: customColumnDetailTicket(
+                          title: "Waktu",
+                          subtitle: "08:00-09:00",
+                          context: context),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 85,
+                  child: Flexible(
+                    child: customColumnDetailTicket(
+                        title: "Lokasi Vaksin",
+                        subtitle:
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                        context: context),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "Nama Lengkap",
-                  subtitle: "Nama Lengkap Pemesan",
-                  context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket2(
-                  title: "NIK", subtitle: "3210504864521345", context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "Tanggal Lahir",
-                  subtitle: "YY-MM-DD",
-                  context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "Jenis Kelamin",
-                  subtitle: "Perempuan",
-                  context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "No. HP", subtitle: "083905456024", context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "Alamat", subtitle: "Jl. sentosa", context: context),
-            ),
-            SizedBox(
-              height: 90,
-              child: customColumnDetailTicket(
-                  title: "Jenis Vaksin",
-                  subtitle: "Vaksin A",
-                  context: context),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -261,7 +326,7 @@ class DetailHistoryScreen extends StatelessWidget {
   Widget containerProgramVaccine(context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.84,
-      height: 160,
+      height: 125,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -272,39 +337,95 @@ class DetailHistoryScreen extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              "Program Vaksinasi",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: Colors.grey.shade600),
+            Row(
+              children: [
+                detaiVaccine(
+                    context: context,
+                    title: 'Astra Zaneca',
+                    assetIcon: 'assets/icons/syringe2.svg'),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.343),
+                detaiVaccine(
+                    context: context,
+                    title: 'Dosis 1',
+                    assetIcon: 'assets/icons/dose.svg'),
+              ],
             ),
-            Text(
-              "Vaksin Program Pemerintah",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: Colors.black),
+            const SizedBox(
+              height: 8,
             ),
-            Text(
-              "Lokasi dan Jadwal Vaksinasi",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: Colors.grey.shade600),
+            Row(
+              children: [
+                Row(
+                  children: [
+                    detaiVaccine(
+                        context: context,
+                        title: 'Kamis, 16 Juli 2022',
+                        assetIcon: 'assets/icons/datetime.svg'),
+                  ],
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.281),
+                Row(
+                  children: [
+                    detaiVaccine(
+                        context: context,
+                        title: '08:00 - 09:00',
+                        assetIcon: 'assets/icons/clock.svg'),
+                  ],
+                ),
+              ],
             ),
-            Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in iaculis leo.",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: Colors.black),
+            const SizedBox(
+              height: 8,
             ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/location.svg',
+                  color: primaryColor,
+                  width: 20,
+                  height: 20,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Flexible(
+                  child: Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in iaculis leo.",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(color: Colors.grey.shade800),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget detaiVaccine({context, assetIcon, title}) {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          assetIcon,
+          color: primaryColor,
+          width: 20,
+          height: 20,
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+        Text(
+          title,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2!
+              .copyWith(color: Colors.grey.shade800),
+        ),
+      ],
     );
   }
 }
