@@ -14,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  AssetImage? assetImage;
   startTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await Future.delayed(
@@ -37,7 +38,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    assetImage = const AssetImage('assets/images/logo.png');
     startTime();
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(assetImage!, context);
+    super.didChangeDependencies();
   }
 
   @override
@@ -51,12 +59,14 @@ class _SplashScreenState extends State<SplashScreen> {
               defaultPadding,
             ),
             child: Center(
-              child: Text(
-                "GetVaccine",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(color: Colors.white, fontSize: 32),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: assetImage!,
+                  ),
+                ),
               ),
             ),
           ),

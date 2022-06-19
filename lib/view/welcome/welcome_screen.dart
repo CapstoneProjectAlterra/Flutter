@@ -26,6 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final maxHeight = MediaQuery.of(context).size.height;
     final maxWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
@@ -37,12 +38,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 220,
+                    height: maxHeight * 0.30,
                     width: maxWidth,
                     child: vaccineImage(),
-                  ),
-                  const SizedBox(
-                    height: 16,
                   ),
                   headlineText(),
                   const SizedBox(

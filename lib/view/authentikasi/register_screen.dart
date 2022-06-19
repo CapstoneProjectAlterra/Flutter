@@ -17,6 +17,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterState extends State<RegisterScreen> {
   var obscureText = true;
   bool isLoading = false;
+  String? name;
+  String? nik;
+  String? email;
+  String? password;
   final _nameEditingController = TextEditingController();
   final _nikEditingController = TextEditingController();
   final _emailEditingController = TextEditingController();
@@ -56,70 +60,83 @@ class _RegisterState extends State<RegisterScreen> {
                           color: Colors.black,
                         ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                   Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textFieldName("Nama Lengkap"),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         fieldNamaLengkap(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         textFieldName("NIK"),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         fieldNIK(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         textFieldName("Email"),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         textFieldEmail(),
-                        const SizedBox(height: 16),
-                        textFieldName("Password"),
                         const SizedBox(height: 8),
+                        textFieldName("Password"),
+                        const SizedBox(height: 4),
                         passwordFieldPassword(),
                         const SizedBox(height: 30),
                         Center(
                           child: SizedBox(
                             height: 50,
                             width: double.infinity,
-                            child: ElevatedButton(
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : const Text(
-                                      "REGISTER",
-                                    ),
-                              onPressed: () async {
-                                _formKey.currentState!.save();
-                                if (isLoading) return;
-                                setState(() => isLoading = true);
-                                await Future.delayed(
-                                  const Duration(seconds: 2),
-                                );
-                                setState(() => isLoading = false);
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  try {
-                                    Future.delayed(
-                                      const Duration(seconds: 2),
-                                    ).then(
-                                      (value) async => Navigator.of(context)
-                                          .pushAndRemoveUntil(
-                                        NavigatorFadeTransition(
-                                          child: const BotNavBar(),
-                                        ),
-                                        ModalRoute.withName('/home'),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    Fluttertoast.showToast(
-                                      msg: e.toString(),
-                                    );
-                                  }
-                                }
-                              },
-                            ),
+                            child: name == null ||
+                                    password == null ||
+                                    nik == null ||
+                                    email == null
+                                ? ElevatedButton(
+                                    onPressed: null,
+                                    child: Text("Register",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4!
+                                            .copyWith(color: Colors.white)),
+                                  )
+                                : ElevatedButton(
+                                    child: isLoading
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : const Text(
+                                            "REGISTER",
+                                          ),
+                                    onPressed: () async {
+                                      _formKey.currentState!.save();
+                                      if (isLoading) return;
+                                      setState(() => isLoading = true);
+                                      await Future.delayed(
+                                        const Duration(seconds: 2),
+                                      );
+                                      setState(() => isLoading = false);
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        try {
+                                          Future.delayed(
+                                            const Duration(seconds: 2),
+                                          ).then(
+                                            (value) async =>
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                              NavigatorFadeTransition(
+                                                child: const BotNavBar(),
+                                              ),
+                                              ModalRoute.withName('/home'),
+                                            ),
+                                          );
+                                        } catch (e) {
+                                          Fluttertoast.showToast(
+                                            msg: e.toString(),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
                           ),
                         ),
                       ],
@@ -150,221 +167,228 @@ class _RegisterState extends State<RegisterScreen> {
   }
 
   Widget fieldNamaLengkap() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _nameEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          }
-          return null;
+    return TextFormField(
+      onChanged: (value) => setState(
+        () {
+          name = value;
         },
       ),
+      cursorColor: Colors.white,
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+        hintText: 'input',
+        hintStyle: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade400),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+        ),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        fillColor: Colors.white,
+        filled: true,
+      ),
+      textInputAction: TextInputAction.next,
+      controller: _nameEditingController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Required";
+        }
+        return null;
+      },
     );
   }
 
   Widget fieldNIK() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.phone,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(16),
-        ],
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _nikEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          } else if (value.length < 16) {
-            return "use valid nik";
-          }
-          return null;
+    return TextFormField(
+      onChanged: (value) => setState(
+        () {
+          nik = value;
         },
       ),
+      cursorColor: Colors.white,
+      keyboardType: TextInputType.phone,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(16),
+      ],
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+        hintText: 'input',
+        hintStyle: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade400),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+        ),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        fillColor: Colors.white,
+        filled: true,
+      ),
+      textInputAction: TextInputAction.next,
+      controller: _nikEditingController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Required";
+        } else if (value.length < 16) {
+          return "use valid nik";
+        }
+        return null;
+      },
     );
   }
 
   Widget passwordFieldPassword() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        obscureText: obscureText,
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(
-                () {
-                  obscureText = !obscureText;
-                },
-              );
-            },
-            child: obscureText
-                ? const Icon(
-                    Icons.visibility_off_rounded,
-                    color: Colors.grey,
-                  )
-                : const Icon(Icons.visibility_rounded, color: Colors.grey),
-          ),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(13),
-        ],
-        controller: _passwordEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          } else if (value.length < 8) {
-            return "Minimum password 8 character";
-          }
-          return null;
+    return TextFormField(
+      onChanged: (value) => setState(
+        () {
+          password = value;
         },
       ),
+      obscureText: obscureText,
+      cursorColor: Colors.white,
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(
+              () {
+                obscureText = !obscureText;
+              },
+            );
+          },
+          child: obscureText
+              ? const Icon(
+                  Icons.visibility_off_rounded,
+                  color: Colors.grey,
+                )
+              : const Icon(Icons.visibility_rounded, color: Colors.grey),
+        ),
+        hintText: 'input',
+        hintStyle: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade400),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+        ),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        fillColor: Colors.white,
+        filled: true,
+      ),
+      textInputAction: TextInputAction.next,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(13),
+      ],
+      controller: _passwordEditingController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Required";
+        } else if (value.length < 8) {
+          return "Minimum password 8 character";
+        }
+        return null;
+      },
     );
   }
 
   Widget textFieldEmail() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: buttonColorSecondary,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _emailEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          }
-          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-              .hasMatch(value)) {
-            return "Use valid email";
-          }
-          return null;
+    return TextFormField(
+      onChanged: (value) => setState(
+        () {
+          email = value;
         },
       ),
+      cursorColor: Colors.white,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+        hintText: 'input',
+        hintStyle: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade400),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+        ),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: buttonColorSecondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        fillColor: Colors.white,
+        filled: true,
+      ),
+      textInputAction: TextInputAction.next,
+      controller: _emailEditingController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Required";
+        }
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return "Use valid email";
+        }
+        return null;
+      },
     );
   }
 }
