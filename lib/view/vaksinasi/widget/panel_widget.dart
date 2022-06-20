@@ -27,7 +27,6 @@ class _PanelWidgetState extends State<PanelWidget> {
     int heightTotal = itemCount * 100;
     double totalHeight = heightTotal.toDouble();
     return SingleChildScrollView(
-      controller: widget.controller,
       padding: EdgeInsets.zero,
       child: Column(
         children: [
@@ -216,14 +215,14 @@ class _PanelWidgetState extends State<PanelWidget> {
 
   Widget listDaftarAnggota(itemCount) {
     return ListView.separated(
+      controller: widget.controller,
       scrollDirection: Axis.vertical,
-      physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
         return const Divider(
           color: Colors.white,
         );
       },
-      itemCount: itemCount,
+      itemCount: 5,
       itemBuilder: (context, index) {
         return Container(
           width: 200,

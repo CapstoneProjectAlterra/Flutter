@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/model/home/news_model.dart';
 
@@ -71,13 +69,14 @@ class NewsScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      LineIcon(
-                        LineIcons.clock,
+                      SvgPicture.asset(
+                        'assets/icons/clock2.svg',
                         color: Colors.grey,
-                        size: 18,
+                        width: 18,
+                        height: 18,
                       ),
                       const SizedBox(
-                        width: 4,
+                        width: 8,
                       ),
                       Text(
                         news.waktuPublikasi,
@@ -94,13 +93,14 @@ class NewsScreen extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      LineIcon(
-                        LineIcons.pencilRuler,
+                      SvgPicture.asset(
+                        'assets/icons/leaf.svg',
                         color: Colors.grey,
-                        size: 18,
+                        width: 18,
+                        height: 18,
                       ),
                       const SizedBox(
-                        width: 4,
+                        width: 8,
                       ),
                       Text(
                         news.namaPenulis,

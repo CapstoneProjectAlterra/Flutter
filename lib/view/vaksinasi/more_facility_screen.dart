@@ -5,10 +5,17 @@ import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
-class MoreFacilityScreen extends StatelessWidget {
+class MoreFacilityScreen extends StatefulWidget {
   final String image;
   const MoreFacilityScreen({Key? key, required this.image}) : super(key: key);
 
+  @override
+  State<MoreFacilityScreen> createState() => _MoreFacilityScreenState();
+}
+
+class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
+  bool isExpand = false;
+  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,46 +25,80 @@ class MoreFacilityScreen extends StatelessWidget {
         child: AppBar(
           automaticallyImplyLeading: false,
           leadingWidth: 35,
-          title: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 16),
-                child: Row(
+          title: isExpand
+              ? Row(
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: SvgPicture.asset(
-                        'assets/icons/arrow_back.svg',
-                        height: 35,
-                        width: 35,
+                    Expanded(
+                      child: searchTextField(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(
+                            () {
+                              setState(
+                                () {
+                                  searchController.clear();
+                                },
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 12,
+                  ],
+                )
+              : Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 16),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: SvgPicture.asset(
+                              'assets/icons/arrow_back.svg',
+                              height: 35,
+                              width: 35,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            "Fasilitas Kesehatan",
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      "Fasilitas Kesehatan",
-                      style: Theme.of(context).textTheme.headline2,
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0, right: 12),
+                      child: Material(
+                        color: Colors.white,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                isExpand = true;
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            CupertinoIcons.search,
+                            size: 28,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, right: 12),
-                child: Material(
-                  color: Colors.white,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      CupertinoIcons.search,
-                      size: 32,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -116,7 +157,7 @@ class MoreFacilityScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(image), fit: BoxFit.cover),
+                        image: NetworkImage(widget.image), fit: BoxFit.cover),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),
@@ -225,6 +266,42 @@ class MoreFacilityScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget searchTextField() {
+    return TextField(
+      style: Theme.of(context)
+          .textTheme
+          .bodyText1!
+          .copyWith(color: Colors.grey.shade800),
+      controller: searchController,
+      decoration: InputDecoration(
+          icon: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: IconButton(
+              onPressed: () {
+                setState(
+                  () {
+                    isExpand = false;
+                    searchController.clear();
+                  },
+                );
+              },
+              icon: const Icon(Icons.arrow_back),
+              color: Colors.grey,
+            ),
+          ),
+          contentPadding: const EdgeInsets.only(top: 8),
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          border: InputBorder.none,
+          errorBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          hintText: 'search'),
     );
   }
 }

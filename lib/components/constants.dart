@@ -90,7 +90,7 @@ ButtonStyle secondStateButton = ButtonStyle(
   overlayColor: MaterialStateProperty.resolveWith<Color?>(
     (Set<MaterialState> states) {
       if (states.contains(MaterialState.pressed)) return lowPressedColor;
-      return Colors.white;
+      return null;
     },
   ),
   backgroundColor: MaterialStateProperty.resolveWith<Color?>(

@@ -148,6 +148,10 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
 
   Widget searchTextField() {
     return TextField(
+      style: Theme.of(context)
+          .textTheme
+          .bodyText1!
+          .copyWith(color: Colors.grey.shade800),
       focusNode: FocusNode(canRequestFocus: false),
       autofocus: false,
       controller: searchController,
