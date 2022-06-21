@@ -37,7 +37,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      padding: const EdgeInsets.only(left: 32),
                       child: Text(
                         "Pesan Vaksinasi",
                         style: Theme.of(context).textTheme.headline1!.copyWith(
@@ -58,7 +58,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 36),
+                        padding: const EdgeInsets.only(
+                            left: defaultPadding, right: defaultPadding),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -78,7 +79,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                               height: 32,
                             ),
                             SizedBox(
-                              height: 50,
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.07,
                               child: searchTextField(),
                             ),
                             const SizedBox(
@@ -87,18 +89,23 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Fasilitas kesehatan terdekat",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline3!
-                                      .copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Text(
+                                    "Fasilitas kesehatan terdekat",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 25,
-                                  width: 100,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.03,
+                                  width: 97,
                                   child: moreButton(
                                       'https://i.postimg.cc/RFM34wYb/a.png'),
                                 )
@@ -184,8 +191,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
         filled: true,
         hintText: 'Cari kota, provinsi, kode pos',
         suffixIcon: SizedBox(
-          height: 55,
-          width: 65,
+          height: MediaQuery.of(context).size.height * 0.07,
+          width: MediaQuery.of(context).size.height * 0.07,
           child: ElevatedButton(
             onPressed: () {},
             child: const Icon(CupertinoIcons.search),
@@ -197,7 +204,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
 
   Widget listNearFacility() {
     return Padding(
-      padding: const EdgeInsets.only(left: 36, right: 36),
+      padding:
+          const EdgeInsets.only(left: defaultPadding, right: defaultPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

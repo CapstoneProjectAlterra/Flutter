@@ -62,7 +62,7 @@ class _BotNavBarState extends State<BotNavBar> {
                         spreadRadius: 1.00),
                   ],
                 ),
-                height: 80,
+                height: 65,
                 child: ClipRRect(
                   clipBehavior: Clip.hardEdge,
                   borderRadius: const BorderRadius.only(
@@ -85,14 +85,14 @@ class _BotNavBarState extends State<BotNavBar> {
                       BottomNavigationBarItem(
                         activeIcon: SvgPicture.asset(
                           'assets/icons/home.svg',
-                          height: 24,
-                          width: 24,
+                          height: 18,
+                          width: 18,
                           color: primaryColor,
                         ),
                         icon: SvgPicture.asset(
                           'assets/icons/home.svg',
-                          height: 24,
-                          width: 24,
+                          height: 18,
+                          width: 18,
                           color: Colors.grey,
                         ),
                         label: 'Home',
@@ -100,14 +100,14 @@ class _BotNavBarState extends State<BotNavBar> {
                       BottomNavigationBarItem(
                         activeIcon: SvgPicture.asset(
                           'assets/icons/syringe.svg',
-                          height: 24,
-                          width: 24,
+                          height: 18,
+                          width: 18,
                           color: primaryColor,
                         ),
                         icon: SvgPicture.asset(
                           'assets/icons/syringe.svg',
-                          height: 24,
-                          width: 24,
+                          height: 18,
+                          width: 18,
                           color: Colors.grey,
                         ),
                         label: 'Vaksinasi',
@@ -116,10 +116,12 @@ class _BotNavBarState extends State<BotNavBar> {
                         activeIcon: Icon(
                           Icons.receipt_long,
                           color: primaryColor,
+                          size: 18,
                         ),
                         icon: Icon(
                           Icons.receipt_long_outlined,
                           color: Colors.grey,
+                          size: 18,
                         ),
                         label: 'History',
                       ),
@@ -127,14 +129,14 @@ class _BotNavBarState extends State<BotNavBar> {
                         activeIcon: SvgPicture.asset(
                           'assets/icons/user.svg',
                           color: primaryColor,
-                          width: 24,
-                          height: 24,
+                          width: 18,
+                          height: 18,
                         ),
                         icon: SvgPicture.asset(
                           'assets/icons/user.svg',
                           color: Colors.grey,
-                          width: 24,
-                          height: 24,
+                          width: 18,
+                          height: 18,
                         ),
                         label: 'Profile',
                       )

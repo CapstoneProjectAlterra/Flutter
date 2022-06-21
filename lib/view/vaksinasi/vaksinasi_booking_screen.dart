@@ -26,7 +26,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     return Scaffold(
       body: SlidingUpPanel(
         defaultPanelState: PanelState.CLOSED,
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
+        maxHeight: MediaQuery.of(context).size.height * 0.55,
         minHeight: MediaQuery.of(context).size.height * 0.09,
         controller: panelController,
         parallaxEnabled: true,
@@ -59,7 +59,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     alignment: Alignment.centerLeft,
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      padding: const EdgeInsets.only(left: 16),
                       child: Text(
                         "Pesan Vaksinasi",
                         style: Theme.of(context)
@@ -70,7 +70,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
+                    height: MediaQuery.of(context).size.height * 1.1,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -80,7 +80,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     ),
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -148,7 +148,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                           Center(
                             child: SizedBox(
                               height: 50,
-                              width: MediaQuery.of(context).size.width * 0.85,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               child: tempString.isEmpty
                                   ? const ElevatedButton(
                                       onPressed: null,
@@ -178,9 +178,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                     ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 100,
-                          ),
                         ],
                       ),
                     ),
@@ -204,7 +201,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       double? widthBorder}) {
     return Container(
       width: dateCtl.text.isNotEmpty
-          ? MediaQuery.of(context).size.width * 0.39
+          ? MediaQuery.of(context).size.width * 0.43
           : 0,
       height: dateCtl.text.isNotEmpty ? 100 : 0,
       decoration: BoxDecoration(
@@ -419,7 +416,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
           ],
         ),
         const SizedBox(
-          width: 32,
+          width: 16,
         ),
         Column(
           children: [

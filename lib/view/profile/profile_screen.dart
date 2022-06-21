@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                       Center(
                         child: SizedBox(
                           height: 50,
-                          width: MediaQuery.of(context).size.width * 0.85,
+                          width: MediaQuery.of(context).size.width * 0.9,
                           child: ElevatedButton(
                             child: const Text(
                               "Edit Profile",

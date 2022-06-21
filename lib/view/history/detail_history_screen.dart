@@ -17,54 +17,53 @@ class DetailHistoryScreen extends StatelessWidget {
               const SizedBox(
                 height: 32,
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.431,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 36),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 16,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    backIcon(context),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      "Tiket Vaksin",
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: Colors.white,
                           ),
-                          backIcon(context),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "Tiket Vaksin",
-                            style:
-                                Theme.of(context).textTheme.headline1!.copyWith(
-                                      color: Colors.white,
-                                    ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          ticketContainer(context),
-                        ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    ticketContainer(context),
+                    DottedBorder(
+                      customPath: (size) {
+                        return Path()
+                          ..moveTo(20, 0)
+                          ..lineTo(size.width - 20, 0);
+                      },
+                      color: Colors.grey.shade600,
+                      dashPattern: const [4, 2],
+                      strokeWidth: 2,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.88,
+                        height: 135,
+                        child: containerProgramVaccine(context),
                       ),
-                      Positioned(
-                        bottom: 30,
-                        child: DottedBorder(
-                          customPath: (size) {
-                            return Path()
-                              ..moveTo(20, 0)
-                              ..lineTo(size.width - 20, 0);
-                          },
-                          color: Colors.grey.shade500,
-                          dashPattern: const [4, 2],
-                          strokeWidth: 2,
-                          child: containerProgramVaccine(context),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    )
+                  ],
                 ),
               ),
-              detailTicket(context),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: detailTicket(context),
+              ),
             ],
           ),
         ),
@@ -136,6 +135,7 @@ class DetailHistoryScreen extends StatelessWidget {
 
   Widget ticketContainer(context) {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.88,
       height: 90,
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -192,7 +192,6 @@ class DetailHistoryScreen extends StatelessWidget {
           topRight: Radius.circular(30),
         ),
       ),
-      width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -220,12 +219,13 @@ class DetailHistoryScreen extends StatelessWidget {
             height: 8,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 32, right: 32),
+            padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 75,
+                  width: MediaQuery.of(context).size.width,
                   child: customColumnDetailTicket(
                       title: "Nama Lengkap",
                       subtitle: "Nama Lengkap Pemesan",
@@ -233,12 +233,14 @@ class DetailHistoryScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 75,
+                  width: MediaQuery.of(context).size.width,
                   child: customColumnDetailTicket2(
                       title: "NIK",
                       subtitle: "3210504864521345",
                       context: context),
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width,
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Tanggal Lahir",
@@ -246,6 +248,7 @@ class DetailHistoryScreen extends StatelessWidget {
                       context: context),
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width,
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Jenis Kelamin",
@@ -253,6 +256,7 @@ class DetailHistoryScreen extends StatelessWidget {
                       context: context),
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width,
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "No. HP",
@@ -260,34 +264,33 @@ class DetailHistoryScreen extends StatelessWidget {
                       context: context),
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width,
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Alamat",
                       subtitle: "Jl. sentosa",
                       context: context),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.79,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 75,
-                        child: customColumnDetailTicket(
-                            title: "Jenis Vaksin",
-                            subtitle: "Astra Zaneca",
-                            context: context),
-                      ),
-                      SizedBox(
-                        height: 75,
-                        child: customColumnDetailTicket(
-                            title: "Dosis ke", subtitle: "1", context: context),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      child: customColumnDetailTicket(
+                          title: "Jenis Vaksin",
+                          subtitle: "Astra Zaneca",
+                          context: context),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.34,
+                    ),
+                    SizedBox(
+                      height: 75,
+                      child: customColumnDetailTicket(
+                          title: "Dosis ke", subtitle: "1", context: context),
+                    ),
+                  ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       height: 75,
@@ -295,6 +298,9 @@ class DetailHistoryScreen extends StatelessWidget {
                           title: "Tanggal Vaksinasi",
                           subtitle: "Kamis, 16 Juli 2022",
                           context: context),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.21,
                     ),
                     SizedBox(
                       height: 75,
@@ -307,13 +313,11 @@ class DetailHistoryScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 85,
-                  child: Flexible(
-                    child: customColumnDetailTicket(
-                        title: "Lokasi Vaksin",
-                        subtitle:
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                        context: context),
-                  ),
+                  child: customColumnDetailTicket(
+                      title: "Lokasi Vaksin",
+                      subtitle:
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                      context: context),
                 ),
               ],
             ),
@@ -325,8 +329,6 @@ class DetailHistoryScreen extends StatelessWidget {
 
   Widget containerProgramVaccine(context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.84,
-      height: 125,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -344,7 +346,7 @@ class DetailHistoryScreen extends StatelessWidget {
                     context: context,
                     title: 'Astra Zaneca',
                     assetIcon: 'assets/icons/syringe2.svg'),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.343),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.19),
                 detaiVaccine(
                     context: context,
                     title: 'Dosis 1',
@@ -364,7 +366,7 @@ class DetailHistoryScreen extends StatelessWidget {
                         assetIcon: 'assets/icons/datetime.svg'),
                   ],
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.281),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.11),
                 Row(
                   children: [
                     detaiVaccine(

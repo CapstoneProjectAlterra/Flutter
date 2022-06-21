@@ -57,10 +57,10 @@ class NewsScreen extends StatelessWidget {
             children: [
               Text(
                 news.judul,
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(color: Colors.black),
               ),
               const SizedBox(
                 height: 16,
@@ -115,7 +115,10 @@ class NewsScreen extends StatelessWidget {
               ),
               Text(
                 news.content,
-                style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: Colors.grey.shade700),
               ),
             ],
           ),

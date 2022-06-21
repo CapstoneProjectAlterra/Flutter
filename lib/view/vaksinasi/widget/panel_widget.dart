@@ -23,9 +23,6 @@ class _PanelWidgetState extends State<PanelWidget> {
   bool isBool = false;
   @override
   Widget build(BuildContext context) {
-    int itemCount = 2;
-    int heightTotal = itemCount * 100;
-    double totalHeight = heightTotal.toDouble();
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: Column(
@@ -46,10 +43,10 @@ class _PanelWidgetState extends State<PanelWidget> {
           Row(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.38,
+                width: MediaQuery.of(context).size.width * 0.35,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.49,
+                width: MediaQuery.of(context).size.width * 0.53,
                 child: const Text(
                   "Pilih Anggota",
                   style: TextStyle(
@@ -67,8 +64,8 @@ class _PanelWidgetState extends State<PanelWidget> {
           SingleChildScrollView(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
-              height: totalHeight,
-              child: listDaftarAnggota(itemCount),
+              height: MediaQuery.of(context).size.height * 0.23,
+              child: listDaftarAnggota(),
             ),
           ),
           const SizedBox(
@@ -115,7 +112,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                       return Center(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.55,
+                          height: MediaQuery.of(context).size.height * 0.65,
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(
@@ -213,7 +210,7 @@ class _PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-  Widget listDaftarAnggota(itemCount) {
+  Widget listDaftarAnggota() {
     return ListView.separated(
       controller: widget.controller,
       scrollDirection: Axis.vertical,
@@ -225,7 +222,6 @@ class _PanelWidgetState extends State<PanelWidget> {
       itemCount: 5,
       itemBuilder: (context, index) {
         return Container(
-          width: 200,
           height: 80,
           decoration: const BoxDecoration(
             color: secondColorLow,
@@ -327,8 +323,8 @@ class _PanelWidgetState extends State<PanelWidget> {
     return TextButton(
       onPressed: togglePanel,
       child: SizedBox(
-        height: 25,
-        width: 25,
+        height: 28,
+        width: 28,
         child: SvgPicture.asset(
           'assets/icons/arrow_up.svg',
           color: primaryColor,

@@ -86,9 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.72,
+                  height: MediaQuery.of(context).size.height * 0.82,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: defaultPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -130,8 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget bannerVaksinasi() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.25,
-      width: MediaQuery.of(context).size.width * 0.85,
+      height: 200,
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: const BoxDecoration(
         color: secondColorLow,
         borderRadius: BorderRadius.all(
@@ -165,8 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 16,
                   ),
                   SizedBox(
-                    height: 30,
-                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: 25,
+                    width: 145,
                     child: lengkapiDataButton(),
                   ),
                 ],
@@ -209,8 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.only(right: 32),
             child: Container(
-              height: 200,
-              width: 300,
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(viewModel.newsList[index].image),
@@ -243,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget lengkapiDataButton() {
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(
+        Navigator.of(context, rootNavigator: true).push(
           NavigatorFadeTransition(
             child: const EditProfileScreen(),
           ),
