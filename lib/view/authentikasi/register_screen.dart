@@ -168,6 +168,12 @@ class _RegisterState extends State<RegisterScreen> {
 
   Widget fieldNamaLengkap() {
     return TextFormField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(25),
+        FilteringTextInputFormatter.allow(
+          RegExp("[0-9a-zA-Z]"),
+        ),
+      ],
       onChanged: (value) => setState(
         () {
           name = value;
@@ -330,8 +336,11 @@ class _RegisterState extends State<RegisterScreen> {
       ],
       controller: _passwordEditingController,
       validator: (value) {
+        RegExp regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*?[0-9])');
         if (value!.isEmpty) {
           return "Required";
+        } else if (!regex.hasMatch(value)) {
+          return "password should contain at least one upper case\n, lower case & number";
         } else if (value.length < 8) {
           return "Minimum password 8 character";
         }

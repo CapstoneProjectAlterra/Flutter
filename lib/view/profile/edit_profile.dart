@@ -328,7 +328,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
+                LengthLimitingTextInputFormatter(13),
               ],
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(
@@ -363,7 +363,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               textInputAction: TextInputAction.next,
               controller: controller,
               validator: (value) {
-                if (value!.length < 10) {
+                if (value!.length < 11) {
                   return "use valid number";
                 }
                 return null;

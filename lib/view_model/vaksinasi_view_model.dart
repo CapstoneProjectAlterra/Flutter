@@ -41,7 +41,7 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  searchMoreFacility({String? query, previousQuery}) async {
+  searchMoreFacility({String? query}) async {
     if (query == "") {
       return moreResult = result;
     } else if (query != null) {
