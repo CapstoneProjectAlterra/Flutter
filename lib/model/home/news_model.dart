@@ -1,28 +1,36 @@
 class NewsModel {
-  String judul;
-  String waktuPublikasi;
-  String namaPenulis;
+  String author;
+  String title;
+  String urlToImage;
   String content;
-  String image;
+  String description;
+  String publishedAt;
+  String url;
 
   NewsModel(
-      {required this.judul,
-      required this.waktuPublikasi,
-      required this.namaPenulis,
+      {required this.author,
+      required this.title,
+      required this.urlToImage,
       required this.content,
-      required this.image});
+      required this.description,
+      required this.publishedAt,
+      required this.url});
 
   factory NewsModel.fromJson(Map<String, dynamic> json) => NewsModel(
-      judul: json['judul'],
-      waktuPublikasi: json['waktuPublikasi'],
-      namaPenulis: json['namaPenulis'],
+      author: json['author'],
+      title: json['title'],
+      urlToImage: json['urlToImage'],
       content: json['content'],
-      image: json['image']);
+      description: json['description'],
+      publishedAt: json['publishedAt'],
+      url: json['url']);
   Map<String, dynamic> toJson() => {
-        'judul': judul,
-        'waktuPublikasi': waktuPublikasi,
-        'namaPenulis': namaPenulis,
+        'author': author,
+        'title': title,
+        'urlToImage': urlToImage,
         'content': content,
-        'image': image
+        'description': description,
+        'publishedAt': publishedAt,
+        'url': url
       };
 }

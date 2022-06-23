@@ -1,20 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/more_facility_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
+import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
+
+import '../../components/skeleton_container.dart';
 
 class VaksinasiScreen extends StatefulWidget {
-  final String? image;
-  const VaksinasiScreen({Key? key, this.image}) : super(key: key);
+  const VaksinasiScreen({Key? key}) : super(key: key);
 
   @override
   State<VaksinasiScreen> createState() => _VaksinasiScreenState();
 }
 
 class _VaksinasiScreenState extends State<VaksinasiScreen> {
+  String query = '';
+  bool isInit = true;
   TextEditingController searchController = TextEditingController();
   @override
   void dispose() {
@@ -23,7 +28,18 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (isInit == true) {
+      Provider.of<VaksinasiViewModel>(context, listen: false)
+          .getAllHealthFacilities();
+      isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final healthFacilities = Provider.of<VaksinasiViewModel>(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -47,7 +63,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.85,
+                  height: MediaQuery.of(context).size.height * 0.87,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -81,7 +97,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 0.07,
-                              child: searchTextField(),
+                              child: searchTextField(healthFacilities),
                             ),
                             const SizedBox(
                               height: 32,
@@ -103,11 +119,10 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.03,
+                                  height: MediaQuery.of(context).size.height *
+                                      0.037,
                                   width: 97,
-                                  child: moreButton(
-                                      'https://i.postimg.cc/RFM34wYb/a.png'),
+                                  child: moreButton(healthFacilities),
                                 )
                               ],
                             ),
@@ -119,7 +134,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.5,
-                        child: listNearFacility(),
+                        child: listNearFacility(healthFacilities),
                       ),
                     ],
                   ),
@@ -132,35 +147,37 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     );
   }
 
-  Widget moreButton(image) {
+  Widget moreButton(VaksinasiViewModel healthFacilities) {
     return ElevatedButton(
+      style: lowStateButton,
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push(
           NavigatorFadeTransition(
             child: MoreFacilityScreen(
-              image: image,
+              query: query,
             ),
           ),
         );
       },
-      child: Text(
+      child: const Text(
         "Lihat Semua",
-        style: Theme.of(context)
-            .textTheme
-            .caption!
-            .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 10),
       ),
     );
   }
 
-  Widget searchTextField() {
+  Widget searchTextField(VaksinasiViewModel healthFacilities) {
     return TextField(
+      onSubmitted: (value) => setState(
+        () {
+          String input = value;
+          healthFacilities.searchFacility(query: input);
+        },
+      ),
       style: Theme.of(context)
           .textTheme
           .bodyText1!
           .copyWith(color: Colors.grey.shade800),
-      focusNode: FocusNode(canRequestFocus: false),
-      autofocus: false,
       controller: searchController,
       decoration: InputDecoration(
         contentPadding:
@@ -182,7 +199,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: buttonColorSecondary,
+            color: pressedColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(15),
@@ -194,7 +211,12 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
           height: MediaQuery.of(context).size.height * 0.07,
           width: MediaQuery.of(context).size.height * 0.07,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                query = searchController.text;
+                healthFacilities.searchFacility(query: query);
+              });
+            },
             child: const Icon(CupertinoIcons.search),
           ),
         ),
@@ -202,7 +224,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     );
   }
 
-  Widget listNearFacility() {
+  Widget listNearFacility(VaksinasiViewModel healthFacilities) {
     return Padding(
       padding:
           const EdgeInsets.only(left: defaultPadding, right: defaultPadding),
@@ -213,8 +235,13 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 6,
+              itemCount: query.isEmpty
+                  ? healthFacilities.facilityList.length
+                  : healthFacilities.result.length,
               itemBuilder: (context, index) {
+                if (healthFacilities.facilityList.isEmpty) {
+                  return buildSkeleton();
+                }
                 return Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: Column(
@@ -224,19 +251,26 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
                             NavigatorFadeTransition(
-                              child: const VaksinasiBookingScreen(),
+                              child: VaksinasiBookingScreen(
+                                facilities: query.isEmpty
+                                    ? healthFacilities.facilityList[index]
+                                    : healthFacilities.result[index],
+                              ),
                             ),
                           );
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.23,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          decoration: const BoxDecoration(
+                          width: MediaQuery.of(context).size.width * 0.42,
+                          decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://i.postimg.cc/RFM34wYb/a.png'),
+                                image: query.isEmpty
+                                    ? NetworkImage(healthFacilities
+                                        .facilityList[index].imgUrl!)
+                                    : NetworkImage(
+                                        healthFacilities.result[index].imgUrl!),
                                 fit: BoxFit.cover),
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(15),
                             ),
                           ),
@@ -245,12 +279,26 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                       const SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        "RS AMC",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline3!
-                            .copyWith(color: Colors.black),
+                      Flexible(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.42,
+                          child: query.isEmpty
+                              ? Text(
+                                  healthFacilities
+                                      .facilityList[index].facilityName!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3!
+                                      .copyWith(color: Colors.black),
+                                )
+                              : Text(
+                                  healthFacilities.result[index].facilityName!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3!
+                                      .copyWith(color: Colors.black),
+                                ),
+                        ),
                       ),
                       const SizedBox(
                         height: 8,
@@ -276,6 +324,46 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                 );
               },
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSkeleton() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SkeletonContainer(
+              height: MediaQuery.of(context).size.height * 0.23,
+              width: MediaQuery.of(context).size.width * 0.42,
+              borderRadius: 15),
+          const SizedBox(
+            height: 8,
+          ),
+          Flexible(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.42,
+              child: query.isEmpty
+                  ? const SkeletonContainer(
+                      width: 50, height: 20, borderRadius: 0)
+                  : const SkeletonContainer(
+                      width: 50, height: 20, borderRadius: 0),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: const [
+              SkeletonContainer(width: 20, height: 20, borderRadius: 0),
+              SizedBox(
+                width: 8,
+              ),
+              SkeletonContainer(width: 20, height: 50, borderRadius: 0),
+            ],
           ),
         ],
       ),

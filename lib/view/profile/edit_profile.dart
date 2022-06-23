@@ -267,7 +267,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       .copyWith(color: Colors.grey.shade400),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: buttonColorSecondary,
+                      color: pressedColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
@@ -279,7 +279,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: buttonColorSecondary,
+                      color: pressedColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
@@ -340,7 +340,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     .copyWith(color: Colors.grey.shade400),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -352,7 +352,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -407,7 +407,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     .copyWith(color: Colors.grey.shade400),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -419,7 +419,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -475,7 +475,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     .copyWith(color: Colors.grey.shade400),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -487,7 +487,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: buttonColorSecondary,
+                    color: pressedColor,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10),

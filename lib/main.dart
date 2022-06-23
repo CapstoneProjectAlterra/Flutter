@@ -6,6 +6,8 @@ import 'package:vaccine_booking/view/home/home_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 
+import 'view_model/vaksinasi_view_model.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => HomeViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => VaksinasiViewModel(),
         ),
       ],
       child: MaterialApp(

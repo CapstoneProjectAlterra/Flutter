@@ -5,8 +5,12 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
 
+import '../../model/vaksinasi/health_facility_model.dart';
+
 class VaksinasiBookingScreen extends StatefulWidget {
-  const VaksinasiBookingScreen({Key? key}) : super(key: key);
+  final HealthFacilityModel facilities;
+  const VaksinasiBookingScreen({Key? key, required this.facilities})
+      : super(key: key);
 
   @override
   State<VaksinasiBookingScreen> createState() => _VaksinasiBookingScreenState();
@@ -26,7 +30,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     return Scaffold(
       body: SlidingUpPanel(
         defaultPanelState: PanelState.CLOSED,
-        maxHeight: MediaQuery.of(context).size.height * 0.55,
+        maxHeight: MediaQuery.of(context).size.height * 0.58,
         minHeight: MediaQuery.of(context).size.height * 0.09,
         controller: panelController,
         parallaxEnabled: true,
@@ -70,7 +74,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 1.1,
+                    height: MediaQuery.of(context).size.height * 1.09,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -85,14 +89,14 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
-                            height: 32,
+                            height: 16,
                           ),
                           imageFacility(),
                           const SizedBox(
                             height: 12,
                           ),
                           Text(
-                            "RSUD Majalaya",
+                            widget.facilities.facilityName!,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline2!
@@ -115,7 +119,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Jalan Masjid Agung No. 13, Majalaya, Kabupaten Bandung, Jawa Barat, Indonesia",
+                                  widget.facilities.streetName!,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText2!
@@ -323,11 +327,11 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.17,
         width: MediaQuery.of(context).size.width * 0.85,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage('https://i.postimg.cc/RFM34wYb/a.png'),
+              image: NetworkImage(widget.facilities.imgUrl!),
               fit: BoxFit.cover),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(10),
           ),
         ),

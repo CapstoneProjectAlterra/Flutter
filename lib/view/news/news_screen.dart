@@ -21,7 +21,7 @@ class NewsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                     image: CachedNetworkImageProvider(
-                      news.image,
+                      news.urlToImage,
                     ),
                     fit: BoxFit.fill),
               ),
@@ -39,8 +39,8 @@ class NewsScreen extends StatelessWidget {
                       child: SvgPicture.asset(
                         'assets/icons/arrow_back.svg',
                         color: Colors.white,
-                        width: 40,
-                        height: 40,
+                        width: 30,
+                        height: 30,
                       ),
                     ),
                   ],
@@ -56,7 +56,7 @@ class NewsScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                news.judul,
+                news.title,
                 style: Theme.of(context)
                     .textTheme
                     .headline3!
@@ -79,7 +79,7 @@ class NewsScreen extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        news.waktuPublikasi,
+                        news.publishedAt,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(
@@ -103,7 +103,7 @@ class NewsScreen extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        news.namaPenulis,
+                        news.author,
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],

@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
-import 'package:vaccine_booking/view/news/news_screen.dart';
+import 'package:vaccine_booking/components/skeleton_container.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 
 import '../profile/edit_profile.dart';
@@ -28,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final homeViewModel = Provider.of<HomeViewModel>(context);
+    final news = Provider.of<HomeViewModel>(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -115,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.22,
-                          child: newsListView(homeViewModel),
+                          child: newsListView(news),
                         ),
                       ],
                     ),
@@ -195,17 +197,20 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
       ),
       scrollDirection: Axis.horizontal,
-      itemCount: viewModel.newsList.length,
+      itemCount: 6,
       itemBuilder: (context, index) {
+        if (viewModel.newsList.isEmpty) {
+          return buildSkeleton();
+        }
         return GestureDetector(
-          onTap: () {
-            Navigator.of(context, rootNavigator: true).push(
-              NavigatorFadeTransition(
-                child: NewsScreen(
-                  news: viewModel.newsList[index],
-                ),
-              ),
-            );
+          onTap: () async {
+            if (await canLaunchUrl(
+              Uri.parse(viewModel.newsList[index].url),
+            )) {
+              await launchUrl(
+                Uri.parse(viewModel.newsList[index].url),
+              );
+            }
           },
           child: Padding(
             padding: const EdgeInsets.only(right: 32),
@@ -214,7 +219,11 @@ class _HomeScreenState extends State<HomeScreen> {
               width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(viewModel.newsList[index].image),
+                    image: viewModel.newsList[index].urlToImage.isEmpty
+                        ? const AssetImage('assets/images/default_facility.png')
+                            as ImageProvider
+                        : CachedNetworkImageProvider(
+                            viewModel.newsList[index].urlToImage),
                     fit: BoxFit.cover),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(15),
@@ -226,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    viewModel.newsList[index].judul,
+                    viewModel.newsList[index].title,
                     style: Theme.of(context)
                         .textTheme
                         .subtitle2!
@@ -253,6 +262,17 @@ class _HomeScreenState extends State<HomeScreen> {
       child: const Text(
         "Lengkapi Data Diri",
         style: TextStyle(fontSize: 12),
+      ),
+    );
+  }
+
+  Widget buildSkeleton() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 32),
+      child: SkeletonContainer(
+        borderRadius: 15,
+        height: MediaQuery.of(context).size.height * 0.2,
+        width: MediaQuery.of(context).size.width * 0.6,
       ),
     );
   }

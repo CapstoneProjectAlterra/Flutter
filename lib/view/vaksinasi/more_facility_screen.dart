@@ -1,23 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
+import '../../view_model/vaksinasi_view_model.dart';
+
 class MoreFacilityScreen extends StatefulWidget {
-  final String image;
-  const MoreFacilityScreen({Key? key, required this.image}) : super(key: key);
+  final String? query;
+  const MoreFacilityScreen({Key? key, required this.query}) : super(key: key);
 
   @override
   State<MoreFacilityScreen> createState() => _MoreFacilityScreenState();
 }
 
 class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
+  String moreQuery = '';
   bool isExpand = false;
   TextEditingController searchController = TextEditingController();
   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final healthFacilities = Provider.of<VaksinasiViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
@@ -29,7 +40,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
               ? Row(
                   children: [
                     Expanded(
-                      child: searchTextField(),
+                      child: searchTextField(healthFacilities),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -63,8 +74,8 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                             onTap: () => Navigator.pop(context),
                             child: SvgPicture.asset(
                               'assets/icons/arrow_back.svg',
-                              height: 35,
-                              width: 35,
+                              height: 30,
+                              width: 30,
                             ),
                           ),
                           const SizedBox(
@@ -92,7 +103,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                           },
                           icon: const Icon(
                             CupertinoIcons.search,
-                            size: 28,
+                            size: 24,
                           ),
                         ),
                       ),
@@ -117,7 +128,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height,
-                child: listFacility(),
+                child: listFacility(healthFacilities),
               ),
             ],
           ),
@@ -126,7 +137,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
     );
   }
 
-  Widget listFacility() {
+  Widget listFacility(VaksinasiViewModel healthFacilities) {
     return ListView.separated(
         scrollDirection: Axis.vertical,
         separatorBuilder: (context, index) {
@@ -136,7 +147,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
         },
         itemBuilder: (context, index) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.17,
+            height: MediaQuery.of(context).size.height * 0.2,
             width: MediaQuery.of(context).size.width * 0.9,
             decoration: BoxDecoration(
               boxShadow: [
@@ -157,13 +168,21 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(widget.image), fit: BoxFit.cover),
+                        image: widget.query!.isEmpty
+                            ? NetworkImage(
+                                healthFacilities.facilityList[index].imgUrl!)
+                            : moreQuery.isEmpty
+                                ? NetworkImage(
+                                    healthFacilities.result[index].imgUrl!)
+                                : NetworkImage(
+                                    healthFacilities.moreResult[index].imgUrl!),
+                        fit: BoxFit.cover),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),
                     ),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.33,
                 ),
                 const SizedBox(
                   width: 16,
@@ -172,17 +191,36 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "RS AMC",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline2!
-                                  .copyWith(color: Colors.black),
-                            ),
+                            widget.query!.isEmpty
+                                ? Text(
+                                    healthFacilities
+                                        .facilityList[index].facilityName!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(color: Colors.black),
+                                  )
+                                : moreQuery.isEmpty
+                                    ? Text(
+                                        healthFacilities
+                                            .result[index].facilityName!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3!
+                                            .copyWith(color: Colors.black),
+                                      )
+                                    : Text(
+                                        healthFacilities
+                                            .moreResult[index].facilityName!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3!
+                                            .copyWith(color: Colors.black),
+                                      ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -203,10 +241,16 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                         ),
                       ),
                       Positioned(
-                        left: MediaQuery.of(context).size.width * 0.3,
+                        left: MediaQuery.of(context).size.width * 0.20,
                         bottom: 0,
                         right: 0,
-                        child: buttonText(context),
+                        child: buttonText(
+                            context,
+                            widget.query!.isEmpty
+                                ? healthFacilities.facilityList[index]
+                                : moreQuery.isEmpty
+                                    ? healthFacilities.result[index]
+                                    : healthFacilities.moreResult[index]),
                       ),
                     ],
                   ),
@@ -215,17 +259,23 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
             ),
           );
         },
-        itemCount: 6);
+        itemCount: widget.query!.isEmpty
+            ? healthFacilities.facilityList.length
+            : moreQuery.isEmpty
+                ? healthFacilities.result.length
+                : healthFacilities.moreResult.length);
   }
 
-  Widget buttonText(context) {
+  Widget buttonText(context, facilities) {
     return Row(
       children: [
         TextButton(
           onPressed: () {
             Navigator.of(context).push(
               NavigatorFadeTransition(
-                child: const VaksinasiBookingScreen(),
+                child: VaksinasiBookingScreen(
+                  facilities: facilities,
+                ),
               ),
             );
           },
@@ -253,24 +303,49 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
         children: [
           SvgPicture.asset(
             'assets/icons/location.svg',
-            width: 24,
-            height: 24,
+            width: 20,
+            height: 20,
             color: primaryColor,
           ),
           const SizedBox(
             width: 8,
           ),
-          Text(
-            "Bandung",
-            style: Theme.of(context).textTheme.bodyText2,
-          )
+          widget.query!.isEmpty
+              ? Text(
+                  'All health of facility',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: Colors.black),
+                )
+              : moreQuery.isEmpty
+                  ? Text(
+                      widget.query!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.black),
+                    )
+                  : Text(
+                      moreQuery,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.black),
+                    ),
         ],
       ),
     );
   }
 
-  Widget searchTextField() {
+  Widget searchTextField(VaksinasiViewModel healthFacilities) {
     return TextField(
+      onSubmitted: (value) => setState(
+        () {
+          moreQuery = value;
+          healthFacilities.searchMoreFacility(query: moreQuery);
+        },
+      ),
       style: Theme.of(context)
           .textTheme
           .bodyText1!

@@ -77,8 +77,22 @@ class _PanelWidgetState extends State<PanelWidget> {
               width: MediaQuery.of(context).size.width * 0.9,
               child: ElevatedButton(
                 style: secondStateButton,
-                child: const Text(
-                  "Tambah Anggota Keluarga",
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/new-member.svg',
+                      color: primaryColor,
+                      height: 22,
+                      width: 22,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      "Tambah Keluarga",
+                    ),
+                  ],
                 ),
                 onPressed: () {
                   Navigator.of(context).push(

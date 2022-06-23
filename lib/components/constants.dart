@@ -40,7 +40,7 @@ AppBarTheme appBarTheme = const AppBarTheme(
     elevation: 0,
     backgroundColor: Colors.white);
 
-ButtonStyle secondStateButton = ButtonStyle(
+ButtonStyle lowStateButton = ButtonStyle(
   foregroundColor: MaterialStateProperty.resolveWith(
     (states) {
       if (states.contains(MaterialState.disabled)) {
@@ -48,6 +48,75 @@ ButtonStyle secondStateButton = ButtonStyle(
       }
       if (states.contains(MaterialState.pressed)) {
         return pressedColor;
+      }
+      return primaryColor;
+    },
+  ),
+  textStyle: MaterialStateProperty.resolveWith(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.disabled)) {
+        return const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'Poppins',
+        );
+      }
+      if (states.contains(MaterialState.pressed)) {
+        return const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'Poppins',
+        );
+      }
+      return const TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Poppins',
+      );
+    },
+  ),
+  side: MaterialStateProperty.resolveWith<BorderSide?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.disabled)) {
+        return BorderSide(width: 1, color: Colors.grey.shade600);
+      }
+      if (states.contains(MaterialState.pressed)) {
+        return const BorderSide(width: 1, color: pressedColor);
+      }
+
+      return const BorderSide(width: 1, color: lowPressedColor);
+    },
+  ),
+  overlayColor: MaterialStateProperty.resolveWith<Color?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.pressed)) return lowPressedColor;
+      return null;
+    },
+  ),
+  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.disabled)) {
+        return Colors.grey.shade600;
+      }
+      if (states.contains(MaterialState.pressed)) return lowPressedColor;
+      return Colors.white;
+    },
+  ),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+  ),
+);
+
+ButtonStyle secondStateButton = ButtonStyle(
+  foregroundColor: MaterialStateProperty.resolveWith(
+    (states) {
+      if (states.contains(MaterialState.disabled)) {
+        return Colors.grey.shade300;
+      }
+      if (states.contains(MaterialState.pressed)) {
+        return primaryColor;
       }
       return primaryColor;
     },
