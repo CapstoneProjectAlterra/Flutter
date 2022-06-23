@@ -51,6 +51,9 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                               setState(
                                 () {
                                   searchController.clear();
+                                  moreQuery = searchController.text;
+                                  healthFacilities.searchMoreFacility(
+                                      query: moreQuery);
                                 },
                               );
                             },
@@ -168,14 +171,11 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: widget.query!.isEmpty
+                        image: moreQuery.isEmpty
                             ? NetworkImage(
-                                healthFacilities.facilityList[index].imgUrl!)
-                            : moreQuery.isEmpty
-                                ? NetworkImage(
-                                    healthFacilities.result[index].imgUrl!)
-                                : NetworkImage(
-                                    healthFacilities.moreResult[index].imgUrl!),
+                                healthFacilities.result[index].imgUrl!)
+                            : NetworkImage(
+                                healthFacilities.moreResult[index].imgUrl!),
                         fit: BoxFit.cover),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -195,32 +195,23 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            widget.query!.isEmpty
+                            moreQuery.isEmpty
                                 ? Text(
                                     healthFacilities
-                                        .facilityList[index].facilityName!,
+                                        .result[index].facilityName!,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3!
                                         .copyWith(color: Colors.black),
                                   )
-                                : moreQuery.isEmpty
-                                    ? Text(
-                                        healthFacilities
-                                            .result[index].facilityName!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3!
-                                            .copyWith(color: Colors.black),
-                                      )
-                                    : Text(
-                                        healthFacilities
-                                            .moreResult[index].facilityName!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3!
-                                            .copyWith(color: Colors.black),
-                                      ),
+                                : Text(
+                                    healthFacilities
+                                        .moreResult[index].facilityName!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(color: Colors.black),
+                                  ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -246,11 +237,9 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                         right: 0,
                         child: buttonText(
                             context,
-                            widget.query!.isEmpty
-                                ? healthFacilities.facilityList[index]
-                                : moreQuery.isEmpty
-                                    ? healthFacilities.result[index]
-                                    : healthFacilities.moreResult[index]),
+                            moreQuery.isEmpty
+                                ? healthFacilities.result[index]
+                                : healthFacilities.moreResult[index]),
                       ),
                     ],
                   ),
@@ -259,11 +248,9 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
             ),
           );
         },
-        itemCount: widget.query!.isEmpty
-            ? healthFacilities.facilityList.length
-            : moreQuery.isEmpty
-                ? healthFacilities.result.length
-                : healthFacilities.moreResult.length);
+        itemCount: moreQuery.isEmpty
+            ? healthFacilities.result.length
+            : healthFacilities.moreResult.length);
   }
 
   Widget buttonText(context, facilities) {

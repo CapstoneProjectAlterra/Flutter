@@ -40,6 +40,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
   @override
   Widget build(BuildContext context) {
     final healthFacilities = Provider.of<VaksinasiViewModel>(context);
+    setState(() {
+      healthFacilities.searchFacility(query: '');
+    });
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -235,9 +238,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: query.isEmpty
-                  ? healthFacilities.facilityList.length
-                  : healthFacilities.result.length,
+              itemCount: query.isEmpty ? 2 : healthFacilities.result.length,
               itemBuilder: (context, index) {
                 if (healthFacilities.facilityList.isEmpty) {
                   return buildSkeleton();
@@ -345,13 +346,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
           ),
           Flexible(
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.42,
-              child: query.isEmpty
-                  ? const SkeletonContainer(
-                      width: 50, height: 20, borderRadius: 0)
-                  : const SkeletonContainer(
-                      width: 50, height: 20, borderRadius: 0),
-            ),
+                width: MediaQuery.of(context).size.width * 0.42,
+                child: const SkeletonContainer(
+                    width: 100, height: 20, borderRadius: 0)),
           ),
           const SizedBox(
             height: 8,
@@ -362,7 +359,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
               SizedBox(
                 width: 8,
               ),
-              SkeletonContainer(width: 20, height: 50, borderRadius: 0),
+              SkeletonContainer(width: 100, height: 20, borderRadius: 0),
             ],
           ),
         ],
