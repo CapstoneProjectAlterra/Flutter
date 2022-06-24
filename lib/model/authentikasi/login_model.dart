@@ -1,17 +1,15 @@
 class LoginModel {
   String? nik;
   String? password;
-  bool? returnSecureToken;
 
-  LoginModel({this.nik, this.password, this.returnSecureToken});
+  LoginModel({this.nik, this.password});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-      nik: json['email'],
-      password: json['password'],
-      returnSecureToken: json['returnSecureToken']);
+        nik: json['username'],
+        password: json['password'],
+      );
   Map<String, dynamic> toJson() => {
-        'email': nik,
+        'username': nik,
         'password': password,
-        'returnSecureToken': returnSecureToken
       };
 }

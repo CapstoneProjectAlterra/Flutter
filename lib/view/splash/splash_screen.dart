@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(
       const Duration(seconds: 3),
       () {
-        prefs.getString('tokenId') != null
+        prefs.getString('token') != null
             ? Navigator.of(context).pushReplacement(
                 NavigatorFadeTransition(
                   child: const BotNavBar(),

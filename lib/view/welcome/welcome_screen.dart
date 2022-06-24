@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
-import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -13,17 +11,6 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  bool isInit = true;
-
-  @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<AuthViewModel>(context, listen: false).getToken();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     final maxHeight = MediaQuery.of(context).size.height;

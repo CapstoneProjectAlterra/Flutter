@@ -9,6 +9,7 @@ import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 import '../../components/constants.dart';
+import '../../model/authentikasi/login_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -158,15 +159,14 @@ class _RegisterState extends State<LoginScreen> {
                       await Future.delayed(
                         const Duration(seconds: 2),
                       )
-                          // .then(
-                          //   (value) async => await login.postLogin(
-                          //     LoginModel(
-                          //       nik: _nikEditingController.text,
-                          //       password: _passwordEditingController.text,
-                          //       returnSecureToken: true,
-                          //     ),
-                          //   ),
-                          // )
+                          .then(
+                            (value) async => await login.postLogin(
+                              LoginModel(
+                                nik: _nikEditingController.text,
+                                password: _passwordEditingController.text,
+                              ),
+                            ),
+                          )
                           .then(
                             (_) =>
                                 Fluttertoast.showToast(msg: "Berhasil Login"),

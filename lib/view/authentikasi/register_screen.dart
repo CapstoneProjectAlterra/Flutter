@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:vaccine_booking/model/authentikasi/register_model.dart';
+import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 
-import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
+import '../../view_model/auth_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -26,9 +29,19 @@ class _RegisterState extends State<RegisterScreen> {
   final _emailEditingController = TextEditingController();
   final _passwordEditingController = TextEditingController();
 
+  @override
+  void dispose() {
+    _nameEditingController.dispose();
+    _nikEditingController.dispose();
+    _emailEditingController.dispose();
+    _passwordEditingController.dispose();
+    super.dispose();
+  }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final register = Provider.of<AuthViewModel>(context);
     return Scaffold(
       body: Padding(
         padding:
@@ -119,16 +132,37 @@ class _RegisterState extends State<RegisterScreen> {
                                         try {
                                           Future.delayed(
                                             const Duration(seconds: 2),
-                                          ).then(
-                                            (value) async =>
-                                                Navigator.of(context)
-                                                    .pushAndRemoveUntil(
-                                              NavigatorFadeTransition(
-                                                child: const BotNavBar(),
-                                              ),
-                                              ModalRoute.withName('/home'),
-                                            ),
-                                          );
+                                          )
+                                              .then(
+                                                (value) =>
+                                                    register.postRegister(
+                                                  RegisterModel(
+                                                    nik: _nikEditingController
+                                                        .text,
+                                                    email:
+                                                        _emailEditingController
+                                                            .text,
+                                                    password:
+                                                        _passwordEditingController
+                                                            .text,
+                                                    profile: {"role": "USER"},
+                                                  ),
+                                                ),
+                                              )
+                                              .then(
+                                                (value) =>
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            'Berhasil Register'),
+                                              )
+                                              .then(
+                                                (value) async =>
+                                                    Navigator.of(context).push(
+                                                  NavigatorFadeTransition(
+                                                    child: const LoginScreen(),
+                                                  ),
+                                                ),
+                                              );
                                         } catch (e) {
                                           Fluttertoast.showToast(
                                             msg: e.toString(),
@@ -171,7 +205,7 @@ class _RegisterState extends State<RegisterScreen> {
       inputFormatters: [
         LengthLimitingTextInputFormatter(25),
         FilteringTextInputFormatter.allow(
-          RegExp("[0-9a-zA-Z]"),
+          RegExp("[0-9a-zA-Z ]"),
         ),
       ],
       onChanged: (value) => setState(
@@ -191,7 +225,7 @@ class _RegisterState extends State<RegisterScreen> {
             .copyWith(color: Colors.grey.shade400),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: buttonColorSecondary,
+            color: pressedColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(10),
@@ -244,7 +278,7 @@ class _RegisterState extends State<RegisterScreen> {
             .copyWith(color: Colors.grey.shade400),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: buttonColorSecondary,
+            color: pressedColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(10),
@@ -311,7 +345,7 @@ class _RegisterState extends State<RegisterScreen> {
             .copyWith(color: Colors.grey.shade400),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: buttonColorSecondary,
+            color: pressedColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(10),
@@ -368,7 +402,7 @@ class _RegisterState extends State<RegisterScreen> {
             .copyWith(color: Colors.grey.shade400),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: buttonColorSecondary,
+            color: pressedColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(10),
