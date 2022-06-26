@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,9 +41,6 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
   @override
   Widget build(BuildContext context) {
     final healthFacilities = Provider.of<VaksinasiViewModel>(context);
-    setState(() {
-      healthFacilities.searchFacility(query: '');
-    });
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -215,10 +213,12 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
           width: MediaQuery.of(context).size.height * 0.07,
           child: ElevatedButton(
             onPressed: () {
-              setState(() {
-                query = searchController.text;
-                healthFacilities.searchFacility(query: query);
-              });
+              setState(
+                () {
+                  query = searchController.text;
+                  healthFacilities.searchFacility(query: query);
+                },
+              );
             },
             child: const Icon(CupertinoIcons.search),
           ),
@@ -260,19 +260,29 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                             ),
                           );
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.height * 0.23,
                           width: MediaQuery.of(context).size.width * 0.42,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: query.isEmpty
-                                    ? NetworkImage(healthFacilities
-                                        .facilityList[index].imgUrl!)
-                                    : NetworkImage(
-                                        healthFacilities.result[index].imgUrl!),
-                                fit: BoxFit.cover),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
+                          child: AspectRatio(
+                            aspectRatio: 3.5 / 4,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: CachedNetworkImage(
+                                errorWidget: (context, url, error) {
+                                  return Image.asset(
+                                    'assets/images/default_facility.png',
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                placeholder: (context, url) {
+                                  return imageSkeleton();
+                                },
+                                imageUrl: query.isEmpty
+                                    ? healthFacilities
+                                        .facilityList[index].imgUrl!
+                                    : healthFacilities.result[index].imgUrl!,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -327,6 +337,17 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget imageSkeleton() {
+    return AspectRatio(
+      aspectRatio: 3.5 / 4,
+      child: SkeletonContainer(
+        borderRadius: 15,
+        height: MediaQuery.of(context).size.height * 0.23,
+        width: MediaQuery.of(context).size.width * 0.42,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +6,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
 
+import '../../components/skeleton_container.dart';
 import '../../model/vaksinasi/health_facility_model.dart';
 
 class VaksinasiBookingScreen extends StatefulWidget {
@@ -324,15 +326,23 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
 
   Widget imageFacility() {
     return Center(
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.17,
-        width: MediaQuery.of(context).size.width * 0.85,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(widget.facilities.imgUrl!),
-              fit: BoxFit.cover),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: CachedNetworkImage(
+            errorWidget: (context, url, error) {
+              return Image.asset(
+                'assets/images/default_facility.png',
+                fit: BoxFit.cover,
+              );
+            },
+            placeholder: (context, url) {
+              return imageSkeleton();
+            },
+            imageUrl: widget.facilities.imgUrl!,
+            fit: BoxFit.cover,
           ),
         ),
       ),
@@ -577,6 +587,14 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
           return null;
         },
       ),
+    );
+  }
+
+  Widget imageSkeleton() {
+    return SkeletonContainer(
+      borderRadius: 10,
+      height: MediaQuery.of(context).size.height * 0.17,
+      width: MediaQuery.of(context).size.width * 0.9,
     );
   }
 }

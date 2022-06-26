@@ -23,7 +23,7 @@ class LoginApi {
     } catch (e) {
       if (e is DioError) {
         // throw e.response!.data['error']['message'];
-        throw e.toString();
+        throw 'Something Wrong';
       }
     }
     return token!;

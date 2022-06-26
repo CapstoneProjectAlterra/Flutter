@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
+import '../../components/skeleton_container.dart';
 import '../../view_model/vaksinasi_view_model.dart';
 
 class MoreFacilityScreen extends StatefulWidget {
@@ -168,21 +170,29 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
             ),
             child: Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: moreQuery.isEmpty
-                            ? NetworkImage(
-                                healthFacilities.result[index].imgUrl!)
-                            : NetworkImage(
-                                healthFacilities.moreResult[index].imgUrl!),
-                        fit: BoxFit.cover),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width * 0.33,
+                  child: ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      errorWidget: (context, url, error) {
+                        return Image.asset(
+                          'assets/images/default_facility.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      placeholder: (context, url) {
+                        return imageSkeleton();
+                      },
+                      imageUrl: moreQuery.isEmpty
+                          ? healthFacilities.result[index].imgUrl!
+                          : healthFacilities.moreResult[index].imgUrl!,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.33,
                 ),
                 const SizedBox(
                   width: 16,
@@ -364,6 +374,14 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           hintText: 'search'),
+    );
+  }
+
+  Widget imageSkeleton() {
+    return SkeletonContainer(
+      borderRadius: 15,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width * 0.33,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 
 import '../model/vaksinasi/api/health_facility_api.dart';
@@ -12,11 +11,8 @@ class VaksinasiViewModel extends ChangeNotifier {
 
   getAllHealthFacilities() async {
     final getAllFacilities = await vaksinasiApi.getAllHealthFacilities();
-    if (getAllFacilities != null) {
-      facilityList = getAllFacilities;
-    } else {
-      Fluttertoast.showToast(msg: 'something wrong');
-    }
+
+    facilityList = getAllFacilities;
 
     notifyListeners();
   }

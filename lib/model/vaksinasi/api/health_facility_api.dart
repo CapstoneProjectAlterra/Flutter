@@ -17,12 +17,14 @@ class HealthFacilityApi {
           },
         ),
       );
-      final healthFacilitiesList = (response.data['data'] as List)
-          .map((e) => HealthFacilityModel.fromJson(e))
-          .toList();
-      return healthFacilitiesList;
-    } on Exception catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+      if (response.statusCode == 200) {
+        final healthFacilitiesList = (response.data['data'] as List)
+            .map((e) => HealthFacilityModel.fromJson(e))
+            .toList();
+        return healthFacilitiesList;
+      }
+    } on Exception catch (_) {
+      Fluttertoast.showToast(msg: 'Failed Fetch');
     }
   }
 }
