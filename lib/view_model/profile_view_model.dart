@@ -8,8 +8,8 @@ class ProfileViewModel extends ChangeNotifier {
   final userApi = UserApi();
   List<UserModel> userList = [];
   List<UserModel> userData = [];
-  final itemsGender = ['Laki_laki', 'Perempuan'];
-  final itemsStatus = ['Ayah', 'Ibu', 'Anak'];
+  final itemsGender = ['laki_laki', 'perempuan'];
+  final itemsStatus = ['ayah', 'ibu', 'anak'];
 
   getAllUser() async {
     final getAllFamilies = await userApi.getAllUser();
@@ -24,6 +24,11 @@ class ProfileViewModel extends ChangeNotifier {
           (element) => element.nik!.contains(prefs.getString('nik')!),
         )
         .toList();
+    notifyListeners();
+  }
+
+  editProfile(UserModel profile, int id) async {
+    await userApi.editProfile(profile: profile, id: id);
     notifyListeners();
   }
 }

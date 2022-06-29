@@ -31,4 +31,27 @@ class UserApi {
       Fluttertoast.showToast(msg: 'Failed Fetch');
     }
   }
+
+  editProfile({int? id, UserModel? profile}) async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    try {
+      await Dio().put(
+        '$baseUrl/api/v1/family/$id',
+        data: profile!.toJson(),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data['error'];
+      } else {
+        throw 'something wrong';
+      }
+    }
+  }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import '../../components/constants.dart';
 
@@ -14,47 +16,37 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  bool isInit = true;
+  bool isLoad = true;
+  String? name;
+  String? nik;
+  String? email;
+  String? phone;
+  String? dateBirth;
+  String? address;
+  String? idCardAddress;
+  String? placeBirth;
   String? gender;
   String? status;
-  final TextEditingController _tanggalLahir = TextEditingController();
-  final TextEditingController _nameEditingController = TextEditingController();
-  final TextEditingController _nikEditingController = TextEditingController();
-  final TextEditingController _tempatLahirEditingController =
+  TextEditingController tanggalLahir = TextEditingController();
+  TextEditingController nameEditingController = TextEditingController();
+  TextEditingController nikEditingController = TextEditingController();
+  TextEditingController tempatLahirEditingController = TextEditingController();
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController phoneEditingController = TextEditingController();
+  TextEditingController alamatKTPEditingController = TextEditingController();
+  TextEditingController alamatDomisiliEditingController =
       TextEditingController();
-  final TextEditingController _genderEditingController =
-      TextEditingController();
-  final TextEditingController _emailEditingController = TextEditingController();
-  final TextEditingController _phoneEditingController = TextEditingController();
-  final TextEditingController _statusEditingController =
-      TextEditingController();
-  final TextEditingController _alamatKTPEditingController =
-      TextEditingController();
-  final TextEditingController _alamatDomisiliEditingController =
-      TextEditingController();
-
-  @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
-      Provider.of<ProfileViewModel>(context, listen: false).nameUser();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {
-    _tanggalLahir.dispose();
-    _nameEditingController.dispose();
-    _nikEditingController.dispose();
-    _tempatLahirEditingController.dispose();
-    _genderEditingController.dispose();
-    _emailEditingController.dispose();
-    _phoneEditingController.dispose();
-    _statusEditingController.dispose();
-    _alamatKTPEditingController.dispose();
-    _alamatDomisiliEditingController.dispose();
+    tanggalLahir.dispose();
+    nameEditingController.dispose();
+    nikEditingController.dispose();
+    tempatLahirEditingController.dispose();
+    emailEditingController.dispose();
+    phoneEditingController.dispose();
+    alamatKTPEditingController.dispose();
+    alamatDomisiliEditingController.dispose();
     super.dispose();
   }
 
@@ -62,6 +54,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
+
+    if (isLoad == true) {
+      if (user.userData[0].dateBirth != null) {
+        tanggalLahir.text = user.userData[0].dateBirth!;
+        dateBirth = user.userData[0].dateBirth!;
+      }
+      if (user.userData[0].name != null) {
+        nameEditingController.text = user.userData[0].name!;
+        name = user.userData[0].name!;
+      }
+      if (user.userData[0].nik != null) {
+        nikEditingController.text = user.userData[0].nik!;
+        nik = user.userData[0].nik!;
+      }
+      if (user.userData[0].placeBirth != null) {
+        tempatLahirEditingController.text = user.userData[0].placeBirth!;
+        placeBirth = user.userData[0].placeBirth!;
+      }
+      if (user.userData[0].email != null) {
+        emailEditingController.text = user.userData[0].email!;
+        email = user.userData[0].email!;
+      }
+      if (user.userData[0].phone != null) {
+        phoneEditingController.text = user.userData[0].phone!;
+        phone = user.userData[0].phone!;
+      }
+      if (user.userData[0].idCardAddress != null) {
+        alamatKTPEditingController.text = user.userData[0].idCardAddress!;
+        idCardAddress = user.userData[0].idCardAddress!;
+      }
+      if (user.userData[0].address != null) {
+        alamatDomisiliEditingController.text = user.userData[0].address!;
+        address = user.userData[0].address!;
+      }
+      if (user.userData[0].statusFamily != null) {
+        status = user.userData[0].statusFamily!.toLowerCase();
+      }
+      if (user.userData[0].gender != null) {
+        gender = user.userData[0].gender!.toLowerCase();
+      }
+      isLoad = false;
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -130,31 +165,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            regularField(
-                                controller: _nameEditingController,
-                                hintText: 'Nama Lengkap',
-                                assetIcon: 'assets/icons/user.svg'),
+                            nameField(),
                             const SizedBox(
                               height: 16,
                             ),
-                            numberField(
-                                controller: _nameEditingController,
-                                hintText: 'Nomor NIK',
-                                assetIcon: 'assets/icons/badge.svg',
-                                maxLength: 16,
-                                validatorLength: 16),
+                            nikField(),
                             const SizedBox(
                               height: 16,
                             ),
-                            regularField(
-                                controller: _nameEditingController,
-                                hintText: 'Tempat Lahir',
-                                assetIcon: 'assets/icons/address.svg'),
+                            tempatLahirField(),
                             const SizedBox(
                               height: 16,
                             ),
                             dateField(
-                                controller: _nameEditingController,
+                                controller: tanggalLahir,
                                 hintText: 'Tanggal Lahir',
                                 assetIcon: 'assets/icons/datetime.svg'),
                             const SizedBox(
@@ -168,18 +192,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               height: 16,
                             ),
                             emailField(
-                                controller: _nameEditingController,
+                                controller: emailEditingController,
                                 hintText: 'Alamat Email',
                                 assetIcon: 'assets/icons/envelop.svg'),
                             const SizedBox(
                               height: 16,
                             ),
-                            numberField(
-                                controller: _nameEditingController,
-                                hintText: 'Nomor hp',
-                                assetIcon: 'assets/icons/phone.svg',
-                                maxLength: 16,
-                                validatorLength: 17),
+                            phoneField(),
                             const SizedBox(
                               height: 16,
                             ),
@@ -190,17 +209,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             const SizedBox(
                               height: 16,
                             ),
-                            regularField(
-                                controller: _nameEditingController,
-                                hintText: 'Alamat Berdasarkan KTP',
-                                assetIcon: 'assets/icons/address.svg'),
+                            alamatKTPField(),
                             const SizedBox(
                               height: 16,
                             ),
-                            regularField(
-                                controller: _nameEditingController,
-                                hintText: 'Alamat Domisili',
-                                assetIcon: 'assets/icons/address.svg'),
+                            alamatDomisiliField(),
                             const SizedBox(
                               height: 16,
                             ),
@@ -214,22 +227,86 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: SizedBox(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.85,
-                          child: _tanggalLahir.text.isEmpty &&
-                                  _nameEditingController.text.isEmpty
-                              ? ElevatedButton(
-                                  onPressed: null,
-                                  child: Text(
-                                    "Simpan",
-                                    style:
-                                        TextStyle(color: Colors.grey.shade300),
-                                  ),
-                                )
-                              : ElevatedButton(
-                                  child: const Text(
-                                    "Simpan",
-                                  ),
-                                  onPressed: () {},
-                                ),
+                          child:
+                              name == null ||
+                                      name!.isEmpty ||
+                                      placeBirth == null ||
+                                      placeBirth!.isEmpty ||
+                                      idCardAddress == null ||
+                                      idCardAddress!.isEmpty ||
+                                      address == null ||
+                                      address!.isEmpty ||
+                                      nik == null ||
+                                      nik!.isEmpty ||
+                                      phone == null ||
+                                      phone!.isEmpty ||
+                                      email == null ||
+                                      email!.isEmpty ||
+                                      dateBirth == null ||
+                                      dateBirth!.isEmpty ||
+                                      gender == null ||
+                                      gender!.isEmpty ||
+                                      status == null ||
+                                      status!.isEmpty
+                                  ? ElevatedButton(
+                                      onPressed: null,
+                                      child: Text(
+                                        "Simpan",
+                                        style: TextStyle(
+                                            color: Colors.grey.shade300),
+                                      ),
+                                    )
+                                  : ElevatedButton(
+                                      child: const Text(
+                                        "Simpan",
+                                      ),
+                                      onPressed: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
+                                          isInit = true;
+                                          int id = user
+                                              .userData[0].profile!['user_id'];
+
+                                          try {
+                                            await Future.delayed(
+                                              const Duration(seconds: 1),
+                                            )
+                                                .then(
+                                                  (_) async => await user.editProfile(
+                                                      UserModel(
+                                                          name:
+                                                              nameEditingController
+                                                                  .text,
+                                                          nik: nikEditingController.text,
+                                                          email: emailEditingController.text,
+                                                          phone: phoneEditingController.text,
+                                                          gender: gender!.toUpperCase(),
+                                                          dateBirth: tanggalLahir.text,
+                                                          address: alamatDomisiliEditingController.text,
+                                                          idCardAddress: alamatKTPEditingController.text,
+                                                          placeBirth: tempatLahirEditingController.text,
+                                                          statusFamily: status!.toUpperCase(),
+                                                          profile: {
+                                                            "user_id": id
+                                                          }),
+                                                      user.userData[0].id!),
+                                                )
+                                                .then(
+                                                  (_) => Fluttertoast.showToast(
+                                                      msg:
+                                                          "Berhasil Mengubah Data Diri"),
+                                                )
+                                                .then(
+                                                  (_) => Navigator.pop(context),
+                                                );
+                                          } catch (e) {
+                                            Fluttertoast.showToast(
+                                              msg: e.toString(),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
                         ),
                       ),
                       const SizedBox(
@@ -264,16 +341,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: GestureDetector(
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2022),
-                    lastDate: DateTime(2023));
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2023),
+                );
 
                 if (pickedDate != null) {
                   setState(
                     () {
-                      _tanggalLahir.text =
+                      tanggalLahir.text =
                           DateFormat('dd-MM-yyyy').format(pickedDate);
+                      dateBirth = DateFormat('dd-MM-yyyy').format(pickedDate);
                     },
                   );
                 }
@@ -328,7 +407,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   filled: true,
                 ),
                 textInputAction: TextInputAction.next,
-                controller: _tanggalLahir,
+                controller: tanggalLahir,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Required";
@@ -343,12 +422,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget numberField(
-      {controller, assetIcon, hintText, maxLength, validatorLength}) {
+  Widget nikField() {
     return Row(
       children: [
         SvgPicture.asset(
-          assetIcon,
+          'assets/icons/badge.svg',
           color: primaryColor,
           height: 32,
           width: 32,
@@ -360,6 +438,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             height: 45,
             child: TextFormField(
+              onChanged: (value) => setState(() => nik = value),
               style: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -368,12 +447,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(13),
+                LengthLimitingTextInputFormatter(16),
               ],
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(
                     top: 8, left: 16, bottom: 8, right: 8),
-                hintText: hintText,
+                hintText: "Nomor NIK",
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -401,10 +480,82 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 filled: true,
               ),
               textInputAction: TextInputAction.next,
-              controller: controller,
+              controller: nikEditingController,
+              validator: (value) {
+                if (value!.length < 16) {
+                  return "use valid nik";
+                }
+                return null;
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget phoneField() {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          'assets/icons/phone.svg',
+          color: primaryColor,
+          height: 32,
+          width: 32,
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 45,
+            child: TextFormField(
+              onChanged: (value) => setState(() => phone = value),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(color: Colors.grey.shade700),
+              cursorColor: Colors.white,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(13),
+              ],
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(
+                    top: 8, left: 16, bottom: 8, right: 8),
+                hintText: "Nomor hp",
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade400),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade400, width: 1.5),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              textInputAction: TextInputAction.next,
+              controller: phoneEditingController,
               validator: (value) {
                 if (value!.length < 11) {
-                  return "use valid number";
+                  return "use valid phone number";
                 }
                 return null;
               },
@@ -431,6 +582,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             height: 45,
             child: TextFormField(
+              onChanged: (value) => setState(() => email = value),
               style: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -483,11 +635,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget regularField({controller, assetIcon, hintText}) {
+  Widget nameField() {
     return Row(
       children: [
         SvgPicture.asset(
-          assetIcon,
+          'assets/icons/user.svg',
           color: primaryColor,
           height: 32,
           width: 32,
@@ -499,6 +651,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             height: 45,
             child: TextFormField(
+              onChanged: (value) => setState(() => name = value),
               style: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -508,7 +661,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(
                     top: 8, left: 16, bottom: 8, right: 8),
-                hintText: hintText,
+                hintText: "Nama Lengkap",
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -536,7 +689,211 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 filled: true,
               ),
               textInputAction: TextInputAction.next,
-              controller: controller,
+              controller: nameEditingController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Required";
+                }
+                return null;
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget tempatLahirField() {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          'assets/icons/address.svg',
+          color: primaryColor,
+          height: 32,
+          width: 32,
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 45,
+            child: TextFormField(
+              onChanged: (value) => setState(() => placeBirth = value),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(color: Colors.grey.shade700),
+              cursorColor: Colors.white,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(
+                    top: 8, left: 16, bottom: 8, right: 8),
+                hintText: "Tempat Lahir",
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade400),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade400, width: 1.5),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              textInputAction: TextInputAction.next,
+              controller: tempatLahirEditingController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Required";
+                }
+                return null;
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget alamatKTPField() {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          'assets/icons/address.svg',
+          color: primaryColor,
+          height: 32,
+          width: 32,
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 45,
+            child: TextFormField(
+              onChanged: (value) => setState(() => idCardAddress = value),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(color: Colors.grey.shade700),
+              cursorColor: Colors.white,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(
+                    top: 8, left: 16, bottom: 8, right: 8),
+                hintText: "Alamat Berdasarkan KTP",
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade400),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade400, width: 1.5),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              textInputAction: TextInputAction.next,
+              controller: alamatKTPEditingController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Required";
+                }
+                return null;
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget alamatDomisiliField() {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          'assets/icons/address.svg',
+          color: primaryColor,
+          height: 32,
+          width: 32,
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 45,
+            child: TextFormField(
+              onChanged: (value) => setState(() => address = value),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(color: Colors.grey.shade700),
+              cursorColor: Colors.white,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(
+                    top: 8, left: 16, bottom: 8, right: 8),
+                hintText: "Alamat Domisili",
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade400),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade400, width: 1.5),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: pressedColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              textInputAction: TextInputAction.next,
+              controller: alamatDomisiliEditingController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return "Required";

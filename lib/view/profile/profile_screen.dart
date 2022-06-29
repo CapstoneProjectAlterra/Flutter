@@ -18,7 +18,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isInit = true;
   @override
   void didChangeDependencies() {
     if (isInit == true) {
@@ -226,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: 'assets/icons/gender.svg',
               title: profile.userData.isEmpty
                   ? "Gender"
-                  : profile.userData[0].gender ?? "Gender",
+                  : profile.userData[0].gender!.toLowerCase(),
               context: context),
         ),
         SizedBox(
@@ -253,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: 'assets/icons/status.svg',
               title: profile.userData.isEmpty
                   ? "Status Keluarga"
-                  : profile.userData[0].statusFamily ?? "Status Keluarga",
+                  : profile.userData[0].statusFamily!.toLowerCase(),
               context: context),
         ),
         SizedBox(
