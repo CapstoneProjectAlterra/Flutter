@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 
-class HealthFacilityApi {
-  getAllHealthFacilities() async {
+import '../schedule_model.dart';
+
+class ScheduleApi {
+  getAllSchedules() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     try {
       final response = await Dio().get(
-        '$baseUrl/api/v1/facility/',
+        'http://ec2-3-237-105-224.compute-1.amazonaws.com:8080/api/v1/schedule',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -19,10 +19,10 @@ class HealthFacilityApi {
         ),
       );
       if (response.statusCode == 200) {
-        final healthFacilitiesList = (response.data['data'] as List)
-            .map((e) => HealthFacilityModel.fromJson(e))
+        final schedules = (response.data['data'] as List)
+            .map((e) => ScheduleModel.fromJson(e))
             .toList();
-        return healthFacilitiesList;
+        return schedules;
       }
     } on Exception catch (_) {
       Fluttertoast.showToast(msg: 'Failed Fetch');

@@ -238,7 +238,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: query.isEmpty ? 2 : healthFacilities.result.length,
+              itemCount: query.isEmpty
+                  ? healthFacilities.facilityList.length
+                  : healthFacilities.result.length,
               itemBuilder: (context, index) {
                 if (healthFacilities.facilityList.isEmpty) {
                   return buildSkeleton();
@@ -256,6 +258,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                                 facilities: query.isEmpty
                                     ? healthFacilities.facilityList[index]
                                     : healthFacilities.result[index],
+                                id: query.isEmpty
+                                    ? healthFacilities.facilityList[index].id
+                                    : healthFacilities.result[index].id,
                               ),
                             ),
                           );

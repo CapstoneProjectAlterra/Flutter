@@ -102,7 +102,11 @@ class _RegisterState extends State<RegisterScreen> {
                             child: name == null ||
                                     password == null ||
                                     nik == null ||
-                                    email == null
+                                    email == null ||
+                                    name!.isEmpty ||
+                                    password!.isEmpty ||
+                                    nik!.isEmpty ||
+                                    email!.isEmpty
                                 ? ElevatedButton(
                                     onPressed: null,
                                     child: Text("Register",
@@ -120,7 +124,6 @@ class _RegisterState extends State<RegisterScreen> {
                                             "REGISTER",
                                           ),
                                     onPressed: () async {
-                                      _formKey.currentState!.save();
                                       if (isLoading) return;
                                       setState(() => isLoading = true);
                                       await Future.delayed(
@@ -130,12 +133,12 @@ class _RegisterState extends State<RegisterScreen> {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
                                         try {
-                                          Future.delayed(
+                                          await Future.delayed(
                                             const Duration(seconds: 2),
                                           )
                                               .then(
-                                                (value) =>
-                                                    register.postRegister(
+                                                (value) async =>
+                                                    await register.postRegister(
                                                   RegisterModel(
                                                     nik: _nikEditingController
                                                         .text,
@@ -145,6 +148,8 @@ class _RegisterState extends State<RegisterScreen> {
                                                     password:
                                                         _passwordEditingController
                                                             .text,
+                                                    name: _nameEditingController
+                                                        .text,
                                                     profile: {"role": "USER"},
                                                   ),
                                                 ),
@@ -157,7 +162,8 @@ class _RegisterState extends State<RegisterScreen> {
                                               )
                                               .then(
                                                 (value) async =>
-                                                    Navigator.of(context).push(
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
                                                   NavigatorFadeTransition(
                                                     child: const LoginScreen(),
                                                   ),
@@ -205,7 +211,7 @@ class _RegisterState extends State<RegisterScreen> {
       inputFormatters: [
         LengthLimitingTextInputFormatter(25),
         FilteringTextInputFormatter.allow(
-          RegExp("[0-9a-zA-Z ]"),
+          RegExp("[a-zA-Z ]"),
         ),
       ],
       onChanged: (value) => setState(

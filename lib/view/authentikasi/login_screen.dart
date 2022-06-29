@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/components/botnavbar.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/authentikasi/register_screen.dart';
@@ -128,7 +129,10 @@ class _RegisterState extends State<LoginScreen> {
       child: SizedBox(
         height: 50,
         width: double.infinity,
-        child: nik == null || password == null
+        child: nik == null ||
+                password == null ||
+                nik!.isEmpty ||
+                password!.isEmpty
             ? ElevatedButton(
                 onPressed: null,
                 child: Text("Login",
@@ -154,7 +158,9 @@ class _RegisterState extends State<LoginScreen> {
                   setState(() => isLoading = false);
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-
+                    SharedPreferences? prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setString('nik', _nikEditingController.text);
                     try {
                       await Future.delayed(
                         const Duration(seconds: 2),

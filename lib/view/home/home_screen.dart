@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/components/skeleton_container.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../profile/edit_profile.dart';
 
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     if (isInit == true) {
       Provider.of<HomeViewModel>(context, listen: false).getAllNews();
+      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
       isInit = false;
     }
     super.didChangeDependencies();
@@ -31,6 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final news = Provider.of<HomeViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
+
+    if (user.userData.isEmpty) {
+      Provider.of<ProfileViewModel>(context).nameUser();
+    }
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -66,13 +74,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(
                               width: 4,
                             ),
-                            Text(
-                              "Nama User!",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline3!
-                                  .copyWith(color: Colors.white),
-                            ),
+                            user.userData.isEmpty
+                                ? Text(
+                                    "null",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(color: Colors.white),
+                                  )
+                                : Text(
+                                    user.userData[0].name!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(color: Colors.white),
+                                  ),
                           ],
                         )
                       ],
@@ -203,13 +219,13 @@ class _HomeScreenState extends State<HomeScreen> {
           return buildSkeleton();
         }
         return GestureDetector(
-          onTap: () async {
-            if (await canLaunchUrl(
-              Uri.parse(viewModel.newsList[index].url),
-            )) {
-              await launchUrl(
+          onTap: () {
+            try {
+              launchUrl(
                 Uri.parse(viewModel.newsList[index].url),
               );
+            } catch (_) {
+              Fluttertoast.showToast(msg: 'Something Wrong');
             }
           },
           child: Padding(
@@ -274,6 +290,14 @@ class _HomeScreenState extends State<HomeScreen> {
         height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width * 0.6,
       ),
+    );
+  }
+
+  Widget textSkeleton() {
+    return SkeletonContainer(
+      borderRadius: 0,
+      height: MediaQuery.of(context).size.height * 0.03,
+      width: MediaQuery.of(context).size.width * 0.3,
     );
   }
 }

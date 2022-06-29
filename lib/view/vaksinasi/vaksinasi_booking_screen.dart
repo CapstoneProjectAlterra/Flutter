@@ -2,16 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
+import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/skeleton_container.dart';
 import '../../model/vaksinasi/health_facility_model.dart';
 
 class VaksinasiBookingScreen extends StatefulWidget {
   final HealthFacilityModel facilities;
-  const VaksinasiBookingScreen({Key? key, required this.facilities})
+  final int? id;
+  const VaksinasiBookingScreen({Key? key, required this.facilities, this.id})
       : super(key: key);
 
   @override
@@ -19,6 +22,7 @@ class VaksinasiBookingScreen extends StatefulWidget {
 }
 
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
+  bool isInit = true;
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
   String tempString = '';
@@ -28,7 +32,21 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   bool vaksinD = false;
 
   @override
+  void didChangeDependencies() {
+    if (isInit == true) {
+      Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
+      isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final schedule = Provider.of<VaksinasiViewModel>(context);
+    setState(() {
+      Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
+    });
+
     return Scaffold(
       body: SlidingUpPanel(
         defaultPanelState: PanelState.CLOSED,
@@ -147,7 +165,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          selectVaccine(),
+                          selectVaccine(schedule),
                           const SizedBox(
                             height: 16,
                           ),
@@ -349,7 +367,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     );
   }
 
-  Widget selectVaccine() {
+  Widget selectVaccine(VaksinasiViewModel schedule) {
     return Row(
       children: [
         Column(
@@ -413,7 +431,11 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                   ? customContainerVaksin(
                       color: secondColorLow,
                       border: primaryColor,
-                      jenisVaksin: "Sinovac",
+                      jenisVaksin:
+                          schedule.filterScheduleList[0].vaccine.isEmpty
+                              ? "-"
+                              : schedule.filterScheduleList[0]
+                                  .vaccine['vaccine_name'],
                       time: "09.00 - 10.00",
                       stock: 100,
                       tahap: 1,

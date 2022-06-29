@@ -19,9 +19,11 @@ class MoreFacilityScreen extends StatefulWidget {
 }
 
 class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
+  bool isInit = true;
   String moreQuery = '';
   bool isExpand = false;
   TextEditingController searchController = TextEditingController();
+
   @override
   void dispose() {
     searchController.dispose();
@@ -29,8 +31,22 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (isInit == true) {
+      Provider.of<VaksinasiViewModel>(context, listen: false)
+          .searchMoreFacility(query: moreQuery);
+      isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final healthFacilities = Provider.of<VaksinasiViewModel>(context);
+    setState(() {
+      healthFacilities.searchMoreFacility(
+          query: moreQuery, query2: widget.query);
+    });
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
@@ -309,7 +325,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
           ),
           widget.query!.isEmpty
               ? Text(
-                  'All health of facility',
+                  'all health of facility',
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!

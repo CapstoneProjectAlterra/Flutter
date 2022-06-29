@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const baseUrl = 'http://ec2-3-237-105-224.compute-1.amazonaws.com:8080';
+
 const textColor = Color(0xFF35364F);
 const primaryColor = Color(0xFF06919D);
 const secondColor = Color(0xFF6CC5CD);

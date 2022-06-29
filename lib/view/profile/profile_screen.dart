@@ -6,14 +6,33 @@ import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/profile/edit_profile.dart';
 import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../components/constants.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool isInit = true;
+  @override
+  void didChangeDependencies() {
+    if (isInit == true) {
+      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
+      Provider.of<ProfileViewModel>(context, listen: false).nameUser();
+      isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deleteToken = Provider.of<AuthViewModel>(context);
+    final profile = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -66,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                      detailProfile(context),
+                      detailProfile(context, profile),
                       const SizedBox(
                         height: 16,
                       ),
@@ -99,6 +118,8 @@ class ProfileScreen extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               deleteToken.deleteToken();
+                              profile.userData.clear();
+                              profile.userList.clear();
                               Navigator.of(context, rootNavigator: true)
                                   .pushReplacement(
                                 NavigatorFadeTransition(
@@ -160,77 +181,98 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget detailProfile(context) {
+  Widget detailProfile(context, ProfileViewModel profile) {
     return Column(
       children: [
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/user.svg',
-              title: "Nama Lengkap Pemesan",
+              title: profile.userData.isEmpty
+                  ? "Nama Lengkap Pemesan"
+                  : profile.userData[0].name ?? "Nama Lengkap Pemesan",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/badge.svg',
-              title: "Nomor NIK",
+              title: profile.userData.isEmpty
+                  ? "Nomor NIK"
+                  : profile.userData[0].nik ?? "Nomor NIK",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: "Tempat Lahir",
+              title: profile.userData.isEmpty
+                  ? "Tanggal Lahir"
+                  : profile.userData[0].placeBirth ?? "Tempat Lahir",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/datetime.svg',
-              title: "Tanggal Lahir",
+              title: profile.userData.isEmpty
+                  ? "Tanggal Lahir"
+                  : profile.userData[0].dateBirth ?? "Tanggal Lahir",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/gender.svg',
-              title: "Gender",
+              title: profile.userData.isEmpty
+                  ? "Gender"
+                  : profile.userData[0].gender ?? "Gender",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/envelop.svg',
-              title: "Alamat Email",
+              title: profile.userData.isEmpty
+                  ? "Alamat Email"
+                  : profile.userData[0].email ?? "Alamat Email",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/phone.svg',
-              title: "Nomor Hp",
+              title: profile.userData.isEmpty
+                  ? "Nomor Hp"
+                  : profile.userData[0].phone ?? "Nomor Hp",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/status.svg',
-              title: "Status Keluarga",
+              title: profile.userData.isEmpty
+                  ? "Status Keluarga"
+                  : profile.userData[0].statusFamily ?? "Status Keluarga",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: "Alamat Berdasarkan KTP",
+              title: profile.userData.isEmpty
+                  ? "Alamat Berdasarkan KTP"
+                  : profile.userData[0].idCardAddress ??
+                      "Alamat Berdasarkan KTP",
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: "Alamat Domisili",
+              title: profile.userData.isEmpty
+                  ? "Alamat Domisili"
+                  : profile.userData[0].address ?? "Alamat Domisili",
               context: context),
         ),
       ],

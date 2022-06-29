@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import '../../components/constants.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -12,16 +14,54 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  bool isInit = true;
   String? gender;
   String? status;
-  final itemsGender = ['Laki - laki', 'Perempuan'];
-  final itemsStatus = ['Ayah', 'Ibu', 'Saudara Kandung'];
-  final TextEditingController dateCtl = TextEditingController();
+  final TextEditingController _tanggalLahir = TextEditingController();
   final TextEditingController _nameEditingController = TextEditingController();
+  final TextEditingController _nikEditingController = TextEditingController();
+  final TextEditingController _tempatLahirEditingController =
+      TextEditingController();
+  final TextEditingController _genderEditingController =
+      TextEditingController();
+  final TextEditingController _emailEditingController = TextEditingController();
+  final TextEditingController _phoneEditingController = TextEditingController();
+  final TextEditingController _statusEditingController =
+      TextEditingController();
+  final TextEditingController _alamatKTPEditingController =
+      TextEditingController();
+  final TextEditingController _alamatDomisiliEditingController =
+      TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    if (isInit == true) {
+      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
+      Provider.of<ProfileViewModel>(context, listen: false).nameUser();
+      isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _tanggalLahir.dispose();
+    _nameEditingController.dispose();
+    _nikEditingController.dispose();
+    _tempatLahirEditingController.dispose();
+    _genderEditingController.dispose();
+    _emailEditingController.dispose();
+    _phoneEditingController.dispose();
+    _statusEditingController.dispose();
+    _alamatKTPEditingController.dispose();
+    _alamatDomisiliEditingController.dispose();
+    super.dispose();
+  }
 
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -123,7 +163,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             genderField(
                                 hintText: 'Jenis Kelamn',
                                 assetIcon: 'assets/icons/gender.svg',
-                                item: itemsGender),
+                                item: user.itemsGender),
                             const SizedBox(
                               height: 16,
                             ),
@@ -146,7 +186,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             statusField(
                                 hintText: 'Status Keluarga',
                                 assetIcon: 'assets/icons/status.svg',
-                                item: itemsStatus),
+                                item: user.itemsStatus),
                             const SizedBox(
                               height: 16,
                             ),
@@ -174,7 +214,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: SizedBox(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.85,
-                          child: dateCtl.text.isEmpty &&
+                          child: _tanggalLahir.text.isEmpty &&
                                   _nameEditingController.text.isEmpty
                               ? ElevatedButton(
                                   onPressed: null,
@@ -232,7 +272,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 if (pickedDate != null) {
                   setState(
                     () {
-                      dateCtl.text =
+                      _tanggalLahir.text =
                           DateFormat('dd-MM-yyyy').format(pickedDate);
                     },
                   );
@@ -288,7 +328,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   filled: true,
                 ),
                 textInputAction: TextInputAction.next,
-                controller: dateCtl,
+                controller: _tanggalLahir,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Required";

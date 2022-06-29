@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 
+import '../../../components/constants.dart';
 import '../register_model.dart';
 
 class RegisterApi {
   postLogin({RegisterModel? register}) async {
     try {
       await Dio().post(
-        "http://ec2-3-237-105-224.compute-1.amazonaws.com:8080/api/v1/auth/register",
+        "$baseUrl/api/v1/auth/register",
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -16,7 +17,11 @@ class RegisterApi {
       );
     } catch (e) {
       if (e is DioError) {
-        throw e.toString();
+        if (e.response!.statusCode == 409) {
+          throw e.response!.data['status']['message'];
+        } else {
+          throw 'something wrong';
+        }
       }
     }
   }
