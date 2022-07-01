@@ -9,6 +9,7 @@ import 'package:vaccine_booking/components/skeleton_container.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
+import '../../view_model/vaksinasi_view_model.dart';
 import '../profile/edit_profile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,14 +20,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isInit = true;
-
   @override
   void didChangeDependencies() {
-    if (isInit == true) {
+    if (isTrue == true) {
       Provider.of<HomeViewModel>(context, listen: false).getAllNews();
-      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
-      isInit = false;
+      Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
+      Provider.of<ProfileViewModel>(context, listen: false).detailProfile();
+      Provider.of<ProfileViewModel>(context, listen: false).getAllUsers();
+      Provider.of<VaksinasiViewModel>(context, listen: false)
+          .getAllHealthFacilities();
+      Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
+      Provider.of<ProfileViewModel>(context, listen: false).filterUser();
+      isTrue = false;
     }
     super.didChangeDependencies();
   }
@@ -35,10 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final news = Provider.of<HomeViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
-
     if (user.userData.isEmpty) {
-      Provider.of<ProfileViewModel>(context).nameUser();
+      Provider.of<ProfileViewModel>(context).filterFamilyUser();
     }
+    Provider.of<ProfileViewModel>(context).filterUser();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),

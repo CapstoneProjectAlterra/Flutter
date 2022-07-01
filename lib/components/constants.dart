@@ -17,7 +17,7 @@ const statusInfo = Color(0XFF1890FF);
 const pressedColor = Color(0xff03484E);
 const lowPressedColor = Color(0xffCDE9EB);
 
-bool isInit = true;
+bool isTrue = true;
 
 const LinearGradient gradientVertical = LinearGradient(
   begin: Alignment.topCenter,

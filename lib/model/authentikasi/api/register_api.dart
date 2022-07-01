@@ -18,9 +18,9 @@ class RegisterApi {
     } catch (e) {
       if (e is DioError) {
         if (e.response!.statusCode == 409) {
-          throw e.response!.data['status']['message'];
+          throw 'NIK Sudah Digunakan';
         } else {
-          throw 'something wrong';
+          throw 'Ada masalah dengan koneksi ke server';
         }
       }
     }

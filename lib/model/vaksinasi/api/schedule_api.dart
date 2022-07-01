@@ -25,7 +25,7 @@ class ScheduleApi {
         return schedules;
       }
     } on Exception catch (_) {
-      Fluttertoast.showToast(msg: 'Failed Fetch');
+      Fluttertoast.showToast(msg: 'Ada masalah dengan koneksi ke server');
     }
   }
 }

@@ -20,22 +20,11 @@ class VaksinasiScreen extends StatefulWidget {
 
 class _VaksinasiScreenState extends State<VaksinasiScreen> {
   String query = '';
-  bool isInit = true;
   TextEditingController searchController = TextEditingController();
   @override
   void dispose() {
     searchController.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<VaksinasiViewModel>(context, listen: false)
-          .getAllHealthFacilities();
-      isInit = false;
-    }
-    super.didChangeDependencies();
   }
 
   @override

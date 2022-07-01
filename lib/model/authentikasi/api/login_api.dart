@@ -23,9 +23,11 @@ class LoginApi {
       }
     } catch (e) {
       if (e is DioError) {
-        throw e.response!.data['status']['message'];
+        if (e.response!.statusCode == 400) {
+          throw 'NIK Atau Password Salah';
+        }
       } else {
-        throw 'something wrong';
+        throw 'Ada masalah dengan koneksi ke server';
       }
     }
     return token!;

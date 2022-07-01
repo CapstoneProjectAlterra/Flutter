@@ -4,9 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:vaccine_booking/model/profile/family_model.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
+import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
+import '../../components/navigator_fade_transition.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -56,43 +59,88 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final user = Provider.of<ProfileViewModel>(context);
 
     if (isLoad == true) {
-      if (user.userData[0].dateBirth != null) {
-        tanggalLahir.text = user.userData[0].dateBirth!;
-        dateBirth = user.userData[0].dateBirth!;
-      }
-      if (user.userData[0].name != null) {
-        nameEditingController.text = user.userData[0].name!;
-        name = user.userData[0].name!;
-      }
-      if (user.userData[0].nik != null) {
-        nikEditingController.text = user.userData[0].nik!;
-        nik = user.userData[0].nik!;
-      }
-      if (user.userData[0].placeBirth != null) {
-        tempatLahirEditingController.text = user.userData[0].placeBirth!;
-        placeBirth = user.userData[0].placeBirth!;
-      }
-      if (user.userData[0].email != null) {
-        emailEditingController.text = user.userData[0].email!;
-        email = user.userData[0].email!;
-      }
-      if (user.userData[0].phone != null) {
-        phoneEditingController.text = user.userData[0].phone!;
-        phone = user.userData[0].phone!;
-      }
-      if (user.userData[0].idCardAddress != null) {
-        alamatKTPEditingController.text = user.userData[0].idCardAddress!;
-        idCardAddress = user.userData[0].idCardAddress!;
-      }
-      if (user.userData[0].address != null) {
-        alamatDomisiliEditingController.text = user.userData[0].address!;
-        address = user.userData[0].address!;
-      }
-      if (user.userData[0].statusFamily != null) {
-        status = user.userData[0].statusFamily!.toLowerCase();
-      }
-      if (user.userData[0].gender != null) {
-        gender = user.userData[0].gender!.toLowerCase();
+      if (user.userData.isEmpty) {
+        dateBirth = '';
+        name = '';
+        nik = '';
+        placeBirth = '';
+        email = '';
+        phone = '';
+        idCardAddress = '';
+        address = '';
+        status = '';
+        gender = '';
+        tanggalLahir.text = '';
+        nameEditingController.text = '';
+        nikEditingController.text = '';
+        tempatLahirEditingController.text = '';
+        emailEditingController.text = '';
+        phoneEditingController.text = '';
+        alamatKTPEditingController.text = '';
+        alamatDomisiliEditingController.text = '';
+      } else {
+        if (user.userData[0].dateBirth != null) {
+          tanggalLahir.text = user.userData[0].dateBirth!;
+          dateBirth = user.userData[0].dateBirth!;
+        } else {
+          tanggalLahir.text = '';
+          dateBirth = '';
+        }
+        if (user.userData[0].name != null) {
+          nameEditingController.text = user.userData[0].name!;
+          name = user.userData[0].name!;
+        } else {
+          nameEditingController.text = '';
+          name = '';
+        }
+        if (user.userData[0].nik != null) {
+          nikEditingController.text = user.userData[0].nik!;
+          nik = user.userData[0].nik!;
+        } else {
+          nikEditingController.text = '';
+          nik = '';
+        }
+        if (user.userData[0].placeBirth != null) {
+          tempatLahirEditingController.text = user.userData[0].placeBirth!;
+          placeBirth = user.userData[0].placeBirth!;
+        } else {
+          tempatLahirEditingController.text = '';
+          placeBirth = '';
+        }
+        if (user.userData[0].email != null) {
+          emailEditingController.text = user.userData[0].email!;
+          email = user.userData[0].email!;
+        } else {
+          emailEditingController.text = '';
+          email = '';
+        }
+        if (user.userData[0].phone != null) {
+          phoneEditingController.text = user.userData[0].phone!;
+          phone = user.userData[0].phone!;
+        } else {
+          phoneEditingController.text = '';
+          phone = '';
+        }
+        if (user.userData[0].idCardAddress != null) {
+          alamatKTPEditingController.text = user.userData[0].idCardAddress!;
+          idCardAddress = user.userData[0].idCardAddress!;
+        } else {
+          alamatKTPEditingController.text = '';
+          idCardAddress = '';
+        }
+        if (user.userData[0].address != null) {
+          alamatDomisiliEditingController.text = user.userData[0].address!;
+          address = user.userData[0].address!;
+        } else {
+          alamatDomisiliEditingController.text = '';
+          address = '';
+        }
+        if (user.userData[0].statusFamily != null) {
+          status = user.userData[0].statusFamily!.toLowerCase();
+        }
+        if (user.userData[0].gender != null) {
+          gender = user.userData[0].gender!.toLowerCase();
+        }
       }
       isLoad = false;
     }
@@ -227,86 +275,158 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: SizedBox(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.85,
-                          child:
-                              name == null ||
-                                      name!.isEmpty ||
-                                      placeBirth == null ||
-                                      placeBirth!.isEmpty ||
-                                      idCardAddress == null ||
-                                      idCardAddress!.isEmpty ||
-                                      address == null ||
-                                      address!.isEmpty ||
-                                      nik == null ||
-                                      nik!.isEmpty ||
-                                      phone == null ||
-                                      phone!.isEmpty ||
-                                      email == null ||
-                                      email!.isEmpty ||
-                                      dateBirth == null ||
-                                      dateBirth!.isEmpty ||
-                                      gender == null ||
-                                      gender!.isEmpty ||
-                                      status == null ||
-                                      status!.isEmpty
-                                  ? ElevatedButton(
-                                      onPressed: null,
-                                      child: Text(
-                                        "Simpan",
-                                        style: TextStyle(
-                                            color: Colors.grey.shade300),
-                                      ),
-                                    )
-                                  : ElevatedButton(
-                                      child: const Text(
-                                        "Simpan",
-                                      ),
-                                      onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          _formKey.currentState!.save();
-                                          isInit = true;
-                                          int id = user
-                                              .userData[0].profile!['user_id'];
+                          child: name == null ||
+                                  name!.isEmpty ||
+                                  placeBirth == null ||
+                                  placeBirth!.isEmpty ||
+                                  idCardAddress == null ||
+                                  idCardAddress!.isEmpty ||
+                                  address == null ||
+                                  address!.isEmpty ||
+                                  nik == null ||
+                                  nik!.isEmpty ||
+                                  phone == null ||
+                                  phone!.isEmpty ||
+                                  email == null ||
+                                  email!.isEmpty ||
+                                  dateBirth == null ||
+                                  dateBirth!.isEmpty ||
+                                  gender == null ||
+                                  gender!.isEmpty ||
+                                  status == null ||
+                                  status!.isEmpty
+                              ? ElevatedButton(
+                                  onPressed: null,
+                                  child: Text(
+                                    "Simpan",
+                                    style:
+                                        TextStyle(color: Colors.grey.shade300),
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  child: const Text(
+                                    "Simpan",
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      int id =
+                                          user.userData[0].profile!['user_id'];
+                                      List<UserModel> resultContains = [];
+                                      List<UserModel> contains = user.userList
+                                          .where(
+                                            (element) => element.username!
+                                                .contains(
+                                                    nikEditingController.text),
+                                          )
+                                          .toList();
+                                      String containsNIK = '';
 
-                                          try {
-                                            await Future.delayed(
-                                              const Duration(seconds: 1),
-                                            )
-                                                .then(
-                                                  (_) async => await user.editProfile(
-                                                      UserModel(
-                                                          name:
-                                                              nameEditingController
-                                                                  .text,
-                                                          nik: nikEditingController.text,
-                                                          email: emailEditingController.text,
-                                                          phone: phoneEditingController.text,
-                                                          gender: gender!.toUpperCase(),
-                                                          dateBirth: tanggalLahir.text,
-                                                          address: alamatDomisiliEditingController.text,
-                                                          idCardAddress: alamatKTPEditingController.text,
-                                                          placeBirth: tempatLahirEditingController.text,
-                                                          statusFamily: status!.toUpperCase(),
-                                                          profile: {
-                                                            "user_id": id
-                                                          }),
-                                                      user.userData[0].id!),
-                                                )
-                                                .then(
-                                                  (_) => Fluttertoast.showToast(
+                                      if (contains.isNotEmpty) {
+                                        resultContains = contains;
+                                      }
+
+                                      if (contains[0].username != null ||
+                                          contains[0].username!.isNotEmpty) {
+                                        containsNIK = contains[0].username!;
+                                      }
+
+                                      try {
+                                        await Future.delayed(
+                                          const Duration(seconds: 1),
+                                        )
+                                            .then(
+                                              (_) async {
+                                                if (resultContains.isEmpty ||
+                                                    containsNIK == user.nik) {
+                                                  await user.editFamily(
+                                                      FamilyModel(
+                                                        name:
+                                                            nameEditingController
+                                                                .text,
+                                                        nik:
+                                                            nikEditingController
+                                                                .text,
+                                                        email:
+                                                            emailEditingController
+                                                                .text,
+                                                        phone:
+                                                            phoneEditingController
+                                                                .text,
+                                                        gender: gender!
+                                                            .toUpperCase(),
+                                                        dateBirth:
+                                                            tanggalLahir.text,
+                                                        address:
+                                                            alamatDomisiliEditingController
+                                                                .text,
+                                                        idCardAddress:
+                                                            alamatKTPEditingController
+                                                                .text,
+                                                        placeBirth:
+                                                            tempatLahirEditingController
+                                                                .text,
+                                                        statusFamily: status!
+                                                            .toUpperCase(),
+                                                        profile: {
+                                                          "user_id": id
+                                                        },
+                                                      ),
+                                                      user.userData[0].id!);
+                                                } else {
+                                                  Fluttertoast.showToast(
                                                       msg:
-                                                          "Berhasil Mengubah Data Diri"),
-                                                )
-                                                .then(
-                                                  (_) => Navigator.pop(context),
-                                                );
-                                          } catch (e) {
-                                            Fluttertoast.showToast(
-                                              msg: e.toString(),
+                                                          'NIK Sudah Digunakan');
+                                                }
+                                              },
+                                            )
+                                            .then((_) async => await user.editUser(
+                                                user: UserModel(
+                                                    email:
+                                                        emailEditingController
+                                                            .text,
+                                                    name: nameEditingController
+                                                        .text,
+                                                    profile: user
+                                                        .filterIdUser[0]
+                                                        .profile,
+                                                    password: user
+                                                        .filterIdUser[0]
+                                                        .password,
+                                                    username:
+                                                        nikEditingController
+                                                            .text),
+                                                id: user.filterIdUser[0].id!))
+                                            .then(
+                                              (_) => Fluttertoast.showToast(
+                                                  msg:
+                                                      "Berhasil Mengubah Data Diri"),
+                                            )
+                                            .then(
+                                              (value) =>
+                                                  user.familyList.clear(),
+                                            )
+                                            .then(
+                                              (value) => user.userData.clear(),
+                                            )
+                                            .then((value) => isTrue = true)
+                                            .then(
+                                              (_) => Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                NavigatorFadeTransition(
+                                                  child: const BotNavBar(),
+                                                ),
+                                                ModalRoute.withName('/home'),
+                                              ),
                                             );
-                                          }
-                                        }
-                                      },
-                                    ),
+                                      } catch (e) {
+                                        Fluttertoast.showToast(
+                                          msg: e.toString(),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
                         ),
                       ),
                       const SizedBox(

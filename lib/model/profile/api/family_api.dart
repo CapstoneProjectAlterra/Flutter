@@ -3,15 +3,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/constants.dart';
-import '../user_model.dart';
+import '../family_model.dart';
 
-class UserApi {
-  getAllUser() async {
+class FamilyApi {
+  getAllFamilies() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     try {
       final response = await Dio().get(
-        '$baseUrl/api/v1/user/',
+        '$baseUrl/api/v1/family/',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -20,25 +20,25 @@ class UserApi {
         ),
       );
       if (response.statusCode == 200) {
-        final userList = (response.data['data'] as List)
+        final familyList = (response.data['data'] as List)
             .map(
-              (e) => UserModel.fromJson(e),
+              (e) => FamilyModel.fromJson(e),
             )
             .toList();
-        return userList;
+        return familyList;
       }
     } on Exception catch (_) {
-      Fluttertoast.showToast(msg: 'Ada masalah dengan koneksi ke server');
+      Fluttertoast.showToast(msg: 'Failed Fetch');
     }
   }
 
-  editUser({UserModel? user, int? id}) async {
+  editFamily({int? id, FamilyModel? profile}) async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     try {
       await Dio().put(
-        '$baseUrl/api/v1/user/$id/',
-        data: user!.toJson(),
+        '$baseUrl/api/v1/family/$id',
+        data: profile!.toJson(),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -48,11 +48,9 @@ class UserApi {
       );
     } catch (e) {
       if (e is DioError) {
-        if (e.response!.statusCode == 409) {
-          throw "NIK Sudah Digunakan";
-        } else {
-          throw 'Ada masalah dengan koneksi ke server';
-        }
+        throw e.response!.data['error'];
+      } else {
+        throw 'Ada masalah dengan koneksi ke server';
       }
     }
   }

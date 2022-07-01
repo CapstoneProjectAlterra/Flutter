@@ -19,19 +19,10 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<ProfileViewModel>(context, listen: false).getAllUser();
-      Provider.of<ProfileViewModel>(context, listen: false).nameUser();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final deleteToken = Provider.of<AuthViewModel>(context);
-    final profile = Provider.of<ProfileViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -84,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      detailProfile(context, profile),
+                      detailProfile(context, user),
                       const SizedBox(
                         height: 16,
                       ),
@@ -117,8 +108,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           TextButton(
                             onPressed: () {
                               deleteToken.deleteToken();
-                              profile.userData.clear();
-                              profile.userList.clear();
+                              user.userData.clear();
+                              user.familyList.clear();
                               Navigator.of(context, rootNavigator: true)
                                   .pushReplacement(
                                 NavigatorFadeTransition(
@@ -187,91 +178,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 45,
           child: customProfile(
               icon: 'assets/icons/user.svg',
-              title: profile.userData.isEmpty
-                  ? "Nama Lengkap Pemesan"
-                  : profile.userData[0].name ?? "Nama Lengkap Pemesan",
+              title: profile.name.isEmpty ? "Nama Lengkap" : profile.name,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/badge.svg',
-              title: profile.userData.isEmpty
-                  ? "Nomor NIK"
-                  : profile.userData[0].nik ?? "Nomor NIK",
+              title: profile.nik.isEmpty ? 'Nomor NIK' : profile.nik,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: profile.userData.isEmpty
-                  ? "Tanggal Lahir"
-                  : profile.userData[0].placeBirth ?? "Tempat Lahir",
+              title: profile.placeBirth.isEmpty
+                  ? "Kota Lahir"
+                  : profile.placeBirth,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/datetime.svg',
-              title: profile.userData.isEmpty
+              title: profile.dateBirth.isEmpty
                   ? "Tanggal Lahir"
-                  : profile.userData[0].dateBirth ?? "Tanggal Lahir",
+                  : profile.dateBirth,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/gender.svg',
-              title: profile.userData.isEmpty
+              title: profile.gender.isEmpty
                   ? "Gender"
-                  : profile.userData[0].gender!.toLowerCase(),
+                  : profile.gender.toLowerCase(),
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/envelop.svg',
-              title: profile.userData.isEmpty
-                  ? "Alamat Email"
-                  : profile.userData[0].email ?? "Alamat Email",
+              title: profile.email.isEmpty ? "Alamat Email" : profile.email,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/phone.svg',
-              title: profile.userData.isEmpty
-                  ? "Nomor Hp"
-                  : profile.userData[0].phone ?? "Nomor Hp",
+              title: profile.phone.isEmpty ? "No hp" : profile.phone,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/status.svg',
-              title: profile.userData.isEmpty
-                  ? "Status Keluarga"
-                  : profile.userData[0].statusFamily!.toLowerCase(),
+              title: profile.status.isEmpty
+                  ? "Hubungan dalam keluarga"
+                  : profile.status.toLowerCase(),
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: profile.userData.isEmpty
-                  ? "Alamat Berdasarkan KTP"
-                  : profile.userData[0].idCardAddress ??
-                      "Alamat Berdasarkan KTP",
+              title: profile.idCardAddress.isEmpty
+                  ? "Alamat berdasarkan KTP"
+                  : profile.idCardAddress,
               context: context),
         ),
         SizedBox(
           height: 45,
           child: customProfile(
               icon: 'assets/icons/address.svg',
-              title: profile.userData.isEmpty
-                  ? "Alamat Domisili"
-                  : profile.userData[0].address ?? "Alamat Domisili",
+              title:
+                  profile.address.isEmpty ? "Alamat domisili" : profile.address,
               context: context),
         ),
       ],
