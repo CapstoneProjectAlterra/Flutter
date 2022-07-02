@@ -330,15 +330,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           contains[0].username!.isNotEmpty) {
                                         containsNIK = contains[0].username!;
                                       }
-
-                                      try {
-                                        await Future.delayed(
-                                          const Duration(seconds: 1),
-                                        )
-                                            .then(
-                                              (_) async {
-                                                if (resultContains.isEmpty ||
-                                                    containsNIK == user.nik) {
+                                      if (resultContains.isEmpty ||
+                                          containsNIK == user.nik) {
+                                        try {
+                                          await Future.delayed(
+                                            const Duration(seconds: 1),
+                                          )
+                                              .then(
+                                                (_) async {
+                                                  await user.editUser(
+                                                      user: UserModel(
+                                                          email:
+                                                              emailEditingController
+                                                                  .text,
+                                                          name:
+                                                              nameEditingController
+                                                                  .text,
+                                                          profile: user
+                                                              .filterIdUser[0]
+                                                              .profile,
+                                                          password: user
+                                                              .filterIdUser[0]
+                                                              .password,
+                                                          username:
+                                                              nikEditingController
+                                                                  .text),
+                                                      id: user
+                                                          .filterIdUser[0].id!);
+                                                },
+                                              )
+                                              .then(
+                                                (_) async {
                                                   await user.editFamily(
                                                       FamilyModel(
                                                         name:
@@ -373,56 +395,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                         },
                                                       ),
                                                       user.userData[0].id!);
-                                                } else {
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'NIK Sudah Digunakan');
-                                                }
-                                              },
-                                            )
-                                            .then((_) async => await user.editUser(
-                                                user: UserModel(
-                                                    email:
-                                                        emailEditingController
-                                                            .text,
-                                                    name: nameEditingController
-                                                        .text,
-                                                    profile: user
-                                                        .filterIdUser[0]
-                                                        .profile,
-                                                    password: user
-                                                        .filterIdUser[0]
-                                                        .password,
-                                                    username:
-                                                        nikEditingController
-                                                            .text),
-                                                id: user.filterIdUser[0].id!))
-                                            .then(
-                                              (_) => Fluttertoast.showToast(
-                                                  msg:
-                                                      "Berhasil Mengubah Data Diri"),
-                                            )
-                                            .then(
-                                              (value) =>
-                                                  user.familyList.clear(),
-                                            )
-                                            .then(
-                                              (value) => user.userData.clear(),
-                                            )
-                                            .then((value) => isTrue = true)
-                                            .then(
-                                              (_) => Navigator.of(context)
-                                                  .pushAndRemoveUntil(
-                                                NavigatorFadeTransition(
-                                                  child: const BotNavBar(),
+                                                },
+                                              )
+                                              .then(
+                                                (_) => Fluttertoast.showToast(
+                                                    msg:
+                                                        "Berhasil Mengubah Data Diri"),
+                                              )
+                                              .then(
+                                                (value) =>
+                                                    user.familyList.clear(),
+                                              )
+                                              .then(
+                                                (value) =>
+                                                    user.userData.clear(),
+                                              )
+                                              .then((value) => isTrue = true)
+                                              .then(
+                                                (_) => Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                  NavigatorFadeTransition(
+                                                    child: const BotNavBar(),
+                                                  ),
+                                                  ModalRoute.withName('/home'),
                                                 ),
-                                                ModalRoute.withName('/home'),
-                                              ),
-                                            );
-                                      } catch (e) {
+                                              );
+                                        } catch (e) {
+                                          Fluttertoast.showToast(
+                                            msg: e.toString(),
+                                          );
+                                        }
+                                      } else {
                                         Fluttertoast.showToast(
-                                          msg: e.toString(),
-                                        );
+                                            msg: 'NIK Sudah Digunakan');
                                       }
                                     }
                                   },
