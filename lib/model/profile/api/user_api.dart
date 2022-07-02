@@ -50,8 +50,6 @@ class UserApi {
       if (e is DioError) {
         if (e.response!.statusCode == 409) {
           throw "NIK Sudah Digunakan";
-        } else {
-          throw 'Ada masalah dengan koneksi ke server';
         }
       }
     }

@@ -4,12 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:vaccine_booking/model/profile/family_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
+import '../../model/profile/family_model.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -310,9 +311,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
-                                      int id =
-                                          user.userData[0].profile!['user_id'];
-                                      List<UserModel> resultContains = [];
+                                      SharedPreferences? prefs =
+                                          await SharedPreferences.getInstance();
                                       List<UserModel> contains = user.userList
                                           .where(
                                             (element) => element.username!
@@ -320,111 +320,106 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                     nikEditingController.text),
                                           )
                                           .toList();
-                                      String containsNIK = '';
-
-                                      if (contains.isNotEmpty) {
-                                        resultContains = contains;
-                                      }
-
-                                      if (contains[0].username != null ||
-                                          contains[0].username!.isNotEmpty) {
-                                        containsNIK = contains[0].username!;
-                                      }
-                                      if (resultContains.isEmpty ||
-                                          containsNIK == user.nik) {
-                                        try {
-                                          await Future.delayed(
-                                            const Duration(seconds: 1),
-                                          )
-                                              .then(
-                                                (_) async {
-                                                  await user.editUser(
-                                                      user: UserModel(
-                                                          email:
-                                                              emailEditingController
-                                                                  .text,
-                                                          name:
-                                                              nameEditingController
-                                                                  .text,
-                                                          profile: user
-                                                              .filterIdUser[0]
-                                                              .profile,
-                                                          password: user
-                                                              .filterIdUser[0]
-                                                              .password,
-                                                          username:
-                                                              nikEditingController
-                                                                  .text),
-                                                      id: user
-                                                          .filterIdUser[0].id!);
-                                                },
-                                              )
-                                              .then(
-                                                (_) async {
-                                                  await user.editFamily(
-                                                      FamilyModel(
-                                                        name:
-                                                            nameEditingController
-                                                                .text,
-                                                        nik:
-                                                            nikEditingController
-                                                                .text,
+                                      final id =
+                                          user.userData[0].profile!['user_id'];
+                                      if (contains.isEmpty ||
+                                          nikEditingController.text ==
+                                              user.nik) {
+                                        await Future.delayed(
+                                          const Duration(seconds: 1),
+                                        )
+                                            .then(
+                                              (_) async {
+                                                await user.editFamily(
+                                                    FamilyModel(
+                                                      name:
+                                                          nameEditingController
+                                                              .text,
+                                                      nik: nikEditingController
+                                                          .text,
+                                                      email:
+                                                          emailEditingController
+                                                              .text,
+                                                      phone:
+                                                          phoneEditingController
+                                                              .text,
+                                                      gender:
+                                                          gender!.toUpperCase(),
+                                                      dateBirth:
+                                                          tanggalLahir.text,
+                                                      address:
+                                                          alamatDomisiliEditingController
+                                                              .text,
+                                                      idCardAddress:
+                                                          alamatKTPEditingController
+                                                              .text,
+                                                      placeBirth:
+                                                          tempatLahirEditingController
+                                                              .text,
+                                                      statusFamily:
+                                                          status!.toUpperCase(),
+                                                      profile: {"user_id": id},
+                                                    ),
+                                                    user.userData[0].id!);
+                                              },
+                                            )
+                                            .then(
+                                              (_) async {
+                                                await user.editUser(
+                                                    user: UserModel(
                                                         email:
                                                             emailEditingController
                                                                 .text,
-                                                        phone:
-                                                            phoneEditingController
+                                                        name:
+                                                            nameEditingController
                                                                 .text,
-                                                        gender: gender!
-                                                            .toUpperCase(),
-                                                        dateBirth:
-                                                            tanggalLahir.text,
-                                                        address:
-                                                            alamatDomisiliEditingController
-                                                                .text,
-                                                        idCardAddress:
-                                                            alamatKTPEditingController
-                                                                .text,
-                                                        placeBirth:
-                                                            tempatLahirEditingController
-                                                                .text,
-                                                        statusFamily: status!
-                                                            .toUpperCase(),
-                                                        profile: {
-                                                          "user_id": id
-                                                        },
-                                                      ),
-                                                      user.userData[0].id!);
-                                                },
-                                              )
-                                              .then(
-                                                (_) => Fluttertoast.showToast(
-                                                    msg:
-                                                        "Berhasil Mengubah Data Diri"),
-                                              )
-                                              .then(
-                                                (value) =>
-                                                    user.familyList.clear(),
-                                              )
-                                              .then(
-                                                (value) =>
-                                                    user.userData.clear(),
-                                              )
-                                              .then((value) => isTrue = true)
-                                              .then(
-                                                (_) => Navigator.of(context)
-                                                    .pushAndRemoveUntil(
-                                                  NavigatorFadeTransition(
-                                                    child: const BotNavBar(),
-                                                  ),
-                                                  ModalRoute.withName('/home'),
+                                                        profile: user
+                                                            .filterIdUser[0]
+                                                            .profile,
+                                                        password:
+                                                            prefs.getString(
+                                                                'password'),
+                                                        username:
+                                                            nikEditingController
+                                                                .text),
+                                                    id: user
+                                                        .filterIdUser[0].id!);
+                                              },
+                                            )
+                                            .then(
+                                              (_) => Fluttertoast.showToast(
+                                                  msg:
+                                                      "Berhasil Mengubah Data Diri"),
+                                            )
+                                            .then(
+                                              (value) =>
+                                                  user.familyList.clear(),
+                                            )
+                                            .then(
+                                              (value) => user.userData.clear(),
+                                            )
+                                            .then(
+                                              (_) async => await prefs.remove(
+                                                'nik',
+                                              ),
+                                            )
+                                            .then(
+                                              (_) async =>
+                                                  await prefs.setString(
+                                                      'nik',
+                                                      nikEditingController
+                                                          .text),
+                                            )
+                                            .then((value) => isTrue = true)
+                                            .then(
+                                              (_) => Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                NavigatorFadeTransition(
+                                                  child: const BotNavBar(),
                                                 ),
-                                              );
-                                        } catch (e) {
-                                          Fluttertoast.showToast(
-                                            msg: e.toString(),
-                                          );
-                                        }
+                                                ModalRoute.withName('/home'),
+                                              ),
+                                            );
                                       } else {
                                         Fluttertoast.showToast(
                                             msg: 'NIK Sudah Digunakan');

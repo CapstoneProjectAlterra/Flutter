@@ -9,13 +9,15 @@ class LoginApi {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     String? token;
     try {
-      final response = await Dio().post("$baseUrl/api/v1/auth/login",
-          options: Options(
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          ),
-          data: login!.toJson());
+      final response = await Dio().post(
+        "$baseUrl/api/v1/auth/login/",
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: login!.toJson(),
+      );
       if (response.statusCode == 200) {
         await prefs.setString("token", response.data['data']["token"]);
 

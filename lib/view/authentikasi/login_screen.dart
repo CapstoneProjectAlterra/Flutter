@@ -160,11 +160,25 @@ class _RegisterState extends State<LoginScreen> {
                     _formKey.currentState!.save();
                     SharedPreferences? prefs =
                         await SharedPreferences.getInstance();
-                    await prefs.setString('nik', _nikEditingController.text);
+
                     try {
                       await Future.delayed(
                         const Duration(seconds: 2),
                       )
+                          .then(
+                            (_) async => await prefs.remove('password'),
+                          )
+                          .then(
+                            (_) => prefs.setString(
+                                'password', _passwordEditingController.text),
+                          )
+                          .then(
+                            (_) async => await prefs.remove('nik'),
+                          )
+                          .then(
+                            (_) async => await prefs.setString(
+                                'nik', _nikEditingController.text),
+                          )
                           .then(
                             (value) async => await login.postLogin(
                               LoginModel(
@@ -177,6 +191,7 @@ class _RegisterState extends State<LoginScreen> {
                             (_) =>
                                 Fluttertoast.showToast(msg: "Berhasil Login"),
                           )
+                          .then((_) => isTrue = true)
                           .then(
                             (_) => Navigator.of(context).pushAndRemoveUntil(
                               NavigatorFadeTransition(

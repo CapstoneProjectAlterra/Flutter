@@ -48,7 +48,7 @@ class FamilyApi {
       );
     } catch (e) {
       if (e is DioError) {
-        throw e.response!.data['error'];
+        throw e.response!.data['error'].toString();
       } else {
         throw 'Ada masalah dengan koneksi ke server';
       }

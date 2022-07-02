@@ -13,7 +13,7 @@ class AuthViewModel extends ChangeNotifier {
 
   deleteToken() async {
     _prefs = await SharedPreferences.getInstance();
-    _prefs!.clear();
+    _prefs!.remove('token');
     notifyListeners();
   }
 

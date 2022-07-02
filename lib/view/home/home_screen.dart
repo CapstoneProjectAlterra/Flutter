@@ -29,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ProfileViewModel>(context, listen: false).getAllUsers();
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
-      Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
       Provider.of<ProfileViewModel>(context, listen: false).filterUser();
+      Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
       isTrue = false;
     }
     super.didChangeDependencies();
@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ProfileViewModel>(context).filterFamilyUser();
     }
     Provider.of<ProfileViewModel>(context).filterUser();
+    Provider.of<ProfileViewModel>(context).filterFamilyUser();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -60,12 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Home",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white),
+                        GestureDetector(
+                          onTap: () async {
+                            print(user.userData);
+                            print(user.filterIdUser[0].password);
+                          },
+                          child: Text(
+                            "Home",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: Colors.white),
+                          ),
                         ),
                         Row(
                           children: [
