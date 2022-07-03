@@ -2,18 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/api/family_api.dart';
-import 'package:vaccine_booking/model/profile/api/user_api.dart';
-import 'package:vaccine_booking/model/profile/user_model.dart';
 
 import '../model/profile/family_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   final familyApi = FamilyApi();
-  final userApi = UserApi();
   List<FamilyModel> familyList = [];
   List<FamilyModel> userData = [];
-  List<UserModel> userList = [];
-  List<UserModel> filterIdUser = [];
 
   final itemsGender = ['laki_laki', 'perempuan'];
   final itemsStatus = ['ayah', 'ibu', 'anak'];
@@ -32,25 +27,6 @@ class ProfileViewModel extends ChangeNotifier {
   getAllFamilies() async {
     final getAllFamilies = await familyApi.getAllFamilies();
     familyList = getAllFamilies;
-  }
-
-  getAllUsers() async {
-    final getAllUsers = await userApi.getAllUser();
-    userList = getAllUsers;
-  }
-
-  editUser({UserModel? user, int? id}) async {
-    await userApi.editUser(user: user, id: id);
-  }
-
-  filterUser() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    filterIdUser = userList
-        .where(
-          (element) => element.username!.contains(prefs.getString('nik')!),
-        )
-        .toList();
-    notifyListeners();
   }
 
   filterFamilyUser() async {

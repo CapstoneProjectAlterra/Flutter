@@ -5,9 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vaccine_booking/model/profile/user_model.dart';
+import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
-import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
 import '../../model/profile/family_model.dart';
@@ -20,6 +19,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  bool isLoading = false;
   bool isLoad = true;
   String? name;
   String? nik;
@@ -305,26 +305,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ),
                                 )
                               : ElevatedButton(
-                                  child: const Text(
-                                    "Simpan",
-                                  ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : const Text(
+                                          "Simpan",
+                                        ),
                                   onPressed: () async {
+                                    if (isLoading) return;
+                                    setState(() => isLoading = true);
+                                    await Future.delayed(
+                                      const Duration(seconds: 2),
+                                    );
+                                    setState(() => isLoading = false);
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
                                       SharedPreferences? prefs =
                                           await SharedPreferences.getInstance();
-                                      List<UserModel> contains = user.userList
+                                      List<FamilyModel> contains = user.userData
                                           .where(
-                                            (element) => element.username!
-                                                .contains(
-                                                    nikEditingController.text),
+                                            (element) => element.nik!.contains(
+                                                nikEditingController.text),
                                           )
                                           .toList();
                                       final id =
                                           user.userData[0].profile!['user_id'];
-                                      if (contains.isEmpty ||
-                                          nikEditingController.text ==
-                                              user.nik) {
+                                      if (contains.isEmpty) {
                                         await Future.delayed(
                                           const Duration(seconds: 1),
                                         )
@@ -364,58 +371,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               },
                                             )
                                             .then(
-                                              (_) {
-                                                user.editUser(
-                                                    user: UserModel(
-                                                        email:
-                                                            emailEditingController
-                                                                .text,
-                                                        name:
-                                                            nameEditingController
-                                                                .text,
-                                                        profile: user
-                                                            .filterIdUser[0]
-                                                            .profile,
-                                                        password:
-                                                            prefs.getString(
-                                                                'password'),
-                                                        username:
-                                                            nikEditingController
-                                                                .text),
-                                                    id: user
-                                                        .filterIdUser[0].id!);
-                                              },
-                                            )
-                                            .then(
                                               (_) => Fluttertoast.showToast(
                                                   msg:
-                                                      "Berhasil Mengubah Data Diri"),
+                                                      "Berhasil Mengubah Data Diri, silahkan login kembali menggunakan nik yang telah diubah"),
                                             )
                                             .then(
-                                              (value) =>
-                                                  user.familyList.clear(),
+                                              (_) => prefs.remove('token'),
                                             )
                                             .then(
-                                              (value) => user.userData.clear(),
+                                              (_) => user.familyList.clear(),
+                                            )
+                                            .then(
+                                              (_) => user.userData.clear(),
                                             )
                                             .then(
                                               (_) async => await prefs.remove(
                                                 'nik',
                                               ),
                                             )
-                                            .then(
-                                              (_) async =>
-                                                  await prefs.setString(
-                                                      'nik',
-                                                      nikEditingController
-                                                          .text),
-                                            )
-                                            .then((value) => isTrue = true)
+                                            .then((_) => isTrue = true)
                                             .then(
                                               (_) => Navigator.of(context)
                                                   .pushAndRemoveUntil(
                                                 NavigatorFadeTransition(
-                                                  child: const BotNavBar(),
+                                                  child: const LoginScreen(),
                                                 ),
                                                 ModalRoute.withName('/home'),
                                               ),

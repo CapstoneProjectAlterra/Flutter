@@ -24,8 +24,6 @@ class HealthFacilityApi {
             .toList();
         return healthFacilitiesList;
       }
-    } on Exception catch (_) {
-      Fluttertoast.showToast(msg: 'Ada masalah dengan koneksi ke server');
-    }
+    } on Exception catch (_) {}
   }
 }

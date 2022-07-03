@@ -27,9 +27,7 @@ class FamilyApi {
             .toList();
         return familyList;
       }
-    } on Exception catch (_) {
-      Fluttertoast.showToast(msg: 'Failed Fetch');
-    }
+    } on Exception catch (_) {}
   }
 
   editFamily({int? id, FamilyModel? profile}) async {
@@ -49,8 +47,6 @@ class FamilyApi {
     } catch (e) {
       if (e is DioError) {
         throw e.response!.data['error'].toString();
-      } else {
-        throw 'Ada masalah dengan koneksi ke server';
       }
     }
   }

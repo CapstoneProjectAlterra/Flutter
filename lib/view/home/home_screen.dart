@@ -26,10 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<HomeViewModel>(context, listen: false).getAllNews();
       Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
       Provider.of<ProfileViewModel>(context, listen: false).detailProfile();
-      Provider.of<ProfileViewModel>(context, listen: false).getAllUsers();
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
-      Provider.of<ProfileViewModel>(context, listen: false).filterUser();
       Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
       isTrue = false;
     }
@@ -43,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.userData.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterFamilyUser();
     }
-    Provider.of<ProfileViewModel>(context).filterUser();
     Provider.of<ProfileViewModel>(context).filterFamilyUser();
     return Scaffold(
       body: Container(

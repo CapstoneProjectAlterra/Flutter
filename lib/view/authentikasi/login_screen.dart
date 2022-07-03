@@ -173,6 +173,9 @@ class _RegisterState extends State<LoginScreen> {
                                 'password', _passwordEditingController.text),
                           )
                           .then(
+                            (value) async => await prefs.remove('token'),
+                          )
+                          .then(
                             (_) async => await prefs.remove('nik'),
                           )
                           .then(
