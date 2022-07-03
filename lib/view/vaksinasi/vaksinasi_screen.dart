@@ -5,8 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
+import 'package:vaccine_booking/view/profile/edit_profile.dart';
 import 'package:vaccine_booking/view/vaksinasi/more_facility_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/skeleton_container.dart';
@@ -30,6 +32,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
   @override
   Widget build(BuildContext context) {
     final healthFacilities = Provider.of<VaksinasiViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -124,13 +127,90 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.5,
-                        child: listNearFacility(healthFacilities),
+                        child: listNearFacility(healthFacilities, user),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget modalDataAlert(context) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.6,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child:
+                      Icon(Icons.close, color: Colors.grey.shade500, size: 32),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                height: MediaQuery.of(context).size.height * 0.08,
+                width: MediaQuery.of(context).size.width * 0.135,
+                child: Image.asset('assets/images/warning.png'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Duh, data dirimu masih belum lengkap!",
+                style: Theme.of(context).textTheme.headline2!,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(
+                "Yuk, lengkapi data profilmu terlebih dahulu sebelum kembali melanjutkan pemesanan.",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade500),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Center(
+                child: SizedBox(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: ElevatedButton(
+                    child: const Text(
+                      "Lengkapi Profil",
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        NavigatorFadeTransition(
+                          child: const EditProfileScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -216,7 +296,8 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     );
   }
 
-  Widget listNearFacility(VaksinasiViewModel healthFacilities) {
+  Widget listNearFacility(
+      VaksinasiViewModel healthFacilities, ProfileViewModel user) {
     return Padding(
       padding:
           const EdgeInsets.only(left: defaultPadding, right: defaultPadding),
@@ -241,18 +322,28 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            NavigatorFadeTransition(
-                              child: VaksinasiBookingScreen(
-                                facilities: query.isEmpty
-                                    ? healthFacilities.facilityList[index]
-                                    : healthFacilities.result[index],
-                                id: query.isEmpty
-                                    ? healthFacilities.facilityList[index].id
-                                    : healthFacilities.result[index].id,
+                          if (user.userData[0].name != null &&
+                              user.userData[0].phone != null) {
+                            Navigator.of(context, rootNavigator: true).push(
+                              NavigatorFadeTransition(
+                                child: VaksinasiBookingScreen(
+                                  facilities: query.isEmpty
+                                      ? healthFacilities.facilityList[index]
+                                      : healthFacilities.result[index],
+                                  id: query.isEmpty
+                                      ? healthFacilities.facilityList[index].id
+                                      : healthFacilities.result[index].id,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return modalDataAlert(context);
+                              },
+                            );
+                          }
                         },
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height * 0.23,

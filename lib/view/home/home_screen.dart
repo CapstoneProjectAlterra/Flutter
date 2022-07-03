@@ -61,18 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            print(user.userData);
-                            print(user.filterIdUser[0].password);
-                          },
-                          child: Text(
-                            "Home",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(color: Colors.white),
-                          ),
+                        Text(
+                          "Home",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .copyWith(color: Colors.white),
                         ),
                         Row(
                           children: [

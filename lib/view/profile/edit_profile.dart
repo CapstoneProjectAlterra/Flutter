@@ -364,8 +364,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               },
                                             )
                                             .then(
-                                              (_) async {
-                                                await user.editUser(
+                                              (_) {
+                                                user.editUser(
                                                     user: UserModel(
                                                         email:
                                                             emailEditingController
