@@ -22,7 +22,6 @@ class VaksinasiBookingScreen extends StatefulWidget {
 }
 
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
-  bool isInit = true;
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
   String tempString = '';
@@ -32,20 +31,12 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   bool vaksinD = false;
 
   @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final schedule = Provider.of<VaksinasiViewModel>(context);
-    setState(() {
-      Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
-    });
+    Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
+    Provider.of<VaksinasiViewModel>(context)
+        .filterScheduleSession(dateCtl.text, widget.id!);
+    Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
 
     return Scaffold(
       body: SlidingUpPanel(
@@ -161,7 +152,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                           const SizedBox(
                             height: 12,
                           ),
-                          selectDate(),
+                          selectDate(schedule),
                           const SizedBox(
                             height: 16,
                           ),
@@ -220,8 +211,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       Color? color,
       String? jenisVaksin,
       int? stock,
-      int? tahap,
-      String? time,
+      String? dosis,
+      String? time1,
+      String? time2,
       double? widthBorder}) {
     return Container(
       width: dateCtl.text.isNotEmpty
@@ -256,7 +248,14 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     width: 8,
                   ),
                   Text(
-                    time!,
+                    "$time1 - ",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(color: Colors.black),
+                  ),
+                  Text(
+                    "$time2",
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -302,7 +301,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                         width: 4,
                       ),
                       Text(
-                        'Dosis $tahap',
+                        dosis!,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2!
@@ -368,181 +367,234 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   }
 
   Widget selectVaccine(VaksinasiViewModel schedule) {
-    return Row(
+    return Column(
       children: [
-        Column(
+        Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(
-                  () {
-                    if (vaksinA == false ||
-                        vaksinB == true ||
-                        vaksinC == true ||
-                        vaksinD == true) {
-                      tempString = 'a';
-                      vaksinA = true;
-                      vaksinB = false;
-                      vaksinC = false;
-                      vaksinD = false;
-                    }
-                  },
-                );
-              },
-              child: vaksinA
-                  ? customContainerVaksin(
-                      color: secondColorLow,
-                      border: primaryColor,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 3)
-                  : customContainerVaksin(
-                      border: pressedColor,
-                      color: Colors.white,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 1),
-            ),
+            schedule.filterScheduleSessionList.isEmpty
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      setState(
+                        () {
+                          if (vaksinA == false ||
+                              vaksinB == true ||
+                              vaksinC == true ||
+                              vaksinD == true) {
+                            tempString = 'a';
+                            vaksinA = true;
+                            vaksinB = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                          } else {
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                            tempString = '';
+                          }
+                        },
+                      );
+                    },
+                    child: vaksinA
+                        ? customContainerVaksin(
+                            color: secondColorLow,
+                            border: pressedColor,
+                            jenisVaksin: schedule.vaccine1,
+                            time1: schedule.timeStart1,
+                            time2: schedule.timeEnd1,
+                            stock: schedule.stock1,
+                            dosis: schedule.dosis1,
+                            widthBorder: 2)
+                        : customContainerVaksin(
+                            border: secondColor,
+                            color: Colors.white,
+                            jenisVaksin: schedule.vaccine1,
+                            time1: schedule.timeStart1,
+                            time2: schedule.timeEnd1,
+                            stock: schedule.stock1,
+                            dosis: schedule.dosis1,
+                            widthBorder: 1),
+                  ),
             const SizedBox(
-              height: 16,
+              width: 16,
             ),
-            GestureDetector(
-              onTap: () {
-                setState(
-                  () {
-                    if (vaksinB == false ||
-                        vaksinA == true ||
-                        vaksinC == true ||
-                        vaksinD == true) {
-                      tempString = 'a';
-                      vaksinB = true;
-                      vaksinA = false;
-                      vaksinC = false;
-                      vaksinD = false;
-                    }
-                  },
-                );
-              },
-              child: vaksinB
-                  ? customContainerVaksin(
-                      color: secondColorLow,
-                      border: primaryColor,
-                      jenisVaksin:
-                          schedule.filterScheduleList[0].vaccine.isEmpty
-                              ? "-"
-                              : schedule.filterScheduleList[0]
-                                  .vaccine['vaccine_name'],
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 3)
-                  : customContainerVaksin(
-                      border: pressedColor,
-                      color: Colors.white,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 1),
-            ),
+            schedule.filterScheduleSessionList.isEmpty ||
+                    schedule.filterScheduleSessionList.length == 1
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      setState(
+                        () {
+                          if (vaksinB == false ||
+                              vaksinA == true ||
+                              vaksinC == true ||
+                              vaksinD == true) {
+                            tempString = 'a';
+                            vaksinB = true;
+                            vaksinA = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                          } else {
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                            tempString = '';
+                          }
+                        },
+                      );
+                    },
+                    child: vaksinB
+                        ? customContainerVaksin(
+                            color: secondColorLow,
+                            border: pressedColor,
+                            jenisVaksin: schedule.vaccine2,
+                            time1: schedule.timeStart2,
+                            time2: schedule.timeEnd2,
+                            stock: schedule.stock2,
+                            dosis: schedule.dosis2,
+                            widthBorder: 2)
+                        : customContainerVaksin(
+                            border: secondColor,
+                            color: Colors.white,
+                            jenisVaksin: schedule.vaccine2,
+                            time1: schedule.timeStart2,
+                            time2: schedule.timeEnd2,
+                            stock: schedule.stock2,
+                            dosis: schedule.dosis2,
+                            widthBorder: 1),
+                  ),
           ],
         ),
         const SizedBox(
-          width: 16,
+          height: 16,
         ),
-        Column(
+        Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(
-                  () {
-                    if (vaksinC == false ||
-                        vaksinA == true ||
-                        vaksinB == true ||
-                        vaksinD == true) {
-                      tempString = 'a';
-                      vaksinC = true;
-                      vaksinA = false;
-                      vaksinB = false;
-                      vaksinD = false;
-                    }
-                  },
-                );
-              },
-              child: vaksinC
-                  ? customContainerVaksin(
-                      color: secondColorLow,
-                      border: primaryColor,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 3)
-                  : customContainerVaksin(
-                      border: pressedColor,
-                      color: Colors.white,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 1),
-            ),
+            schedule.filterScheduleSessionList.isEmpty ||
+                    schedule.filterScheduleSessionList.length == 1 ||
+                    schedule.filterScheduleSessionList.length == 2
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      setState(
+                        () {
+                          if (vaksinC == false ||
+                              vaksinA == true ||
+                              vaksinB == true ||
+                              vaksinD == true) {
+                            tempString = 'a';
+                            vaksinC = true;
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinD = false;
+                          } else {
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                            tempString = '';
+                          }
+                        },
+                      );
+                    },
+                    child: vaksinC
+                        ? customContainerVaksin(
+                            color: secondColorLow,
+                            border: pressedColor,
+                            jenisVaksin: schedule.vaccine3,
+                            time1: schedule.timeStart3,
+                            time2: schedule.timeEnd3,
+                            stock: schedule.stock3,
+                            dosis: schedule.dosis3,
+                            widthBorder: 2)
+                        : customContainerVaksin(
+                            border: secondColor,
+                            color: Colors.white,
+                            jenisVaksin: schedule.vaccine3,
+                            time1: schedule.timeStart3,
+                            time2: schedule.timeEnd3,
+                            stock: schedule.stock3,
+                            dosis: schedule.dosis3,
+                            widthBorder: 1),
+                  ),
             const SizedBox(
-              height: 16,
+              width: 16,
             ),
-            GestureDetector(
-              onTap: () {
-                setState(
-                  () {
-                    if (vaksinD == false ||
-                        vaksinA == true ||
-                        vaksinB == true ||
-                        vaksinC == true) {
-                      tempString = 'a';
-                      vaksinD = true;
-                      vaksinA = false;
-                      vaksinB = false;
-                      vaksinC = false;
-                    }
-                  },
-                );
-              },
-              child: vaksinD
-                  ? customContainerVaksin(
-                      color: secondColorLow,
-                      border: primaryColor,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 3)
-                  : customContainerVaksin(
-                      border: pressedColor,
-                      color: Colors.white,
-                      jenisVaksin: "Sinovac",
-                      time: "09.00 - 10.00",
-                      stock: 100,
-                      tahap: 1,
-                      widthBorder: 1),
-            ),
+            schedule.filterScheduleSessionList.isEmpty ||
+                    schedule.filterScheduleSessionList.length == 1 ||
+                    schedule.filterScheduleSessionList.length == 2 ||
+                    schedule.filterScheduleSessionList.length == 3
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      setState(
+                        () {
+                          if (vaksinD == false ||
+                              vaksinA == true ||
+                              vaksinB == true ||
+                              vaksinC == true) {
+                            tempString = 'a';
+                            vaksinD = true;
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinC = false;
+                          } else {
+                            vaksinA = false;
+                            vaksinB = false;
+                            vaksinC = false;
+                            vaksinD = false;
+                            tempString = '';
+                          }
+                        },
+                      );
+                    },
+                    child: vaksinD
+                        ? customContainerVaksin(
+                            color: secondColorLow,
+                            border: pressedColor,
+                            jenisVaksin: schedule.vaccine4,
+                            time1: schedule.timeStart4,
+                            time2: schedule.timeEnd4,
+                            stock: schedule.stock4,
+                            dosis: schedule.dosis4,
+                            widthBorder: 2)
+                        : customContainerVaksin(
+                            border: secondColor,
+                            color: Colors.white,
+                            jenisVaksin: schedule.vaccine4,
+                            time1: schedule.timeStart4,
+                            time2: schedule.timeEnd4,
+                            stock: schedule.stock4,
+                            dosis: schedule.dosis4,
+                            widthBorder: 1),
+                  ),
           ],
         ),
       ],
     );
   }
 
-  Widget selectDate() {
+  Widget selectDate(VaksinasiViewModel schedule) {
+    DateTime initialDate = DateTime.now();
+    DateTime firstDate = DateTime(
+      initialDate.year,
+      initialDate.month,
+      initialDate.day,
+    );
+    DateTime lastDate = DateTime(
+      initialDate.year,
+      initialDate.month,
+      initialDate.day + 7,
+    );
     return GestureDetector(
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime(2022),
-            lastDate: DateTime(2023));
+            firstDate: firstDate,
+            lastDate: lastDate);
 
         if (pickedDate != null) {
           setState(

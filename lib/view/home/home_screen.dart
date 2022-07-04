@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
       Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
+      Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
       isTrue = false;
     }
     super.didChangeDependencies();

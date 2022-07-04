@@ -205,6 +205,7 @@ class _RegisterState extends State<LoginScreen> {
                           );
                     } catch (e) {
                       Fluttertoast.showToast(
+                        toastLength: Toast.LENGTH_SHORT,
                         msg: e.toString(),
                       );
                     }

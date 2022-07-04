@@ -331,7 +331,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           .toList();
                                       final id =
                                           user.userData[0].profile!['user_id'];
-                                      if (contains.isEmpty) {
+                                      if (contains.isEmpty ||
+                                          contains[0].nik ==
+                                              nikEditingController.text) {
                                         await Future.delayed(
                                           const Duration(seconds: 1),
                                         )
@@ -373,7 +375,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             .then(
                                               (_) => Fluttertoast.showToast(
                                                   msg:
-                                                      "Berhasil Mengubah Data Diri, silahkan login kembali menggunakan nik yang telah diubah"),
+                                                      "Berhasil mengubah data diri, silahkan login kembali"),
                                             )
                                             .then(
                                               (_) => prefs.remove('token'),
