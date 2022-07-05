@@ -11,7 +11,7 @@ class ProfileViewModel extends ChangeNotifier {
   List<FamilyModel> userData = [];
 
   final itemsGender = ['laki_laki', 'perempuan'];
-  final itemsStatus = ['ayah', 'ibu', 'anak'];
+  final itemsStatus = ['ayah', 'ibu', 'anak', 'saudara'];
 
   String name = '';
   String nik = '';

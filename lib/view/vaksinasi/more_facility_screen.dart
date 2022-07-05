@@ -265,7 +265,10 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                             context,
                             moreQuery.isEmpty
                                 ? healthFacilities.result[index]
-                                : healthFacilities.moreResult[index]),
+                                : healthFacilities.moreResult[index],
+                            moreQuery.isEmpty
+                                ? healthFacilities.result[index].id
+                                : healthFacilities.moreResult[index].id),
                       ),
                     ],
                   ),
@@ -279,7 +282,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
             : healthFacilities.moreResult.length);
   }
 
-  Widget buttonText(context, facilities) {
+  Widget buttonText(context, facilities, id) {
     return Row(
       children: [
         TextButton(
@@ -288,6 +291,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
               NavigatorFadeTransition(
                 child: VaksinasiBookingScreen(
                   facilities: facilities,
+                  id: id,
                 ),
               ),
             );

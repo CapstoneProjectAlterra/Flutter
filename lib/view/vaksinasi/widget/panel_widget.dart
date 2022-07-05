@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
+import '../../../view_model/vaksinasi_view_model.dart';
 import '../edit_data_screen.dart';
 
 class PanelWidget extends StatefulWidget {
@@ -23,6 +26,8 @@ class _PanelWidgetState extends State<PanelWidget> {
   bool isBool = false;
   @override
   Widget build(BuildContext context) {
+    final vaksinasi = Provider.of<VaksinasiViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: Column(
@@ -65,7 +70,7 @@ class _PanelWidgetState extends State<PanelWidget> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height * 0.23,
-              child: listDaftarAnggota(),
+              child: listDaftarAnggota(vaksinasi, user),
             ),
           ),
           const SizedBox(
@@ -223,7 +228,8 @@ class _PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-  Widget listDaftarAnggota() {
+  Widget listDaftarAnggota(
+      VaksinasiViewModel vaksinasi, ProfileViewModel user) {
     return ListView.separated(
       controller: widget.controller,
       scrollDirection: Axis.vertical,
@@ -232,7 +238,7 @@ class _PanelWidgetState extends State<PanelWidget> {
           color: Colors.white,
         );
       },
-      itemCount: 5,
+      itemCount: vaksinasi.dataPersonVaksinasiList.length,
       itemBuilder: (context, index) {
         return Container(
           height: 80,
@@ -253,7 +259,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                     Row(
                       children: [
                         Text(
-                          "Nama Lengkap",
+                          vaksinasi.dataPersonVaksinasiList[index].name!,
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
@@ -263,7 +269,11 @@ class _PanelWidgetState extends State<PanelWidget> {
                           width: 8,
                         ),
                         Text(
-                          "Saya",
+                          vaksinasi.dataPersonVaksinasiList[index].name ==
+                                  user.name
+                              ? "Saya"
+                              : vaksinasi
+                                  .dataPersonVaksinasiList[index].gender!,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!
@@ -287,7 +297,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                           width: 4,
                         ),
                         Text(
-                          "3205415605604560",
+                          vaksinasi.dataPersonVaksinasiList[index].nik!,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!

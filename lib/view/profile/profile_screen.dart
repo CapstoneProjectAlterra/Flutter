@@ -212,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: 'assets/icons/gender.svg',
               title: profile.gender.isEmpty
                   ? "Gender"
-                  : profile.gender.toLowerCase(),
+                  : profile.gender.toLowerCase().replaceAll('_', ' - '),
               context: context),
         ),
         SizedBox(

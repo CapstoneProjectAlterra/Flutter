@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/skeleton_container.dart';
@@ -24,6 +26,7 @@ class VaksinasiBookingScreen extends StatefulWidget {
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
+  int? scheduleId;
   String tempString = '';
   bool vaksinA = false;
   bool vaksinB = false;
@@ -33,6 +36,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   @override
   Widget build(BuildContext context) {
     final schedule = Provider.of<VaksinasiViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
     Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
     Provider.of<VaksinasiViewModel>(context)
         .filterScheduleSession(dateCtl.text, widget.id!);
@@ -181,13 +185,23 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      onPressed: () {
-                                        if (tempString.isNotEmpty ||
-                                            vaksinA != true ||
-                                            vaksinB != true ||
-                                            vaksinC != true ||
-                                            vaksinD != true) {
-                                          panelController.open();
+                                      onPressed: () async {
+                                        if (schedule.scheduleIdBooking !=
+                                            scheduleId) {
+                                          schedule.addPersonBooking(
+                                              dataPerson: user.userData[0],
+                                              id: scheduleId);
+                                          if (tempString.isNotEmpty ||
+                                              vaksinA != true ||
+                                              vaksinB != true ||
+                                              vaksinC != true ||
+                                              vaksinD != true) {
+                                            panelController.open();
+                                          }
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  'Kamu sudah menambahkan jadwal ini');
                                         }
                                       },
                                     ),
@@ -400,6 +414,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             tempString = 'a';
+                            scheduleId = schedule.scheduleId1;
                             vaksinA = true;
                             vaksinB = false;
                             vaksinC = false;
@@ -410,6 +425,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinC = false;
                             vaksinD = false;
                             tempString = '';
+                            scheduleId = 0;
                           }
                         },
                       );
@@ -449,6 +465,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             tempString = 'a';
+                            scheduleId = schedule.scheduleId2;
                             vaksinB = true;
                             vaksinA = false;
                             vaksinC = false;
@@ -459,6 +476,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinC = false;
                             vaksinD = false;
                             tempString = '';
+                            scheduleId = 0;
                           }
                         },
                       );
@@ -502,6 +520,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinA == true ||
                               vaksinB == true ||
                               vaksinD == true) {
+                            scheduleId = schedule.scheduleId3;
                             tempString = 'a';
                             vaksinC = true;
                             vaksinA = false;
@@ -513,6 +532,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinC = false;
                             vaksinD = false;
                             tempString = '';
+                            scheduleId = 0;
                           }
                         },
                       );
@@ -554,6 +574,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinB == true ||
                               vaksinC == true) {
                             tempString = 'a';
+                            scheduleId = schedule.scheduleId4;
                             vaksinD = true;
                             vaksinA = false;
                             vaksinB = false;
@@ -564,6 +585,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinC = false;
                             vaksinD = false;
                             tempString = '';
+                            scheduleId = 0;
                           }
                         },
                       );
