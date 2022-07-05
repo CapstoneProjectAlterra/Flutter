@@ -248,14 +248,14 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     width: 8,
                   ),
                   Text(
-                    "$time1 - ",
+                    "${time1!.substring(0, 5).replaceAll(':', '.')} - ",
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
                         .copyWith(color: Colors.black),
                   ),
                   Text(
-                    "$time2",
+                    time2!.substring(0, 5).replaceAll(':', '.'),
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -280,12 +280,21 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                       const SizedBox(
                         width: 4,
                       ),
-                      Text(
-                        jenisVaksin!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.grey.shade800),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        height: 20,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Expanded(
+                            child: Text(
+                              jenisVaksin!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.grey.shade800),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -300,12 +309,21 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                       const SizedBox(
                         width: 4,
                       ),
-                      Text(
-                        dosis!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.grey.shade800),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        height: 20,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Expanded(
+                            child: Text(
+                              dosis!.replaceAll('_', ' '),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.grey.shade800),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -326,7 +344,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     width: 4,
                   ),
                   Text(
-                    '$stock Dosis',
+                    ' Dosis $stock',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -417,7 +435,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             widthBorder: 1),
                   ),
             const SizedBox(
-              width: 16,
+              width: 12,
             ),
             schedule.filterScheduleSessionList.isEmpty ||
                     schedule.filterScheduleSessionList.length == 1
@@ -468,7 +486,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
           ],
         ),
         const SizedBox(
-          height: 16,
+          height: 12,
         ),
         Row(
           children: [
@@ -520,7 +538,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             widthBorder: 1),
                   ),
             const SizedBox(
-              width: 16,
+              width: 12,
             ),
             schedule.filterScheduleSessionList.isEmpty ||
                     schedule.filterScheduleSessionList.length == 1 ||
