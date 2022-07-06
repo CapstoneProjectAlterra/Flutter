@@ -5,9 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
+import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
+import '../../model/profile/user_model.dart';
 import '../../model/vaksinasi/health_facility_model.dart';
 import '../../view_model/profile_view_model.dart';
 
@@ -53,6 +55,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
+    final schedule = Provider.of<VaksinasiViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -190,35 +193,83 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                       setState(() => isLoading = false);
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        try {
-                                          Future.delayed(
-                                            const Duration(seconds: 2),
-                                          )
-                                              .then((_) => Fluttertoast.showToast(
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  msg:
-                                                      "Berhasil Menambahkan Anggota Keluarga"))
-                                              .then(
-                                                (_) async =>
-                                                    Navigator.of(context)
-                                                        .pushReplacement(
-                                                  NavigatorFadeTransition(
-                                                    child:
-                                                        VaksinasiBookingScreen(
-                                                      dateSchedule:
-                                                          widget.dateSchedule,
-                                                      facilities:
-                                                          widget.facilities,
-                                                      id: widget.id,
+                                        List<UserModel> contains =
+                                            user.familyList
+                                                .where(
+                                                  (element) => element.nik!
+                                                      .contains(
+                                                          nikEditingController
+                                                              .text),
+                                                )
+                                                .toList();
+                                        final id = user
+                                            .userData[0].profile!['user_id'];
+                                        if (contains.isEmpty) {
+                                          try {
+                                            Future.delayed(
+                                              const Duration(seconds: 2),
+                                            )
+                                                .then(
+                                                  (_) => schedule.addFamily(
+                                                    family: UserModel(
+                                                      name:
+                                                          nameEditingController
+                                                              .text,
+                                                      nik: nikEditingController
+                                                          .text,
+                                                      email:
+                                                          emailEditingController
+                                                              .text,
+                                                      phone:
+                                                          phoneEditingController
+                                                              .text,
+                                                      gender:
+                                                          gender!.toUpperCase(),
+                                                      dateBirth:
+                                                          tanggalLahir.text,
+                                                      address:
+                                                          alamatDomisiliEditingController
+                                                              .text,
+                                                      idCardAddress:
+                                                          alamatKTPEditingController
+                                                              .text,
+                                                      placeBirth:
+                                                          tempatLahirEditingController
+                                                              .text,
+                                                      statusFamily:
+                                                          status!.toUpperCase(),
+                                                      profile: {"user_id": id},
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                        } catch (e) {
-                                          Fluttertoast.showToast(
-                                            msg: e.toString(),
-                                          );
+                                                )
+                                                .then(
+                                                  (_) => Fluttertoast.showToast(
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      msg:
+                                                          "Berhasil Menambahkan Anggota Keluarga"),
+                                                )
+                                                .then(
+                                                  (_) async =>
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                    NavigatorFadeTransition(
+                                                      child:
+                                                          VaksinasiBookingScreen(
+                                                        dateSchedule:
+                                                            widget.dateSchedule,
+                                                        facilities:
+                                                            widget.facilities,
+                                                        id: widget.id,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                          } catch (e) {
+                                            Fluttertoast.showToast(
+                                              msg: e.toString(),
+                                            );
+                                          }
                                         }
                                       }
                                     },
@@ -490,7 +541,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
           filled: true,
         ),
         textInputAction: TextInputAction.next,
-        controller: controller,
+        controller: emailEditingController,
         validator: (value) {
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
               .hasMatch(value!)) {

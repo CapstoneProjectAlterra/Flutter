@@ -109,7 +109,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     NavigatorFadeTransition(
                       child: RegisterFamilyScreen(
                         facilities: widget.facilities,

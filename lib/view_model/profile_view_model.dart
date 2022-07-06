@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vaccine_booking/model/profile/api/family_api.dart';
 
+import '../model/profile/api/user_api.dart';
 import '../model/profile/user_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
-  final familyApi = FamilyApi();
+  final familyApi = UserApi();
   List<UserModel> familyList = [];
   List<UserModel> userData = [];
   List<UserModel> userFamily = [];
@@ -28,6 +28,7 @@ class ProfileViewModel extends ChangeNotifier {
   getAllFamilies() async {
     final getAllFamilies = await familyApi.getAllFamilies();
     familyList = getAllFamilies;
+    notifyListeners();
   }
 
   filterUserFamily({int? profile}) {
@@ -115,7 +116,7 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   editFamily(UserModel profile, int id) async {
-    await familyApi.editFamily(profile: profile, id: id);
+    await familyApi.editUser(profile: profile, id: id);
   }
 
   detailProfile() async {

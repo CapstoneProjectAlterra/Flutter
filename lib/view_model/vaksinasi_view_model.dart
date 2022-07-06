@@ -5,6 +5,7 @@ import 'package:vaccine_booking/model/vaksinasi/api/schedule_api.dart';
 import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/schedule_model.dart';
 
+import '../model/profile/api/user_api.dart';
 import '../model/profile/user_model.dart';
 import '../model/vaksinasi/api/health_facility_api.dart';
 import '../model/vaksinasi/booking_model.dart';
@@ -13,6 +14,7 @@ class VaksinasiViewModel extends ChangeNotifier {
   final vaksinasiApi = HealthFacilityApi();
   final scheduleApi = ScheduleApi();
   final bookingApi = BookingApi();
+  final userApi = UserApi();
   List<HealthFacilityModel> facilityList = [];
   List<HealthFacilityModel> result = [];
   List<HealthFacilityModel> moreResult = [];
@@ -49,6 +51,11 @@ class VaksinasiViewModel extends ChangeNotifier {
   int stock3 = 0;
   int stock4 = 0;
 
+  addFamily({UserModel? family}) async {
+    userApi.addFamily(profile: family);
+    notifyListeners();
+  }
+
   postBooking({BookingModel? booking}) async {
     await bookingApi.postBooking(booking: booking);
     notifyListeners();
@@ -81,7 +88,6 @@ class VaksinasiViewModel extends ChangeNotifier {
       }
     }
     scheduleIdBooking = id!;
-
     notifyListeners();
   }
 
