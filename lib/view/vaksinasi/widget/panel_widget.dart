@@ -11,7 +11,7 @@ import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../../model/vaksinasi/health_facility_model.dart';
 import '../../../view_model/vaksinasi_view_model.dart';
-import '../edit_data_screen.dart';
+import '../edit_family_screen.dart';
 
 class PanelWidget extends StatefulWidget {
   final HealthFacilityModel facilities;
@@ -115,16 +115,12 @@ class _PanelWidgetState extends State<PanelWidget> {
                   widget.scheduleId == 0
                       ? Fluttertoast.showToast(
                           msg: "Pilih Jadwal Terlebih Dahulu")
-                      : Navigator.of(context).pushReplacement(
+                      : Navigator.of(context).push(
                           NavigatorFadeTransition(
-                            child: RegisterFamilyScreen(
-                              scheduleId: widget.scheduleId,
-                              facilities: widget.facilities,
-                              id: widget.id,
-                              dateSchedule: widget.dateSchedule,
-                            ),
+                            child: const RegisterFamilyScreen(),
                           ),
                         );
+                  widget.panelController.close();
                 },
               ),
             ),
@@ -293,7 +289,16 @@ class _PanelWidgetState extends State<PanelWidget> {
                                   user.name
                               ? "Saya"
                               : vaksinasi
-                                  .dataPersonVaksinasiList[index].gender!,
+                                  .dataPersonVaksinasiList[index].statusFamily!
+                                  .toLowerCase()
+                                  .replaceFirst(
+                                    vaksinasi.dataPersonVaksinasiList[index]
+                                        .statusFamily!
+                                        .toLowerCase()[0],
+                                    vaksinasi.dataPersonVaksinasiList[index]
+                                        .statusFamily!
+                                        .toUpperCase()[0],
+                                  ),
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!
@@ -333,7 +338,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
                         NavigatorFadeTransition(
-                          child: const EditDataScreen(),
+                          child: const EditFamilyScreen(),
                         ),
                       ),
                       child: SvgPicture.asset(

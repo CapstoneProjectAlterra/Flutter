@@ -40,12 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final news = Provider.of<HomeViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
+    final schedule = Provider.of<VaksinasiViewModel>(context);
     if (user.userData.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUser();
     }
     if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
+    schedule.scheduleIdBooking = 0;
 
     return Scaffold(
       body: Container(

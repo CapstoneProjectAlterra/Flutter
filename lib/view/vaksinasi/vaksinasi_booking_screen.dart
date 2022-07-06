@@ -15,22 +15,19 @@ import '../../model/vaksinasi/health_facility_model.dart';
 
 class VaksinasiBookingScreen extends StatefulWidget {
   final HealthFacilityModel facilities;
-  final int? scheduleId;
   final int? id;
-  final String? dateSchedule;
-  const VaksinasiBookingScreen(
-      {Key? key,
-      required this.facilities,
-      this.id,
-      this.dateSchedule,
-      this.scheduleId})
-      : super(key: key);
+  const VaksinasiBookingScreen({
+    Key? key,
+    required this.facilities,
+    this.id,
+  }) : super(key: key);
 
   @override
   State<VaksinasiBookingScreen> createState() => _VaksinasiBookingScreenState();
 }
 
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
+  bool isInit = true;
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
   int scheduleId = 0;
@@ -43,6 +40,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   @override
   void didChangeDependencies() {
     Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
+    if (isInit == true) {
+      Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
+    }
     super.didChangeDependencies();
   }
 
@@ -55,21 +55,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
         .filterScheduleSession(dateCtl.text, widget.id!);
     Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
     Provider.of<ProfileViewModel>(context).filterUserFamily();
-
-    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
-      Provider.of<ProfileViewModel>(context).getAllFamilies();
-    }
-
-    if (widget.scheduleId != 0 && user.userFamily.isEmpty) {
-      schedule.addPersonBooking(
-          dataPerson: user.userData[0],
-          id: widget.scheduleId,
-          userFamily: user.userFamily);
-    }
-
-    if (widget.dateSchedule != null) {
-      dateCtl.text = widget.dateSchedule!;
-    }
 
     if (dateCtl.text.isEmpty) {
       schedule.dataPersonVaksinasiList.clear();

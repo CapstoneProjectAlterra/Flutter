@@ -10,16 +10,16 @@ import '../../components/constants.dart';
 import '../../model/profile/user_model.dart';
 import '../../view_model/profile_view_model.dart';
 
-class RegisterFamilyScreen extends StatefulWidget {
-  const RegisterFamilyScreen({
+class EditFamilyScreen extends StatefulWidget {
+  const EditFamilyScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<RegisterFamilyScreen> createState() => _RegisterState();
+  State<EditFamilyScreen> createState() => _RegisterState();
 }
 
-class _RegisterState extends State<RegisterFamilyScreen> {
+class _RegisterState extends State<EditFamilyScreen> {
   var obscureText = true;
   bool isLoading = false;
   String? name;

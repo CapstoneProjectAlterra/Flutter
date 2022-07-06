@@ -182,7 +182,7 @@ class VaksinasiViewModel extends ChangeNotifier {
       vaccine1 = filterScheduleSessionList[0].vaccine['vaccine_name'];
       dosis1 = filterScheduleSessionList[0].dose;
       timeStart1 = filterScheduleSessionList[0].operationalHourStart;
-      timeEnd1 = filterScheduleSessionList[0].operationalHourStart;
+      timeEnd1 = filterScheduleSessionList[0].operationalHourEnd;
       stock1 = filterScheduleSessionList[0].quota;
       scheduleId1 = filterScheduleSessionList[0].id;
     }
@@ -190,14 +190,14 @@ class VaksinasiViewModel extends ChangeNotifier {
       vaccine1 = filterScheduleSessionList[0].vaccine['vaccine_name'];
       dosis1 = filterScheduleSessionList[0].dose;
       timeStart1 = filterScheduleSessionList[0].operationalHourStart;
-      timeEnd1 = filterScheduleSessionList[0].operationalHourStart;
+      timeEnd1 = filterScheduleSessionList[0].operationalHourEnd;
       stock1 = filterScheduleSessionList[0].quota;
       scheduleId1 = filterScheduleSessionList[0].id;
 
       vaccine2 = filterScheduleSessionList[1].vaccine['vaccine_name'];
       dosis2 = filterScheduleSessionList[1].dose;
       timeStart2 = filterScheduleSessionList[1].operationalHourStart;
-      timeEnd2 = filterScheduleSessionList[1].operationalHourStart;
+      timeEnd2 = filterScheduleSessionList[1].operationalHourEnd;
       stock2 = filterScheduleSessionList[1].quota;
       scheduleId2 = filterScheduleSessionList[1].id;
     }
@@ -205,21 +205,21 @@ class VaksinasiViewModel extends ChangeNotifier {
       vaccine1 = filterScheduleSessionList[0].vaccine['vaccine_name'];
       dosis1 = filterScheduleSessionList[0].dose;
       timeStart1 = filterScheduleSessionList[0].operationalHourStart;
-      timeEnd1 = filterScheduleSessionList[0].operationalHourStart;
+      timeEnd1 = filterScheduleSessionList[0].operationalHourEnd;
       stock1 = filterScheduleSessionList[0].quota;
       scheduleId1 = filterScheduleSessionList[0].id;
 
       vaccine2 = filterScheduleSessionList[1].vaccine['vaccine_name'];
       dosis2 = filterScheduleSessionList[1].dose;
       timeStart2 = filterScheduleSessionList[1].operationalHourStart;
-      timeEnd2 = filterScheduleSessionList[1].operationalHourStart;
+      timeEnd2 = filterScheduleSessionList[1].operationalHourEnd;
       stock2 = filterScheduleSessionList[1].quota;
       scheduleId2 = filterScheduleSessionList[1].id;
 
       vaccine3 = filterScheduleSessionList[2].vaccine['vaccine_name'];
       dosis3 = filterScheduleSessionList[2].dose;
       timeStart3 = filterScheduleSessionList[2].operationalHourStart;
-      timeEnd3 = filterScheduleSessionList[2].operationalHourStart;
+      timeEnd3 = filterScheduleSessionList[2].operationalHourEnd;
       stock3 = filterScheduleSessionList[2].quota;
       scheduleId3 = filterScheduleSessionList[2].id;
     }
@@ -228,28 +228,28 @@ class VaksinasiViewModel extends ChangeNotifier {
       vaccine1 = filterScheduleSessionList[0].vaccine['vaccine_name'];
       dosis1 = filterScheduleSessionList[0].dose;
       timeStart1 = filterScheduleSessionList[0].operationalHourStart;
-      timeEnd1 = filterScheduleSessionList[0].operationalHourStart;
+      timeEnd1 = filterScheduleSessionList[0].operationalHourEnd;
       stock1 = filterScheduleSessionList[0].quota;
       scheduleId1 = filterScheduleSessionList[0].id;
 
       vaccine2 = filterScheduleSessionList[1].vaccine['vaccine_name'];
       dosis2 = filterScheduleSessionList[1].dose;
       timeStart2 = filterScheduleSessionList[1].operationalHourStart;
-      timeEnd2 = filterScheduleSessionList[1].operationalHourStart;
+      timeEnd2 = filterScheduleSessionList[1].operationalHourEnd;
       stock2 = filterScheduleSessionList[1].quota;
       scheduleId2 = filterScheduleSessionList[1].id;
 
       vaccine3 = filterScheduleSessionList[2].vaccine['vaccine_name'];
       dosis3 = filterScheduleSessionList[2].dose;
       timeStart3 = filterScheduleSessionList[2].operationalHourStart;
-      timeEnd3 = filterScheduleSessionList[2].operationalHourStart;
+      timeEnd3 = filterScheduleSessionList[2].operationalHourEnd;
       stock3 = filterScheduleSessionList[2].quota;
       scheduleId3 = filterScheduleSessionList[2].id;
 
       vaccine4 = filterScheduleSessionList[3].vaccine['vaccine_name'];
       dosis4 = filterScheduleSessionList[3].dose;
       timeStart4 = filterScheduleSessionList[3].operationalHourStart;
-      timeEnd4 = filterScheduleSessionList[3].operationalHourStart;
+      timeEnd4 = filterScheduleSessionList[3].operationalHourEnd;
       stock4 = filterScheduleSessionList[3].quota;
       scheduleId4 = filterScheduleSessionList[3].id;
     }
