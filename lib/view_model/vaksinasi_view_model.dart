@@ -61,6 +61,12 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  deleteFamily({int? id, int? index}) async {
+    userApi.editFamily(id: id);
+    dataPersonVaksinasiList.removeAt(index!);
+    notifyListeners();
+  }
+
   postBooking({BookingModel? booking}) async {
     await bookingApi.postBooking(booking: booking);
     notifyListeners();

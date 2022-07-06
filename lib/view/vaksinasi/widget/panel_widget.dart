@@ -351,7 +351,18 @@ class _PanelWidgetState extends State<PanelWidget> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await Future.delayed(const Duration(seconds: 1))
+                            .then(
+                              (_) async => await vaksinasi.deleteFamily(
+                                  id: vaksinasi
+                                      .dataPersonVaksinasiList[index].id,
+                                  index: index),
+                            )
+                            .then((_) => Fluttertoast.showToast(
+                                toastLength: Toast.LENGTH_SHORT,
+                                msg: "Family Member Berhasil Dihapus"));
+                      },
                       icon: SvgPicture.asset(
                         'assets/icons/delete.svg',
                         color: Colors.black,

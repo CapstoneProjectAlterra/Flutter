@@ -91,4 +91,24 @@ class UserApi {
       }
     }
   }
+
+  deleteFamily({int? id}) async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    try {
+      await Dio().delete(
+        '$baseUrl/api/v1/family/$id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data['error'].toString();
+      }
+    }
+  }
 }
