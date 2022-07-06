@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/constants.dart';
-import '../family_model.dart';
+import '../user_model.dart';
 
 class FamilyApi {
   getAllFamilies() async {
@@ -21,7 +21,7 @@ class FamilyApi {
       if (response.statusCode == 200) {
         final familyList = (response.data['data'] as List)
             .map(
-              (e) => FamilyModel.fromJson(e),
+              (e) => UserModel.fromJson(e),
             )
             .toList();
         return familyList;
@@ -29,7 +29,7 @@ class FamilyApi {
     } on Exception catch (_) {}
   }
 
-  editFamily({int? id, FamilyModel? profile}) async {
+  editFamily({int? id, UserModel? profile}) async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     try {

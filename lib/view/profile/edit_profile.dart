@@ -9,7 +9,7 @@ import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
-import '../../model/profile/family_model.dart';
+import '../../model/profile/user_model.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -323,7 +323,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       _formKey.currentState!.save();
                                       SharedPreferences? prefs =
                                           await SharedPreferences.getInstance();
-                                      List<FamilyModel> contains = user.userData
+                                      List<UserModel> contains = user.userData
                                           .where(
                                             (element) => element.nik!.contains(
                                                 nikEditingController.text),
@@ -340,7 +340,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             .then(
                                               (_) async {
                                                 await user.editFamily(
-                                                    FamilyModel(
+                                                    UserModel(
                                                       name:
                                                           nameEditingController
                                                               .text,

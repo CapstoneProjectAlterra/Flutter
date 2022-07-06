@@ -1,4 +1,4 @@
-class FamilyModel {
+class UserModel {
   int? id;
   String? statusFamily;
   String? name;
@@ -12,7 +12,7 @@ class FamilyModel {
   String? placeBirth;
   Map<String, dynamic>? profile;
 
-  FamilyModel(
+  UserModel(
       {this.id,
       this.name,
       this.nik,
@@ -26,7 +26,7 @@ class FamilyModel {
       this.idCardAddress,
       this.placeBirth});
 
-  factory FamilyModel.fromJson(Map<String, dynamic> json) => FamilyModel(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'],
       name: json['name'],
       nik: json['nik'],

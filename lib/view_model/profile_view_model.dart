@@ -3,12 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/api/family_api.dart';
 
-import '../model/profile/family_model.dart';
+import '../model/profile/user_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   final familyApi = FamilyApi();
-  List<FamilyModel> familyList = [];
-  List<FamilyModel> userData = [];
+  List<UserModel> familyList = [];
+  List<UserModel> userData = [];
+  List<UserModel> userFamily = [];
 
   final itemsGender = ['laki_laki', 'perempuan'];
   final itemsStatus = ['ayah', 'ibu', 'anak', 'saudara'];
@@ -29,15 +30,25 @@ class ProfileViewModel extends ChangeNotifier {
     familyList = getAllFamilies;
   }
 
-  filterFamilyUser() async {
+  filterUserFamily({int? profile}) {
+    if (userData.isNotEmpty) {
+      userFamily = familyList
+          .where(
+            (element) => element.profile!.containsValue(profile!),
+          )
+          .toList();
+    }
+  }
+
+  filterUser() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
-    final filterFamily = familyList
+    final filterUser = familyList
         .where(
           (element) => element.nik!.contains(prefs.getString('nik')!),
         )
         .toList();
-    userData = filterFamily;
-    if (filterFamily.isEmpty) {
+    userData = filterUser;
+    if (filterUser.isEmpty) {
       dateBirth = 'Tanggal Lahir';
       name = 'Nama Lengkap Pemesan';
       nik = 'Nomor NIK';
@@ -103,7 +114,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  editFamily(FamilyModel profile, int id) async {
+  editFamily(UserModel profile, int id) async {
     await familyApi.editFamily(profile: profile, id: id);
   }
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:vaccine_booking/model/profile/family_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/api/booking_api.dart';
 import 'package:vaccine_booking/model/vaksinasi/api/schedule_api.dart';
 import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/schedule_model.dart';
 
+import '../model/profile/user_model.dart';
 import '../model/vaksinasi/api/health_facility_api.dart';
 import '../model/vaksinasi/booking_model.dart';
 
@@ -19,7 +19,7 @@ class VaksinasiViewModel extends ChangeNotifier {
   List<ScheduleModel> scheduleList = [];
   List<ScheduleModel> filterScheduleList = [];
   List<ScheduleModel> filterScheduleSessionList = [];
-  List<FamilyModel> dataPersonVaksinasiList = [];
+  List<UserModel> dataPersonVaksinasiList = [];
   BookingModel? dataBookingVaksinasi;
 
   int scheduleIdBooking = 0;
@@ -54,8 +54,10 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addPersonBooking({FamilyModel? dataPerson, int? id}) {
-    List<FamilyModel> contains = [];
+  addPersonBooking(
+      {UserModel? dataPerson, int? id, List<UserModel>? userFamily}) {
+    List<UserModel> contains = [];
+    List<UserModel> contains2 = [];
     contains = dataPersonVaksinasiList
         .where(
           (element) => element.nik!.contains(dataPerson!.nik!),
@@ -64,6 +66,19 @@ class VaksinasiViewModel extends ChangeNotifier {
 
     if (contains.isEmpty) {
       dataPersonVaksinasiList.add(dataPerson!);
+    }
+
+    for (int i = 0; i < userFamily!.length; i++) {
+      contains2 = dataPersonVaksinasiList
+          .where(
+            (element) => element.nik!.contains(userFamily[i].nik!),
+          )
+          .toList();
+      if (contains.isEmpty && contains2.isEmpty) {
+        dataPersonVaksinasiList.add(
+          userFamily[i],
+        );
+      }
     }
     scheduleIdBooking = id!;
 

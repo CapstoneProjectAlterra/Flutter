@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ProfileViewModel>(context, listen: false).detailProfile();
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
-      Provider.of<ProfileViewModel>(context, listen: false).filterFamilyUser();
+      Provider.of<ProfileViewModel>(context, listen: false).filterUser();
       Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
       isTrue = false;
     }
@@ -40,9 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final news = Provider.of<HomeViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
     if (user.userData.isEmpty) {
-      Provider.of<ProfileViewModel>(context).filterFamilyUser();
+      Provider.of<ProfileViewModel>(context).filterUser();
     }
-    Provider.of<ProfileViewModel>(context).filterFamilyUser();
+    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
+      Provider.of<ProfileViewModel>(context)
+          .filterUserFamily(profile: user.userData[0].profile!['user_id']);
+    }
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),

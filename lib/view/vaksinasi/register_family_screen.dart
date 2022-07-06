@@ -3,34 +3,56 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
-import '../../components/botnavbar.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
+import '../../model/vaksinasi/health_facility_model.dart';
+import '../../view_model/profile_view_model.dart';
 
 class RegisterFamilyScreen extends StatefulWidget {
-  const RegisterFamilyScreen({Key? key}) : super(key: key);
+  final HealthFacilityModel facilities;
+  final int? id;
+  final String? dateSchedule;
+  const RegisterFamilyScreen(
+      {Key? key,
+      required this.facilities,
+      required this.id,
+      required this.dateSchedule})
+      : super(key: key);
 
   @override
   State<RegisterFamilyScreen> createState() => _RegisterState();
 }
 
 class _RegisterState extends State<RegisterFamilyScreen> {
-  String? gender;
-  String? status;
-  final itemsGender = ['Laki - laki', 'Perempuan'];
-  final itemsStatus = ['Ayah', 'Ibu', 'Saudara Kandung'];
   var obscureText = true;
   bool isLoading = false;
-  final TextEditingController dateCtl = TextEditingController();
-  final _nameEditingController = TextEditingController();
-  final _nikEditingController = TextEditingController();
-  final _emailEditingController = TextEditingController();
-  final _passwordEditingController = TextEditingController();
+  String? name;
+  String? nik;
+  String? email;
+  String? phone;
+  String? dateBirth;
+  String? address;
+  String? idCardAddress;
+  String? placeBirth;
+  String? gender;
+  String? status;
+  TextEditingController tanggalLahir = TextEditingController();
+  TextEditingController nameEditingController = TextEditingController();
+  TextEditingController nikEditingController = TextEditingController();
+  TextEditingController tempatLahirEditingController = TextEditingController();
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController phoneEditingController = TextEditingController();
+  TextEditingController alamatKTPEditingController = TextEditingController();
+  TextEditingController alamatDomisiliEditingController =
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -71,17 +93,17 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                       children: [
                         textFieldName("NIK"),
                         const SizedBox(height: 8),
-                        fieldNIK(),
+                        nikField(),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Nama"),
                         const SizedBox(height: 8),
-                        fieldNamaLengkap(),
+                        nameField(),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Tempat Lahir"),
                         const SizedBox(height: 8),
-                        fieldNamaLengkap(),
+                        tempatLahirField(),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Tanggal Lahir"),
@@ -91,77 +113,121 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                         //.
                         textFieldName("Jenis Kelamin"),
                         const SizedBox(height: 8),
-                        statusField(hintText: 'pilih', item: itemsStatus),
+                        genderField(hintText: 'pilih', item: user.itemsGender),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Hubungan Keluarga"),
                         const SizedBox(height: 8),
-                        statusField(hintText: 'pilih', item: itemsGender),
+                        statusField(hintText: 'pilih', item: user.itemsStatus),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Email"),
                         const SizedBox(height: 8),
-                        textFieldEmail(),
+                        emailField(hintText: "Alamat email"),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("No. HP"),
                         const SizedBox(height: 8),
-                        fieldNomor(),
+                        phoneField(),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Alamt Berdasarkan KTP"),
                         const SizedBox(height: 8),
-                        fieldNamaLengkap(),
+                        alamatKTPField(),
                         const SizedBox(height: 16),
                         //.
                         textFieldName("Alamat saat ini"),
                         const SizedBox(height: 8),
-                        fieldNamaLengkap(),
+                        alamatDomisiliField(),
                         const SizedBox(height: 30),
                         Center(
                           child: SizedBox(
                             height: 50,
                             width: double.infinity,
-                            child: ElevatedButton(
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : const Text(
+                            child: name == null ||
+                                    name!.isEmpty ||
+                                    placeBirth == null ||
+                                    placeBirth!.isEmpty ||
+                                    idCardAddress == null ||
+                                    idCardAddress!.isEmpty ||
+                                    address == null ||
+                                    address!.isEmpty ||
+                                    nik == null ||
+                                    nik!.isEmpty ||
+                                    phone == null ||
+                                    phone!.isEmpty ||
+                                    email == null ||
+                                    email!.isEmpty ||
+                                    dateBirth == null ||
+                                    dateBirth!.isEmpty ||
+                                    gender == null ||
+                                    gender!.isEmpty ||
+                                    status == null ||
+                                    status!.isEmpty
+                                ? ElevatedButton(
+                                    onPressed: null,
+                                    child: Text(
                                       "REGISTER",
+                                      style: TextStyle(
+                                          color: Colors.grey.shade300),
                                     ),
-                              onPressed: () async {
-                                _formKey.currentState!.save();
-                                if (isLoading) return;
-                                setState(() => isLoading = true);
-                                await Future.delayed(
-                                  const Duration(seconds: 2),
-                                );
-                                setState(() => isLoading = false);
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  try {
-                                    Future.delayed(
-                                      const Duration(seconds: 2),
-                                    ).then(
-                                      (value) async => Navigator.of(context)
-                                          .pushAndRemoveUntil(
-                                        NavigatorFadeTransition(
-                                          child: const BotNavBar(),
-                                        ),
-                                        ModalRoute.withName('/home'),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    Fluttertoast.showToast(
-                                      msg: e.toString(),
-                                    );
-                                  }
-                                }
-                              },
-                            ),
+                                  )
+                                : ElevatedButton(
+                                    child: isLoading
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : const Text(
+                                            "REGISTER",
+                                          ),
+                                    onPressed: () async {
+                                      _formKey.currentState!.save();
+                                      if (isLoading) return;
+                                      setState(() => isLoading = true);
+                                      await Future.delayed(
+                                        const Duration(seconds: 2),
+                                      );
+                                      setState(() => isLoading = false);
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        try {
+                                          Future.delayed(
+                                            const Duration(seconds: 2),
+                                          )
+                                              .then((_) => Fluttertoast.showToast(
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  msg:
+                                                      "Berhasil Menambahkan Anggota Keluarga"))
+                                              .then(
+                                                (_) async =>
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                  NavigatorFadeTransition(
+                                                    child:
+                                                        VaksinasiBookingScreen(
+                                                      dateSchedule:
+                                                          widget.dateSchedule,
+                                                      facilities:
+                                                          widget.facilities,
+                                                      id: widget.id,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                        } catch (e) {
+                                          Fluttertoast.showToast(
+                                            msg: e.toString(),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 32,
+                        )
                       ],
                     ),
                   ),
@@ -189,240 +255,23 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     );
   }
 
-  Widget fieldNamaLengkap() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _nameEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget fieldNIK() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.phone,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(16),
-        ],
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _nikEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          } else if (value.length < 16) {
-            return "use valid nik";
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget passwordFieldPassword() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        obscureText: obscureText,
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(
-                () {
-                  obscureText = !obscureText;
-                },
-              );
-            },
-            child: obscureText
-                ? const Icon(
-                    Icons.visibility_off_rounded,
-                    color: Colors.grey,
-                  )
-                : const Icon(Icons.visibility_rounded, color: Colors.grey),
-          ),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(13),
-        ],
-        controller: _passwordEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          } else if (value.length < 8) {
-            return "Minimum password 8 character";
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget textFieldEmail() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _emailEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          }
-          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-              .hasMatch(value)) {
-            return "Use valid email";
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
   Widget dateField({controller, hintText}) {
     return SizedBox(
       height: 45,
       child: GestureDetector(
         onTap: () async {
           DateTime? pickedDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2023));
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2023),
+          );
 
           if (pickedDate != null) {
             setState(
               () {
-                dateCtl.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                tanggalLahir.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                dateBirth = DateFormat('dd-MM-yyyy').format(pickedDate);
               },
             );
           }
@@ -476,7 +325,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
             filled: true,
           ),
           textInputAction: TextInputAction.next,
-          controller: dateCtl,
+          controller: tanggalLahir,
           validator: (value) {
             if (value!.isEmpty) {
               return "Required";
@@ -484,6 +333,379 @@ class _RegisterState extends State<RegisterFamilyScreen> {
             return null;
           },
         ),
+      ),
+    );
+  }
+
+  Widget nikField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => nik = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.phone,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(16),
+        ],
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Nomor NIK",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: nikEditingController,
+        validator: (value) {
+          if (value!.length < 16) {
+            return "use valid nik";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget phoneField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => phone = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.phone,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(13),
+        ],
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Nomor hp",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: phoneEditingController,
+        validator: (value) {
+          if (value!.length < 11) {
+            return "use valid phone number";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget emailField({controller, hintText}) {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => email = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: hintText,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: controller,
+        validator: (value) {
+          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+              .hasMatch(value!)) {
+            return "Use valid email";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget nameField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => name = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Nama Lengkap",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: nameEditingController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Required";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget tempatLahirField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => placeBirth = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Tempat Lahir",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: tempatLahirEditingController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Required";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget alamatKTPField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => idCardAddress = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Alamat Berdasarkan KTP",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: alamatKTPEditingController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Required";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget alamatDomisiliField() {
+    return SizedBox(
+      height: 45,
+      child: TextFormField(
+        onChanged: (value) => setState(() => address = value),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: Colors.grey.shade700),
+        cursorColor: Colors.white,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
+          hintText: "Alamat Domisili",
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.grey.shade400),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: pressedColor,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        textInputAction: TextInputAction.next,
+        controller: alamatDomisiliEditingController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Required";
+          }
+          return null;
+        },
       ),
     );
   }
@@ -526,12 +748,11 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     );
   }
 
-  Widget statusField({hintText, item}) {
+  Widget statusField({assetIcon, hintText, item}) {
     return Container(
       height: 45,
       padding: const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
@@ -574,57 +795,6 @@ class _RegisterState extends State<RegisterFamilyScreen> {
             .textTheme
             .bodyText1!
             .copyWith(color: Colors.grey.shade700),
-      ),
-    );
-  }
-
-  Widget fieldNomor() {
-    return SizedBox(
-      height: 50,
-      child: TextFormField(
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.phone,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(16),
-        ],
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
-          hintText: 'input',
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.grey.shade400),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: pressedColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-        ),
-        textInputAction: TextInputAction.next,
-        controller: _nikEditingController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Required";
-          }
-          return null;
-        },
       ),
     );
   }

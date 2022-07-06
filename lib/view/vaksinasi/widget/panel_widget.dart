@@ -8,14 +8,23 @@ import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
+import '../../../model/vaksinasi/health_facility_model.dart';
 import '../../../view_model/vaksinasi_view_model.dart';
 import '../edit_data_screen.dart';
 
 class PanelWidget extends StatefulWidget {
+  final HealthFacilityModel facilities;
+  final int? id;
   final PanelController panelController;
   final ScrollController controller;
+  final String dateSchedule;
   const PanelWidget(
-      {Key? key, required this.controller, required this.panelController})
+      {Key? key,
+      required this.controller,
+      required this.panelController,
+      required this.facilities,
+      required this.id,
+      required this.dateSchedule})
       : super(key: key);
 
   @override
@@ -102,7 +111,11 @@ class _PanelWidgetState extends State<PanelWidget> {
                 onPressed: () {
                   Navigator.of(context).push(
                     NavigatorFadeTransition(
-                      child: const RegisterFamilyScreen(),
+                      child: RegisterFamilyScreen(
+                        facilities: widget.facilities,
+                        id: widget.id,
+                        dateSchedule: widget.dateSchedule,
+                      ),
                     ),
                   );
                 },

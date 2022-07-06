@@ -16,7 +16,9 @@ import '../../model/vaksinasi/health_facility_model.dart';
 class VaksinasiBookingScreen extends StatefulWidget {
   final HealthFacilityModel facilities;
   final int? id;
-  const VaksinasiBookingScreen({Key? key, required this.facilities, this.id})
+  final String? dateSchedule;
+  const VaksinasiBookingScreen(
+      {Key? key, required this.facilities, this.id, this.dateSchedule})
       : super(key: key);
 
   @override
@@ -41,6 +43,19 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     Provider.of<VaksinasiViewModel>(context)
         .filterScheduleSession(dateCtl.text, widget.id!);
     Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
+    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
+      Provider.of<ProfileViewModel>(context)
+          .filterUserFamily(profile: user.userData[0].profile!['user_id']);
+    }
+
+    if (widget.dateSchedule != null) {
+      dateCtl.text = widget.dateSchedule!;
+    }
+
+    if (dateCtl.text.isEmpty) {
+      schedule.dataPersonVaksinasiList.clear();
+      schedule.scheduleIdBooking = 0;
+    }
 
     return Scaffold(
       body: SlidingUpPanel(
@@ -61,8 +76,11 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
           top: Radius.circular(25),
         ),
         panelBuilder: (controller) => PanelWidget(
+          id: widget.id,
+          facilities: widget.facilities,
           controller: controller,
           panelController: panelController,
+          dateSchedule: dateCtl.text,
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -190,7 +208,8 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                             scheduleId) {
                                           schedule.addPersonBooking(
                                               dataPerson: user.userData[0],
-                                              id: scheduleId);
+                                              id: scheduleId,
+                                              userFamily: user.userFamily);
                                           if (tempString.isNotEmpty ||
                                               vaksinA != true ||
                                               vaksinB != true ||
@@ -299,14 +318,12 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                         height: 20,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Expanded(
-                            child: Text(
-                              jenisVaksin!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.grey.shade800),
-                            ),
+                          child: Text(
+                            jenisVaksin!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(color: Colors.grey.shade800),
                           ),
                         ),
                       ),
@@ -328,14 +345,12 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                         height: 20,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Expanded(
-                            child: Text(
-                              dosis!.replaceAll('_', ' '),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.grey.shade800),
-                            ),
+                          child: Text(
+                            dosis!.replaceAll('_', ' '),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(color: Colors.grey.shade800),
                           ),
                         ),
                       ),
