@@ -106,17 +106,12 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16),
-                      child: GestureDetector(
-                        onTap: () {
-                          print(user.userFamily);
-                        },
-                        child: Text(
-                          "Pesan Vaksinasi",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white),
-                        ),
+                      child: Text(
+                        "Pesan Vaksinasi",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1!
+                            .copyWith(color: Colors.white),
                       ),
                     ),
                   ),
@@ -218,6 +213,13 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                         ),
                                       ),
                                       onPressed: () async {
+                                        setState(() {
+                                          vaksinA = false;
+                                          vaksinB = false;
+                                          vaksinC = false;
+                                          vaksinD = false;
+                                          tempString = '';
+                                        });
                                         if (schedule.scheduleIdBooking !=
                                             scheduleId) {
                                           schedule.addPersonBooking(

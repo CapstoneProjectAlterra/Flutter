@@ -11,9 +11,8 @@ import '../../model/profile/user_model.dart';
 import '../../view_model/profile_view_model.dart';
 
 class EditFamilyScreen extends StatefulWidget {
-  const EditFamilyScreen({
-    Key? key,
-  }) : super(key: key);
+  final UserModel family;
+  const EditFamilyScreen({Key? key, required this.family}) : super(key: key);
 
   @override
   State<EditFamilyScreen> createState() => _RegisterState();
@@ -21,6 +20,7 @@ class EditFamilyScreen extends StatefulWidget {
 
 class _RegisterState extends State<EditFamilyScreen> {
   var obscureText = true;
+  bool isLoad = true;
   bool isLoading = false;
   String? name;
   String? nik;
@@ -47,6 +47,37 @@ class _RegisterState extends State<EditFamilyScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
     final schedule = Provider.of<VaksinasiViewModel>(context);
+
+    if (isLoad == true) {
+      name = widget.family.name;
+      nameEditingController.text = widget.family.name!;
+
+      nik = widget.family.nik;
+      nikEditingController.text = widget.family.nik!;
+
+      email = widget.family.email;
+      emailEditingController.text = widget.family.email!;
+
+      phone = widget.family.phone;
+      phoneEditingController.text = widget.family.phone!;
+
+      dateBirth = widget.family.dateBirth;
+      tanggalLahir.text = widget.family.dateBirth!;
+
+      address = widget.family.address;
+      alamatDomisiliEditingController.text = widget.family.address!;
+
+      idCardAddress = widget.family.idCardAddress;
+      alamatKTPEditingController.text = widget.family.idCardAddress!;
+
+      placeBirth = widget.family.placeBirth;
+      tempatLahirEditingController.text = widget.family.placeBirth!;
+
+      gender = widget.family.gender!.toLowerCase();
+      status = widget.family.statusFamily!.toLowerCase();
+      isLoad = false;
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -161,7 +192,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                                 ? ElevatedButton(
                                     onPressed: null,
                                     child: Text(
-                                      "REGISTER",
+                                      "SIMPAN",
                                       style: TextStyle(
                                           color: Colors.grey.shade300),
                                     ),
@@ -172,7 +203,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                                             color: Colors.white,
                                           )
                                         : const Text(
-                                            "REGISTER",
+                                            "SIMPAN",
                                           ),
                                     onPressed: () async {
                                       _formKey.currentState!.save();
@@ -201,37 +232,40 @@ class _RegisterState extends State<EditFamilyScreen> {
                                               const Duration(seconds: 2),
                                             )
                                                 .then(
-                                                  (_) => schedule.addFamily(
-                                                    family: UserModel(
-                                                      name:
-                                                          nameEditingController
-                                                              .text,
-                                                      nik: nikEditingController
-                                                          .text,
-                                                      email:
-                                                          emailEditingController
-                                                              .text,
-                                                      phone:
-                                                          phoneEditingController
-                                                              .text,
-                                                      gender:
-                                                          gender!.toUpperCase(),
-                                                      dateBirth:
-                                                          tanggalLahir.text,
-                                                      address:
-                                                          alamatDomisiliEditingController
-                                                              .text,
-                                                      idCardAddress:
-                                                          alamatKTPEditingController
-                                                              .text,
-                                                      placeBirth:
-                                                          tempatLahirEditingController
-                                                              .text,
-                                                      statusFamily:
-                                                          status!.toUpperCase(),
-                                                      profile: {"user_id": id},
-                                                    ),
-                                                  ),
+                                                  (_) => schedule.editFamily(
+                                                      family: UserModel(
+                                                        name:
+                                                            nameEditingController
+                                                                .text,
+                                                        nik:
+                                                            nikEditingController
+                                                                .text,
+                                                        email:
+                                                            emailEditingController
+                                                                .text,
+                                                        phone:
+                                                            phoneEditingController
+                                                                .text,
+                                                        gender: gender!
+                                                            .toUpperCase(),
+                                                        dateBirth:
+                                                            tanggalLahir.text,
+                                                        address:
+                                                            alamatDomisiliEditingController
+                                                                .text,
+                                                        idCardAddress:
+                                                            alamatKTPEditingController
+                                                                .text,
+                                                        placeBirth:
+                                                            tempatLahirEditingController
+                                                                .text,
+                                                        statusFamily: status!
+                                                            .toUpperCase(),
+                                                        profile: {
+                                                          "user_id": id
+                                                        },
+                                                      ),
+                                                      id: widget.family.id!),
                                                 )
                                                 .then(
                                                   (_) => schedule
@@ -247,7 +281,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                                                       toastLength:
                                                           Toast.LENGTH_SHORT,
                                                       msg:
-                                                          "Berhasil Menambahkan Anggota Keluarga"),
+                                                          "Berhasil Mengubah Data Anggota Keluarga"),
                                                 )
                                                 .then(
                                                   (_) async =>

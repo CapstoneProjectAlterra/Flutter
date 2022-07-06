@@ -56,6 +56,11 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  editFamily({UserModel? family, int? id}) async {
+    userApi.editFamily(profile: family, id: id);
+    notifyListeners();
+  }
+
   postBooking({BookingModel? booking}) async {
     await bookingApi.postBooking(booking: booking);
     notifyListeners();

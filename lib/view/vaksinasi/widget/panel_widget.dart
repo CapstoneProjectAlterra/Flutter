@@ -338,7 +338,9 @@ class _PanelWidgetState extends State<PanelWidget> {
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
                         NavigatorFadeTransition(
-                          child: const EditFamilyScreen(),
+                          child: EditFamilyScreen(
+                            family: vaksinasi.dataPersonVaksinasiList[index],
+                          ),
                         ),
                       ),
                       child: SvgPicture.asset(

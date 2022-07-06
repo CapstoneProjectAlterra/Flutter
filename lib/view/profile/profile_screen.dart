@@ -212,7 +212,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: 'assets/icons/gender.svg',
               title: profile.gender.isEmpty
                   ? "Gender"
-                  : profile.gender.toLowerCase().replaceAll('_', ' - '),
+                  : profile.gender
+                      .toLowerCase()
+                      .replaceFirst(
+                        profile.gender.toLowerCase()[0],
+                        profile.gender.toUpperCase()[0],
+                      )
+                      .replaceAll('_', ' - '),
               context: context),
         ),
         SizedBox(
@@ -235,7 +241,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: 'assets/icons/status.svg',
               title: profile.status.isEmpty
                   ? "Hubungan dalam keluarga"
-                  : profile.status.toLowerCase(),
+                  : profile.status.toLowerCase().replaceFirst(
+                        profile.status.toLowerCase()[0],
+                        profile.status.toUpperCase()[0],
+                      ),
               context: context),
         ),
         SizedBox(
