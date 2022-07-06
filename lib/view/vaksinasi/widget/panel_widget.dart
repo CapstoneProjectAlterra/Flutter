@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
@@ -18,13 +19,15 @@ class PanelWidget extends StatefulWidget {
   final PanelController panelController;
   final ScrollController controller;
   final String dateSchedule;
+  final int scheduleId;
   const PanelWidget(
       {Key? key,
       required this.controller,
       required this.panelController,
       required this.facilities,
       required this.id,
-      required this.dateSchedule})
+      required this.dateSchedule,
+      required this.scheduleId})
       : super(key: key);
 
   @override
@@ -109,15 +112,19 @@ class _PanelWidgetState extends State<PanelWidget> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    NavigatorFadeTransition(
-                      child: RegisterFamilyScreen(
-                        facilities: widget.facilities,
-                        id: widget.id,
-                        dateSchedule: widget.dateSchedule,
-                      ),
-                    ),
-                  );
+                  widget.scheduleId == 0
+                      ? Fluttertoast.showToast(
+                          msg: "Pilih Jadwal Terlebih Dahulu")
+                      : Navigator.of(context).pushReplacement(
+                          NavigatorFadeTransition(
+                            child: RegisterFamilyScreen(
+                              scheduleId: widget.scheduleId,
+                              facilities: widget.facilities,
+                              id: widget.id,
+                              dateSchedule: widget.dateSchedule,
+                            ),
+                          ),
+                        );
                 },
               ),
             ),

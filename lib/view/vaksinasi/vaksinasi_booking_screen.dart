@@ -15,10 +15,15 @@ import '../../model/vaksinasi/health_facility_model.dart';
 
 class VaksinasiBookingScreen extends StatefulWidget {
   final HealthFacilityModel facilities;
+  final int? scheduleId;
   final int? id;
   final String? dateSchedule;
   const VaksinasiBookingScreen(
-      {Key? key, required this.facilities, this.id, this.dateSchedule})
+      {Key? key,
+      required this.facilities,
+      this.id,
+      this.dateSchedule,
+      this.scheduleId})
       : super(key: key);
 
   @override
@@ -28,12 +33,18 @@ class VaksinasiBookingScreen extends StatefulWidget {
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
-  int? scheduleId;
+  int scheduleId = 0;
   String tempString = '';
   bool vaksinA = false;
   bool vaksinB = false;
   bool vaksinC = false;
   bool vaksinD = false;
+
+  @override
+  void didChangeDependencies() {
+    Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +54,17 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     Provider.of<VaksinasiViewModel>(context)
         .filterScheduleSession(dateCtl.text, widget.id!);
     Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
+    Provider.of<ProfileViewModel>(context).filterUserFamily();
+
     if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
-      Provider.of<ProfileViewModel>(context)
-          .filterUserFamily(profile: user.userData[0].profile!['user_id']);
+      Provider.of<ProfileViewModel>(context).getAllFamilies();
+    }
+
+    if (widget.scheduleId != 0 && user.userFamily.isEmpty) {
+      schedule.addPersonBooking(
+          dataPerson: user.userData[0],
+          id: widget.scheduleId,
+          userFamily: user.userFamily);
     }
 
     if (widget.dateSchedule != null) {
@@ -55,6 +74,10 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     if (dateCtl.text.isEmpty) {
       schedule.dataPersonVaksinasiList.clear();
       schedule.scheduleIdBooking = 0;
+    }
+
+    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
 
     return Scaffold(
@@ -76,6 +99,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
           top: Radius.circular(25),
         ),
         panelBuilder: (controller) => PanelWidget(
+          scheduleId: scheduleId,
           id: widget.id,
           facilities: widget.facilities,
           controller: controller,
@@ -434,7 +458,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             tempString = 'a';
-                            scheduleId = schedule.scheduleId1;
+                            setState(() {
+                              scheduleId = schedule.scheduleId1;
+                            });
                             vaksinA = true;
                             vaksinB = false;
                             vaksinC = false;
@@ -485,7 +511,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             tempString = 'a';
-                            scheduleId = schedule.scheduleId2;
+                            setState(() {
+                              scheduleId = schedule.scheduleId2;
+                            });
                             vaksinB = true;
                             vaksinA = false;
                             vaksinC = false;
@@ -540,7 +568,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinA == true ||
                               vaksinB == true ||
                               vaksinD == true) {
-                            scheduleId = schedule.scheduleId3;
+                            setState(() {
+                              scheduleId = schedule.scheduleId3;
+                            });
                             tempString = 'a';
                             vaksinC = true;
                             vaksinA = false;
@@ -594,7 +624,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinB == true ||
                               vaksinC == true) {
                             tempString = 'a';
-                            scheduleId = schedule.scheduleId4;
+                            setState(() {
+                              scheduleId = schedule.scheduleId4;
+                            });
                             vaksinD = true;
                             vaksinA = false;
                             vaksinB = false;

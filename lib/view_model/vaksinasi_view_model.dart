@@ -71,24 +71,27 @@ class VaksinasiViewModel extends ChangeNotifier {
         )
         .toList();
 
-    if (contains.isEmpty) {
-      dataPersonVaksinasiList.add(dataPerson!);
+    if (contains.isEmpty && dataPerson != null) {
+      dataPersonVaksinasiList.add(dataPerson);
     }
 
-    for (int i = 0; i < userFamily!.length; i++) {
-      contains2 = dataPersonVaksinasiList
-          .where(
-            (element) => element.nik!.contains(userFamily[i].nik!),
-          )
-          .toList();
-      if (contains.isEmpty && contains2.isEmpty) {
-        dataPersonVaksinasiList.add(
-          userFamily[i],
-        );
+    if (userFamily != null) {
+      for (int i = 0; i < userFamily.length; i++) {
+        contains2 = dataPersonVaksinasiList
+            .where(
+              (element) => element.nik!.contains(userFamily[i].nik!),
+            )
+            .toList();
+        if (contains.isEmpty && contains2.isEmpty) {
+          dataPersonVaksinasiList.add(
+            userFamily[i],
+          );
+        }
       }
     }
-    scheduleIdBooking = id!;
-    notifyListeners();
+    if (id != null) {
+      scheduleIdBooking = id;
+    }
   }
 
   getAllHealthFacilities() async {

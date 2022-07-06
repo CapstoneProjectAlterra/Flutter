@@ -31,14 +31,17 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  filterUserFamily({int? profile}) {
-    if (userData.isNotEmpty) {
+  filterUserFamily() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    int? userId = prefs.getInt('userId');
+    if (userData.isNotEmpty && userId != null) {
       userFamily = familyList
           .where(
-            (element) => element.profile!.containsValue(profile!),
+            (element) => element.profile!.containsValue(userId),
           )
           .toList();
     }
+    notifyListeners();
   }
 
   filterUser() async {
@@ -112,6 +115,11 @@ class ProfileViewModel extends ChangeNotifier {
         gender = 'Gender';
       }
     }
+
+    if (filterUser.isNotEmpty) {
+      prefs.setInt('userId', userData[0].profile!['user_id']);
+    }
+
     notifyListeners();
   }
 

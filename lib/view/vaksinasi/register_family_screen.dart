@@ -14,14 +14,12 @@ import '../../model/vaksinasi/health_facility_model.dart';
 import '../../view_model/profile_view_model.dart';
 
 class RegisterFamilyScreen extends StatefulWidget {
-  final HealthFacilityModel facilities;
+  final HealthFacilityModel? facilities;
   final int? id;
   final String? dateSchedule;
+  final int? scheduleId;
   const RegisterFamilyScreen(
-      {Key? key,
-      required this.facilities,
-      required this.id,
-      required this.dateSchedule})
+      {Key? key, this.facilities, this.id, this.dateSchedule, this.scheduleId})
       : super(key: key);
 
   @override
@@ -243,6 +241,10 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                   ),
                                                 )
                                                 .then(
+                                                  (_) =>
+                                                      user.userFamily.clear(),
+                                                )
+                                                .then(
                                                   (_) => Fluttertoast.showToast(
                                                       toastLength:
                                                           Toast.LENGTH_SHORT,
@@ -256,10 +258,12 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                     NavigatorFadeTransition(
                                                       child:
                                                           VaksinasiBookingScreen(
+                                                        scheduleId:
+                                                            widget.scheduleId,
                                                         dateSchedule:
                                                             widget.dateSchedule,
                                                         facilities:
-                                                            widget.facilities,
+                                                            widget.facilities!,
                                                         id: widget.id,
                                                       ),
                                                     ),
@@ -270,6 +274,9 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                               msg: e.toString(),
                                             );
                                           }
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: "NIK Sudah Digunakan");
                                         }
                                       }
                                     },
