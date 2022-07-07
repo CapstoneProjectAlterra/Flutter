@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/model/vaksinasi/api/booking_api.dart';
 import 'package:vaccine_booking/model/vaksinasi/api/schedule_api.dart';
+import 'package:vaccine_booking/model/vaksinasi/datail_booking_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/schedule_model.dart';
 
@@ -89,6 +90,11 @@ class VaksinasiViewModel extends ChangeNotifier {
 
   postBooking({BookingModel? booking}) async {
     await bookingApi.postBooking(booking: booking);
+    notifyListeners();
+  }
+
+  postDetailBooking(DetailBookingModel? booking) async {
+    await bookingApi.postDetailBooking(booking: booking);
     notifyListeners();
   }
 

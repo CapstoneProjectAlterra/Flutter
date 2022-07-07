@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
+import 'package:vaccine_booking/model/vaksinasi/datail_booking_model.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/content_list_booking.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
@@ -66,15 +67,12 @@ class _PanelWidgetState extends State<PanelWidget> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.53,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const Text(
-                    "Pilih Anggota",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
+                child: const Text(
+                  "Pilih Anggota",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                 ),
               ),
               SizedBox(
@@ -155,13 +153,32 @@ class _PanelWidgetState extends State<PanelWidget> {
                             .headline4!
                             .copyWith(color: Colors.white),
                       ),
-                      onPressed: () {
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (context) {
-                        //     return modalSuccess();
-                        //   },
-                        // );
+                      onPressed: () async {
+                        try {
+                          await Future.delayed(
+                            const Duration(seconds: 1),
+                          )
+                              .then(
+                                (_) async => await vaksinasi.postDetailBooking(
+                                  DetailBookingModel(
+                                      bookingId:
+                                          vaksinasi.filterBookingList[0].id,
+                                      familyId: vaksinasi
+                                          .selectBookingVaksinasiList[0].id,
+                                      bookingStatus: "COMPLETED"),
+                                ),
+                              )
+                              .then(
+                                (_) => showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return modalSuccess();
+                                  },
+                                ),
+                              );
+                        } catch (e) {
+                          Fluttertoast.showToast(msg: e.toString());
+                        }
                       },
                     ),
             ),
