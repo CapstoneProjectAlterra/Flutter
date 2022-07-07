@@ -40,7 +40,8 @@ class _PanelWidgetState extends State<PanelWidget> {
   Widget build(BuildContext context) {
     final vaksinasi = Provider.of<VaksinasiViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
-
+    Provider.of<VaksinasiViewModel>(context)
+        .filterBooking(user.userData[0].profile!['user_id'], widget.scheduleId);
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: Column(
@@ -65,12 +66,15 @@ class _PanelWidgetState extends State<PanelWidget> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.53,
-                child: const Text(
-                  "Pilih Anggota",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const Text(
+                    "Pilih Anggota",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                 ),
               ),
               SizedBox(
@@ -133,23 +137,33 @@ class _PanelWidgetState extends State<PanelWidget> {
             child: SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width * 0.9,
-              child: ElevatedButton(
-                child: Text(
-                  "Pesan",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(color: Colors.white),
-                ),
-                onPressed: () {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return modalSuccess();
-                  //   },
-                  // );
-                },
-              ),
+              child: vaksinasi.selectBookingVaksinasiList.isEmpty
+                  ? ElevatedButton(
+                      onPressed: null,
+                      child: Text(
+                        "Pesan",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(color: Colors.white),
+                      ))
+                  : ElevatedButton(
+                      child: Text(
+                        "Pesan",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) {
+                        //     return modalSuccess();
+                        //   },
+                        // );
+                      },
+                    ),
             ),
           ),
           const SizedBox(

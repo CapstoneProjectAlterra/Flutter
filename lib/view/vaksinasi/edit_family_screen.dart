@@ -7,11 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/constants.dart';
-import '../../model/profile/user_model.dart';
+import '../../model/profile/family_model.dart';
 import '../../view_model/profile_view_model.dart';
 
 class EditFamilyScreen extends StatefulWidget {
-  final UserModel family;
+  final FamilyModel family;
   const EditFamilyScreen({Key? key, required this.family}) : super(key: key);
 
   @override
@@ -215,7 +215,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                                       setState(() => isLoading = false);
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        List<UserModel> contains =
+                                        List<FamilyModel> contains =
                                             user.familyList
                                                 .where(
                                                   (element) => element.nik!
@@ -233,7 +233,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                                             )
                                                 .then(
                                                   (_) => schedule.editFamily(
-                                                      family: UserModel(
+                                                      family: FamilyModel(
                                                         name:
                                                             nameEditingController
                                                                 .text,

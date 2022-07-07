@@ -6,7 +6,7 @@ import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/schedule_model.dart';
 
 import '../model/profile/api/user_api.dart';
-import '../model/profile/user_model.dart';
+import '../model/profile/family_model.dart';
 import '../model/vaksinasi/api/health_facility_api.dart';
 import '../model/vaksinasi/booking_model.dart';
 
@@ -21,8 +21,10 @@ class VaksinasiViewModel extends ChangeNotifier {
   List<ScheduleModel> scheduleList = [];
   List<ScheduleModel> filterScheduleList = [];
   List<ScheduleModel> filterScheduleSessionList = [];
-  List<UserModel> dataPersonVaksinasiList = [];
-  List<UserModel> selectBookingVaksinasiList = [];
+  List<FamilyModel> dataPersonVaksinasiList = [];
+  List<FamilyModel> selectBookingVaksinasiList = [];
+  List<BookingModel> bookingList = [];
+  List<BookingModel> filterBookingList = [];
 
   int scheduleIdBooking = 0;
 
@@ -51,12 +53,12 @@ class VaksinasiViewModel extends ChangeNotifier {
   int stock3 = 0;
   int stock4 = 0;
 
-  addFamily({UserModel? family}) async {
+  addFamily({FamilyModel? family}) async {
     userApi.addFamily(profile: family);
     notifyListeners();
   }
 
-  editFamily({UserModel? family, int? id}) async {
+  editFamily({FamilyModel? family, int? id}) async {
     userApi.editFamily(profile: family, id: id);
     notifyListeners();
   }
@@ -67,14 +69,14 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addSelectBookingVaksinasi(UserModel? family) {
+  addSelectBookingVaksinasi(FamilyModel? family) {
     if (family != null) {
       selectBookingVaksinasiList.add(family);
     }
     notifyListeners();
   }
 
-  deleteSelectBookingVaksinasi(UserModel? family) {
+  deleteSelectBookingVaksinasi(FamilyModel? family) {
     if (family != null) {
       selectBookingVaksinasiList.removeWhere(
         (element) => element.name!.toLowerCase().contains(
@@ -91,9 +93,9 @@ class VaksinasiViewModel extends ChangeNotifier {
   }
 
   addPersonBooking(
-      {UserModel? dataPerson, int? id, List<UserModel>? userFamily}) {
-    List<UserModel> contains = [];
-    List<UserModel> contains2 = [];
+      {FamilyModel? dataPerson, int? id, List<FamilyModel>? userFamily}) {
+    List<FamilyModel> contains = [];
+    List<FamilyModel> contains2 = [];
     contains = dataPersonVaksinasiList
         .where(
           (element) => element.nik!.contains(dataPerson!.nik!),
@@ -130,6 +132,22 @@ class VaksinasiViewModel extends ChangeNotifier {
     facilityList = getAllFacilities;
 
     notifyListeners();
+  }
+
+  getBookingList() async {
+    final bookings = await bookingApi.getBooking();
+    bookingList = bookings;
+    notifyListeners();
+  }
+
+  filterBooking(int? userId, int? scheduleId) {
+    filterBookingList = bookingList
+        .where(
+          (element) =>
+              element.user.containsValue(userId) &&
+              element.schedule.containsValue(scheduleId),
+        )
+        .toList();
   }
 
   searchFacility({String? query}) async {

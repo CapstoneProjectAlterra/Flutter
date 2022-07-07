@@ -1,26 +1,21 @@
 class BookingModel {
+  int? id;
   String bookingDate;
-  String bookingPass;
   Map<String, dynamic> schedule;
   Map<String, dynamic> user;
 
   BookingModel(
       {required this.bookingDate,
-      required this.bookingPass,
       required this.schedule,
-      required this.user});
+      required this.user,
+      this.id});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
-        bookingDate: json['booking_date'],
-        bookingPass: json['booking_pass'],
-        schedule: json['schedule'],
-        user: json['user'],
-      );
+      bookingDate: json['booking_date'],
+      schedule: json['schedule'],
+      user: json['user'],
+      id: json['id']);
 
-  Map<String, dynamic> toJson() => {
-        'booking_date': bookingDate,
-        'booking_pass': bookingPass,
-        'schedule': schedule,
-        'user': user
-      };
+  Map<String, dynamic> toJson() =>
+      {'booking_date': bookingDate, 'schedule': schedule, 'user': user};
 }

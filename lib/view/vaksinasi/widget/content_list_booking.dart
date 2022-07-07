@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/components/constants.dart';
 
-import '../../../model/profile/user_model.dart';
+import '../../../model/profile/family_model.dart';
 import '../edit_family_screen.dart';
 import '../../../view_model/profile_view_model.dart';
 import '../../../view_model/vaksinasi_view_model.dart';
@@ -14,7 +14,7 @@ class ContentListBooking extends StatefulWidget {
   final ProfileViewModel user;
   final int index;
   final bool isPressed;
-  final UserModel family;
+  final FamilyModel family;
   const ContentListBooking(
       {Key? key,
       required this.isPressed,

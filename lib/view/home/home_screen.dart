@@ -25,9 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (isTrue == true) {
       Provider.of<HomeViewModel>(context, listen: false).getAllNews();
       Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
+      Provider.of<ProfileViewModel>(context, listen: false).getUsersProfile();
       Provider.of<ProfileViewModel>(context, listen: false).detailProfile();
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
+      Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
+      Provider.of<ProfileViewModel>(context, listen: false).filterUserData();
       Provider.of<ProfileViewModel>(context, listen: false).filterUser();
       Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
       Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
@@ -46,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
+    }
+    if (user.usersProfile.isNotEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserData();
     }
     schedule.scheduleIdBooking = 0;
 

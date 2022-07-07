@@ -19,6 +19,30 @@ class BookingApi {
         ),
         data: booking!.toJson(),
       );
+    } on Exception catch (e) {
+      if (e is DioError) {}
+    }
+  }
+
+  getBooking() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    try {
+      final response = await Dio().get(
+        "$baseUrl/api/v1/booking/",
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        final bookingList = (response.data['data'] as List)
+            .map((e) => BookingModel.fromJson(e))
+            .toList();
+        return bookingList;
+      }
     } on Exception catch (_) {}
   }
 }

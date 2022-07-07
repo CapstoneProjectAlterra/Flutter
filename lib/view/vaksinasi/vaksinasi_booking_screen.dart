@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/model/vaksinasi/booking_model.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
@@ -42,6 +43,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
     if (isInit == true) {
       Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
+      Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
       isInit = false;
     }
     super.didChangeDependencies();
@@ -69,6 +71,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
+
+    Provider.of<VaksinasiViewModel>(context)
+        .filterBooking(user.userData[0].profile!['user_id'], scheduleId);
 
     return Scaffold(
       body: SlidingUpPanel(
@@ -218,19 +223,56 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                         ),
                                       ),
                                       onPressed: () async {
-                                        setState(() {
-                                          vaksinA = false;
-                                          vaksinB = false;
-                                          vaksinC = false;
-                                          vaksinD = false;
-                                          tempString = '';
-                                        });
+                                        String dateNow =
+                                            DateFormat('dd-MM-yyyy').format(
+                                          DateTime.now(),
+                                        );
+                                        String timeNow =
+                                            DateFormat('H:m:s').format(
+                                          DateTime.now(),
+                                        );
+                                        setState(
+                                          () {
+                                            vaksinA = false;
+                                            vaksinB = false;
+                                            vaksinC = false;
+                                            vaksinD = false;
+                                            tempString = '';
+                                          },
+                                        );
                                         if (schedule.scheduleIdBooking !=
                                             scheduleId) {
                                           schedule.addPersonBooking(
                                               dataPerson: user.userData[0],
                                               id: scheduleId,
                                               userFamily: user.userFamily);
+
+                                          Future.delayed(
+                                            const Duration(seconds: 1),
+                                          )
+                                              .then(
+                                                (_) async =>
+                                                    await schedule.postBooking(
+                                                  booking: BookingModel(
+                                                    bookingDate:
+                                                        "$dateNow $timeNow",
+                                                    schedule: {
+                                                      "id": scheduleId
+                                                    },
+                                                    user: {
+                                                      "id": user
+                                                          .filterUserProfile[0]
+                                                          .profile['user_id'],
+                                                    },
+                                                  ),
+                                                ),
+                                              )
+                                              .then(
+                                                (value) => Fluttertoast.showToast(
+                                                    msg:
+                                                        "Berhasil Menyimpan Jadwal"),
+                                              );
+
                                           if (tempString.isNotEmpty ||
                                               vaksinA != true ||
                                               vaksinB != true ||

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/constants.dart';
-import '../../model/profile/user_model.dart';
+import '../../model/profile/family_model.dart';
 import '../../view_model/profile_view_model.dart';
 
 class RegisterFamilyScreen extends StatefulWidget {
@@ -184,7 +184,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                       setState(() => isLoading = false);
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        List<UserModel> contains =
+                                        List<FamilyModel> contains =
                                             user.familyList
                                                 .where(
                                                   (element) => element.nik!
@@ -202,7 +202,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                             )
                                                 .then(
                                                   (_) => schedule.addFamily(
-                                                    family: UserModel(
+                                                    family: FamilyModel(
                                                       name:
                                                           nameEditingController
                                                               .text,

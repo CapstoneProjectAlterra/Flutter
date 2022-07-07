@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vaccine_booking/model/profile/user_model.dart';
 
 import '../model/profile/api/user_api.dart';
-import '../model/profile/user_model.dart';
+import '../model/profile/family_model.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   final familyApi = UserApi();
-  List<UserModel> familyList = [];
-  List<UserModel> userData = [];
-  List<UserModel> userFamily = [];
+  List<FamilyModel> familyList = [];
+  List<FamilyModel> userData = [];
+  List<FamilyModel> userFamily = [];
+  List<UserModel> usersProfile = [];
+  List<UserModel> filterUserProfile = [];
 
   final itemsGender = ['laki_laki', 'perempuan'];
   final itemsStatus = ['ayah', 'ibu', 'anak', 'saudara'];
@@ -28,6 +31,22 @@ class ProfileViewModel extends ChangeNotifier {
   getAllFamilies() async {
     final getAllFamilies = await familyApi.getAllFamilies();
     familyList = getAllFamilies;
+    notifyListeners();
+  }
+
+  getUsersProfile() async {
+    final getProfiles = await familyApi.getUserProfile();
+    usersProfile = getProfiles;
+    notifyListeners();
+  }
+
+  filterUserData() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    filterUserProfile = usersProfile
+        .where(
+          (element) => element.username.contains(prefs.getString('nik')!),
+        )
+        .toList();
     notifyListeners();
   }
 
@@ -123,7 +142,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  editFamily(UserModel profile, int id) async {
+  editFamily(FamilyModel profile, int id) async {
     await familyApi.editUser(profile: profile, id: id);
   }
 
