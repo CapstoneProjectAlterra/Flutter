@@ -18,6 +18,7 @@ const pressedColor = Color(0xff03484E);
 const lowPressedColor = Color(0xffCDE9EB);
 
 bool isTrue = true;
+bool isInitBooking = true;
 
 const LinearGradient gradientVertical = LinearGradient(
   begin: Alignment.topCenter,

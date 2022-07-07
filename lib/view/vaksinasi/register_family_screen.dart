@@ -234,6 +234,10 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                   ),
                                                 )
                                                 .then(
+                                                  (_) =>
+                                                      user.familyList.clear(),
+                                                )
+                                                .then(
                                                   (_) => schedule
                                                       .dataPersonVaksinasiList
                                                       .clear(),
@@ -241,6 +245,13 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                 .then(
                                                   (_) =>
                                                       user.userFamily.clear(),
+                                                )
+                                                .then(
+                                                  (_) => setState(
+                                                    () {
+                                                      isInitBooking = true;
+                                                    },
+                                                  ),
                                                 )
                                                 .then(
                                                   (_) => Fluttertoast.showToast(

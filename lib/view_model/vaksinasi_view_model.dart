@@ -62,7 +62,7 @@ class VaksinasiViewModel extends ChangeNotifier {
   }
 
   deleteFamily({int? id, int? index}) async {
-    userApi.editFamily(id: id);
+    userApi.deleteFamily(id: id);
     dataPersonVaksinasiList.removeAt(index!);
     notifyListeners();
   }
@@ -103,6 +103,7 @@ class VaksinasiViewModel extends ChangeNotifier {
     if (id != null) {
       scheduleIdBooking = id;
     }
+    notifyListeners();
   }
 
   getAllHealthFacilities() async {

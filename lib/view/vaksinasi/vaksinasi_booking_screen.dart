@@ -42,6 +42,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
     if (isInit == true) {
       Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
+      isInit = false;
     }
     super.didChangeDependencies();
   }
@@ -50,6 +51,10 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   Widget build(BuildContext context) {
     final schedule = Provider.of<VaksinasiViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
+    if (user.familyList.isEmpty) {
+      Provider.of<ProfileViewModel>(context).getAllFamilies();
+    }
+
     Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
     Provider.of<VaksinasiViewModel>(context)
         .filterScheduleSession(dateCtl.text, widget.id!);

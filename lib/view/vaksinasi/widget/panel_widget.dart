@@ -35,11 +35,11 @@ class PanelWidget extends StatefulWidget {
 }
 
 class _PanelWidgetState extends State<PanelWidget> {
-  bool isBool = false;
   @override
   Widget build(BuildContext context) {
     final vaksinasi = Provider.of<VaksinasiViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
+
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: Column(
@@ -256,127 +256,133 @@ class _PanelWidgetState extends State<PanelWidget> {
       },
       itemCount: vaksinasi.dataPersonVaksinasiList.length,
       itemBuilder: (context, index) {
-        return Container(
-          height: 80,
-          decoration: const BoxDecoration(
-            color: secondColorLow,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(defaultPadding),
-            child: Row(
+        return contentListView(vaksinasi, user, index);
+      },
+    );
+  }
+
+  Widget contentListView(
+      VaksinasiViewModel vaksinasi, ProfileViewModel user, int index) {
+    return Container(
+      height: 85,
+      decoration: BoxDecoration(
+        color: secondColorLow,
+        border: Border.all(color: pressedColor, width: 3),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          vaksinasi.dataPersonVaksinasiList[index].name!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.black),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          vaksinasi.dataPersonVaksinasiList[index].name ==
-                                  user.name
-                              ? "Saya"
-                              : vaksinasi
-                                  .dataPersonVaksinasiList[index].statusFamily!
-                                  .toLowerCase()
-                                  .replaceFirst(
-                                    vaksinasi.dataPersonVaksinasiList[index]
-                                        .statusFamily!
-                                        .toLowerCase()[0],
-                                    vaksinasi.dataPersonVaksinasiList[index]
-                                        .statusFamily!
-                                        .toUpperCase()[0],
-                                  ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.grey.shade700),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "NIK :",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.grey.shade900),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          vaksinasi.dataPersonVaksinasiList[index].nik!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.grey.shade900),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                const Spacer(),
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        NavigatorFadeTransition(
-                          child: EditFamilyScreen(
-                            family: vaksinasi.dataPersonVaksinasiList[index],
-                          ),
-                        ),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/icons/edit.svg',
-                        color: Colors.black,
-                        width: 25,
-                        height: 25,
-                      ),
+                    Text(
+                      vaksinasi.dataPersonVaksinasiList[index].name!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(color: Colors.black),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        await Future.delayed(const Duration(seconds: 1))
-                            .then(
-                              (_) async => await vaksinasi.deleteFamily(
-                                  id: vaksinasi
-                                      .dataPersonVaksinasiList[index].id,
-                                  index: index),
-                            )
-                            .then((_) => Fluttertoast.showToast(
-                                toastLength: Toast.LENGTH_SHORT,
-                                msg: "Family Member Berhasil Dihapus"));
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/icons/delete.svg',
-                        color: Colors.black,
-                        width: 25,
-                        height: 25,
-                      ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      vaksinasi.dataPersonVaksinasiList[index].name == user.name
+                          ? "Saya"
+                          : vaksinasi
+                              .dataPersonVaksinasiList[index].statusFamily!
+                              .toLowerCase()
+                              .replaceFirst(
+                                vaksinasi.dataPersonVaksinasiList[index]
+                                    .statusFamily!
+                                    .toLowerCase()[0],
+                                vaksinasi.dataPersonVaksinasiList[index]
+                                    .statusFamily!
+                                    .toUpperCase()[0],
+                              ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.grey.shade700),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "NIK :",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.grey.shade900),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      vaksinasi.dataPersonVaksinasiList[index].nik!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.grey.shade900),
+                    )
+                  ],
+                )
+              ],
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    NavigatorFadeTransition(
+                      child: EditFamilyScreen(
+                        family: vaksinasi.dataPersonVaksinasiList[index],
+                      ),
+                    ),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/edit.svg',
+                    color: Colors.black,
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    await Future.delayed(const Duration(seconds: 1))
+                        .then(
+                          (_) async => await vaksinasi.deleteFamily(
+                              id: vaksinasi.dataPersonVaksinasiList[index].id,
+                              index: index),
+                        )
+                        .then(
+                          (_) => Fluttertoast.showToast(
+                              toastLength: Toast.LENGTH_SHORT,
+                              msg: "Family Member Berhasil Dihapus"),
+                        );
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/icons/delete.svg',
+                    color: Colors.black,
+                    width: 25,
+                    height: 25,
+                  ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
