@@ -22,7 +22,7 @@ class VaksinasiViewModel extends ChangeNotifier {
   List<ScheduleModel> filterScheduleList = [];
   List<ScheduleModel> filterScheduleSessionList = [];
   List<UserModel> dataPersonVaksinasiList = [];
-  BookingModel? dataBookingVaksinasi;
+  List<UserModel> selectBookingVaksinasiList = [];
 
   int scheduleIdBooking = 0;
 
@@ -64,6 +64,24 @@ class VaksinasiViewModel extends ChangeNotifier {
   deleteFamily({int? id, int? index}) async {
     userApi.deleteFamily(id: id);
     dataPersonVaksinasiList.removeAt(index!);
+    notifyListeners();
+  }
+
+  addSelectBookingVaksinasi(UserModel? family) {
+    if (family != null) {
+      selectBookingVaksinasiList.add(family);
+    }
+    notifyListeners();
+  }
+
+  deleteSelectBookingVaksinasi(UserModel? family) {
+    if (family != null) {
+      selectBookingVaksinasiList.removeWhere(
+        (element) => element.name!.toLowerCase().contains(
+              family.name!.toLowerCase(),
+            ),
+      );
+    }
     notifyListeners();
   }
 

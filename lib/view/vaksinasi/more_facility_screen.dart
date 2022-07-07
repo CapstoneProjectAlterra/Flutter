@@ -8,7 +8,9 @@ import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_booking_screen.dart';
 
 import '../../components/skeleton_container.dart';
+import '../../view_model/profile_view_model.dart';
 import '../../view_model/vaksinasi_view_model.dart';
+import '../profile/edit_profile.dart';
 
 class MoreFacilityScreen extends StatefulWidget {
   final String? query;
@@ -43,6 +45,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
   @override
   Widget build(BuildContext context) {
     final healthFacilities = Provider.of<VaksinasiViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
     setState(() {
       healthFacilities.searchMoreFacility(
           query: moreQuery, query2: widget.query);
@@ -149,7 +152,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height,
-                child: listFacility(healthFacilities),
+                child: listFacility(healthFacilities, user),
               ),
             ],
           ),
@@ -158,7 +161,8 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
     );
   }
 
-  Widget listFacility(VaksinasiViewModel healthFacilities) {
+  Widget listFacility(
+      VaksinasiViewModel healthFacilities, ProfileViewModel user) {
     return ListView.separated(
         scrollDirection: Axis.vertical,
         separatorBuilder: (context, index) {
@@ -268,7 +272,8 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                                 : healthFacilities.moreResult[index],
                             moreQuery.isEmpty
                                 ? healthFacilities.result[index].id
-                                : healthFacilities.moreResult[index].id),
+                                : healthFacilities.moreResult[index].id,
+                            user),
                       ),
                     ],
                   ),
@@ -282,19 +287,29 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
             : healthFacilities.moreResult.length);
   }
 
-  Widget buttonText(context, facilities, id) {
+  Widget buttonText(context, facilities, id, ProfileViewModel user) {
     return Row(
       children: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).push(
-              NavigatorFadeTransition(
-                child: VaksinasiBookingScreen(
-                  facilities: facilities,
-                  id: id,
+            if (user.userData[0].name != null &&
+                user.userData[0].phone != null) {
+              Navigator.of(context).push(
+                NavigatorFadeTransition(
+                  child: VaksinasiBookingScreen(
+                    facilities: facilities,
+                    id: id,
+                  ),
                 ),
-              ),
-            );
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return modalDataAlert(context);
+                },
+              );
+            }
           },
           child: Text(
             'Selengkapnya',
@@ -394,6 +409,83 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           hintText: 'search'),
+    );
+  }
+
+  Widget modalDataAlert(context) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 380,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child:
+                      Icon(Icons.close, color: Colors.grey.shade500, size: 32),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                height: MediaQuery.of(context).size.height * 0.08,
+                width: MediaQuery.of(context).size.width * 0.135,
+                child: Image.asset('assets/images/warning.png'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Duh, data dirimu masih belum lengkap!",
+                style: Theme.of(context).textTheme.headline2!,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(
+                "Yuk, lengkapi data profilmu terlebih dahulu sebelum kembali melanjutkan pemesanan.",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.grey.shade500),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Center(
+                child: SizedBox(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: ElevatedButton(
+                    child: const Text(
+                      "Lengkapi Profil",
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        NavigatorFadeTransition(
+                          child: const EditProfileScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

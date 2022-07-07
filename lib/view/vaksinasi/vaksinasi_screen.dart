@@ -144,7 +144,7 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: 380,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
