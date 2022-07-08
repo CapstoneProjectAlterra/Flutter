@@ -115,12 +115,13 @@ class HistoryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      history.filterDetailBookingList[index].family['name'],
+                      history.filterNameBooking[index].family['name'],
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),
                     const Icon(
                       Icons.keyboard_arrow_right,
+                      color: Colors.black,
                       size: 36,
                     ),
                   ],
@@ -130,7 +131,7 @@ class HistoryScreen extends StatelessWidget {
           ),
         );
       },
-      itemCount: history.filterDetailBookingList.length,
+      itemCount: history.filterNameBooking.length,
     );
   }
 }

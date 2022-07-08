@@ -61,6 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<HistoryViewModel>(context)
           .filterDetailBooking(user.filterUserProfile[0].profile['user_id']);
     }
+
+    if (history.filterDetailBookingList.isNotEmpty) {
+      Provider.of<HistoryViewModel>(context).filterBookingName();
+    }
     schedule.scheduleIdBooking = 0;
 
     return Scaffold(

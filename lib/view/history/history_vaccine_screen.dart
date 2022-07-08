@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/model/history/history_model.dart';
 import 'package:vaccine_booking/view/history/detail_history_screen.dart';
+import 'package:vaccine_booking/view_model/history_view_model.dart';
 
 import '../../components/constants.dart';
 
-class HistoryVaccineScreen extends StatelessWidget {
+class HistoryVaccineScreen extends StatefulWidget {
   final HistoryModel history;
   const HistoryVaccineScreen({Key? key, required this.history})
       : super(key: key);
+
+  @override
+  State<HistoryVaccineScreen> createState() => _HistoryVaccineScreenState();
+}
+
+class _HistoryVaccineScreenState extends State<HistoryVaccineScreen> {
   @override
   Widget build(BuildContext context) {
+    final history = Provider.of<HistoryViewModel>(context);
+    if (history.detailBookingList.isEmpty) {
+      Provider.of<HistoryViewModel>(context).getDetailBooking();
+    }
+    if (history.filterDetailBookingList.isNotEmpty &&
+        history.filterDetailVaksinasiOrder.isEmpty) {
+      Provider.of<HistoryViewModel>(context).filterVaksinasiOrder(
+        widget.history.family['nik'],
+      );
+    }
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -80,8 +98,7 @@ class HistoryVaccineScreen extends StatelessWidget {
     );
   }
 
-  Widget historyNameList(HistoryModel history) {
-    String dosis = history.booking['schedule']['dose'];
+  Widget historyNameList(HistoryViewModel history) {
     return ListView.separated(
       separatorBuilder: (context, index) {
         return const Divider(
@@ -91,6 +108,8 @@ class HistoryVaccineScreen extends StatelessWidget {
       },
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
+        String dosis = history
+            .filterDetailVaksinasiOrder[index].booking['schedule']['dose'];
         return Center(
           child: Container(
             height: 55,
@@ -104,7 +123,9 @@ class HistoryVaccineScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).push(
                   NavigatorFadeTransition(
-                    child: DetailHistoryScreen(history: history),
+                    child: DetailHistoryScreen(
+                      history: history.filterDetailVaksinasiOrder[index],
+                    ),
                   ),
                 );
               },
@@ -131,7 +152,7 @@ class HistoryVaccineScreen extends StatelessWidget {
           ),
         );
       },
-      itemCount: 1,
+      itemCount: history.filterDetailVaksinasiOrder.length,
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:vaccine_booking/model/vaksinasi/datail_booking_model.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/content_list_booking.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
+import 'package:vaccine_booking/view_model/history_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../../model/vaksinasi/health_facility_model.dart';
@@ -41,6 +42,7 @@ class _PanelWidgetState extends State<PanelWidget> {
   Widget build(BuildContext context) {
     final vaksinasi = Provider.of<VaksinasiViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
+    final history = Provider.of<HistoryViewModel>(context);
     Provider.of<VaksinasiViewModel>(context)
         .filterBooking(user.userData[0].profile!['user_id'], widget.scheduleId);
     return SingleChildScrollView(
@@ -157,30 +159,43 @@ class _PanelWidgetState extends State<PanelWidget> {
                         try {
                           await Future.delayed(
                             const Duration(seconds: 1),
-                          ).then(
-                            (_) async {
-                              for (int i = vaksinasi
-                                      .selectBookingVaksinasiList.length;
-                                  i > 0;
-                                  i--) {
-                                await vaksinasi.postDetailBooking(
-                                  DetailBookingModel(
-                                      bookingId:
-                                          vaksinasi.filterBookingList[i - 1].id,
-                                      familyId: vaksinasi
-                                          .selectBookingVaksinasiList[i - 1].id,
-                                      bookingStatus: "COMPLETED"),
-                                );
-                              }
-                            },
-                          ).then(
-                            (_) => showDialog(
-                              context: context,
-                              builder: (context) {
-                                return modalSuccess();
-                              },
-                            ),
-                          );
+                          )
+                              .then(
+                                (_) async {
+                                  for (int i = vaksinasi
+                                          .selectBookingVaksinasiList.length;
+                                      i > 0;
+                                      i--) {
+                                    await vaksinasi.postDetailBooking(
+                                      DetailBookingModel(
+                                          bookingId: vaksinasi
+                                              .filterBookingList[i - 1].id,
+                                          familyId: vaksinasi
+                                              .selectBookingVaksinasiList[i - 1]
+                                              .id,
+                                          bookingStatus: "COMPLETED"),
+                                    );
+                                  }
+                                },
+                              )
+                              .then(
+                                (_) => history.detailBookingList.clear(),
+                              )
+                              .then(
+                                (_) => history.filterDetailBookingList.clear(),
+                              )
+                              .then(
+                                (_) =>
+                                    history.filterDetailVaksinasiOrder.clear(),
+                              )
+                              .then(
+                                (_) => showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return modalSuccess();
+                                  },
+                                ),
+                              );
                         } catch (e) {
                           Fluttertoast.showToast(msg: e.toString());
                         }
@@ -265,7 +280,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                       "Lihat Tiket",
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushReplacement(
                         NavigatorFadeTransition(
                           child: const HistoryScreen(),
                         ),
