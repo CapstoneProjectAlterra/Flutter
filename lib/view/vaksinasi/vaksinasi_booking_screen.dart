@@ -246,17 +246,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                             Future.delayed(
                                               const Duration(seconds: 1),
                                             )
-                                                .then((_) {
-                                                  setState(
-                                                    () {
-                                                      vaksinA = false;
-                                                      vaksinB = false;
-                                                      vaksinC = false;
-                                                      vaksinD = false;
-                                                      tempString = '';
-                                                    },
-                                                  );
-                                                })
                                                 .then(
                                                   (_) async {
                                                     for (int i = 0;
@@ -297,6 +286,19 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                                   (value) => Fluttertoast.showToast(
                                                       msg:
                                                           "Berhasil Menyimpan Jadwal"),
+                                                )
+                                                .then(
+                                                  (_) {
+                                                    setState(
+                                                      () {
+                                                        vaksinA = false;
+                                                        vaksinB = false;
+                                                        vaksinC = false;
+                                                        vaksinD = false;
+                                                        tempString = '';
+                                                      },
+                                                    );
+                                                  },
                                                 );
                                           } catch (e) {
                                             Fluttertoast.showToast(

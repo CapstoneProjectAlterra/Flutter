@@ -23,12 +23,9 @@ class _HistoryVaccineScreenState extends State<HistoryVaccineScreen> {
     if (history.detailBookingList.isEmpty) {
       Provider.of<HistoryViewModel>(context).getDetailBooking();
     }
-    if (history.filterDetailBookingList.isNotEmpty &&
-        history.filterDetailVaksinasiOrder.isEmpty) {
-      Provider.of<HistoryViewModel>(context).filterVaksinasiOrder(
-        widget.history.family['nik'],
-      );
-    }
+    Provider.of<HistoryViewModel>(context).filterVaksinasiOrder(
+      widget.history.family['nik'],
+    );
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),

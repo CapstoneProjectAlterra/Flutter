@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/history/history_vaccine_screen.dart';
 import 'package:vaccine_booking/view_model/history_view_model.dart';
+import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../components/constants.dart';
 
@@ -11,6 +12,14 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final history = Provider.of<HistoryViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
+    if (history.detailBookingList.isEmpty) {
+      Provider.of<HistoryViewModel>(context).getDetailBooking();
+    }
+    Provider.of<HistoryViewModel>(context).filterDetailBooking(
+      user.filterUserProfile[0].profile['user_id'],
+    );
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
