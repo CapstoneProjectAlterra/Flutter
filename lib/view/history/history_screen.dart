@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/view/history/history_vaccine_screen.dart';
+import 'package:vaccine_booking/view_model/history_view_model.dart';
 
 import '../../components/constants.dart';
 
@@ -8,6 +10,7 @@ class HistoryScreen extends StatelessWidget {
   const HistoryScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final history = Provider.of<HistoryViewModel>(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -47,7 +50,7 @@ class HistoryScreen extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height * 0.70,
-                        child: historyNameList(),
+                        child: historyNameList(history),
                       ),
                     ],
                   ),
@@ -77,7 +80,7 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget historyNameList() {
+  Widget historyNameList(HistoryViewModel history) {
     return ListView.separated(
       separatorBuilder: (context, index) {
         return const Divider(
@@ -100,7 +103,9 @@ class HistoryScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   NavigatorFadeTransition(
-                    child: const HistoryVaccineScreen(),
+                    child: HistoryVaccineScreen(
+                      history: history.filterDetailBookingList[index],
+                    ),
                   ),
                 );
               },
@@ -110,13 +115,11 @@ class HistoryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Udin Sedunia",
+                      history.filterDetailBookingList[index].family['name'],
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),
-                    // ignore: prefer_const_constructors
-                    Icon(
-                      color: Colors.black,
+                    const Icon(
                       Icons.keyboard_arrow_right,
                       size: 36,
                     ),
@@ -127,7 +130,7 @@ class HistoryScreen extends StatelessWidget {
           ),
         );
       },
-      itemCount: 3,
+      itemCount: history.filterDetailBookingList.length,
     );
   }
 }

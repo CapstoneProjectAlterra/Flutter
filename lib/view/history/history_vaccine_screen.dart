@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
+import 'package:vaccine_booking/model/history/history_model.dart';
 import 'package:vaccine_booking/view/history/detail_history_screen.dart';
 
 import '../../components/constants.dart';
 
 class HistoryVaccineScreen extends StatelessWidget {
-  const HistoryVaccineScreen({Key? key}) : super(key: key);
+  final HistoryModel history;
+  const HistoryVaccineScreen({Key? key, required this.history})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +50,7 @@ class HistoryVaccineScreen extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height * 0.70,
-                        child: historyNameList(),
+                        child: historyNameList(history),
                       ),
                     ],
                   ),
@@ -77,7 +80,8 @@ class HistoryVaccineScreen extends StatelessWidget {
     );
   }
 
-  Widget historyNameList() {
+  Widget historyNameList(HistoryModel history) {
+    String dosis = history.booking['schedule']['dose'];
     return ListView.separated(
       separatorBuilder: (context, index) {
         return const Divider(
@@ -100,7 +104,7 @@ class HistoryVaccineScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).push(
                   NavigatorFadeTransition(
-                    child: const DetailHistoryScreen(),
+                    child: DetailHistoryScreen(history: history),
                   ),
                 );
               },
@@ -110,7 +114,7 @@ class HistoryVaccineScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Vaksin Pertama",
+                      dosis.replaceAll('DOSIS_', 'Vaksinasi '),
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),

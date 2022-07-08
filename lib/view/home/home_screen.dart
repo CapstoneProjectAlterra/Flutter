@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/components/skeleton_container.dart';
+import 'package:vaccine_booking/view_model/history_view_model.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<VaksinasiViewModel>(context, listen: false)
           .getAllHealthFacilities();
       Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
+      Provider.of<HistoryViewModel>(context, listen: false).getDetailBooking();
       Provider.of<ProfileViewModel>(context, listen: false).filterUserData();
       Provider.of<ProfileViewModel>(context, listen: false).filterUser();
       Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
@@ -44,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final news = Provider.of<HomeViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
     final schedule = Provider.of<VaksinasiViewModel>(context);
+    final history = Provider.of<HistoryViewModel>(context);
     if (user.userData.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUser();
     }
@@ -52,6 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (user.usersProfile.isNotEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
+    }
+    if (history.detailBookingList.isNotEmpty &&
+        user.filterUserProfile.isNotEmpty) {
+      Provider.of<HistoryViewModel>(context)
+          .filterDetailBooking(user.filterUserProfile[0].profile['user_id']);
     }
     schedule.scheduleIdBooking = 0;
 

@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vaccine_booking/components/constants.dart';
 
+import '../../model/history/history_model.dart';
+
 class DetailHistoryScreen extends StatelessWidget {
-  const DetailHistoryScreen({Key? key}) : super(key: key);
+  final HistoryModel history;
+  const DetailHistoryScreen({Key? key, required this.history})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    String dosis = history.booking['schedule']['dose'];
+    String timeStart = history.booking['schedule']['operational_hour_start'];
+    String timeEnd = history.booking['schedule']['operational_hour_end'];
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -38,7 +45,7 @@ class DetailHistoryScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    ticketContainer(context),
+                    ticketContainer(context, history),
                     DottedBorder(
                       customPath: (size) {
                         return Path()
@@ -51,7 +58,8 @@ class DetailHistoryScreen extends StatelessWidget {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.88,
                         height: 135,
-                        child: containerProgramVaccine(context),
+                        child: containerProgramVaccine(
+                            context, dosis, timeStart, timeEnd),
                       ),
                     ),
                     const SizedBox(
@@ -62,7 +70,7 @@ class DetailHistoryScreen extends StatelessWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: detailTicket(context),
+                child: detailTicket(context, dosis, timeStart, timeEnd),
               ),
             ],
           ),
@@ -133,7 +141,7 @@ class DetailHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget ticketContainer(context) {
+  Widget ticketContainer(context, HistoryModel history) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.88,
       height: 90,
@@ -150,7 +158,7 @@ class DetailHistoryScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Berliana Bjorn",
+              history.family['name'],
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!
@@ -169,7 +177,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  "000012",
+                  history.booking['booking_pass'].toString(),
                   style: Theme.of(context)
                       .textTheme
                       .headline3!
@@ -183,7 +191,7 @@ class DetailHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget detailTicket(context) {
+  Widget detailTicket(context, String dosis, String timeStart, String timeEnd) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -228,7 +236,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: customColumnDetailTicket(
                       title: "Nama Lengkap",
-                      subtitle: "Nama Lengkap Pemesan",
+                      subtitle: history.family['name'],
                       context: context),
                 ),
                 SizedBox(
@@ -236,7 +244,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: customColumnDetailTicket2(
                       title: "NIK",
-                      subtitle: "3210504864521345",
+                      subtitle: history.family['nik'],
                       context: context),
                 ),
                 SizedBox(
@@ -244,7 +252,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Tanggal Lahir",
-                      subtitle: "YY-MM-DD",
+                      subtitle: history.family['date_of_birth'],
                       context: context),
                 ),
                 SizedBox(
@@ -252,7 +260,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Jenis Kelamin",
-                      subtitle: "Perempuan",
+                      subtitle: history.family['gender'],
                       context: context),
                 ),
                 SizedBox(
@@ -260,7 +268,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "No. HP",
-                      subtitle: "083905456024",
+                      subtitle: history.family['phone_number'],
                       context: context),
                 ),
                 SizedBox(
@@ -268,7 +276,7 @@ class DetailHistoryScreen extends StatelessWidget {
                   height: 75,
                   child: customColumnDetailTicket(
                       title: "Alamat",
-                      subtitle: "Jl. sentosa",
+                      subtitle: history.family['id_card_address'],
                       context: context),
                 ),
                 Row(
@@ -277,7 +285,8 @@ class DetailHistoryScreen extends StatelessWidget {
                       height: 75,
                       child: customColumnDetailTicket(
                           title: "Jenis Vaksin",
-                          subtitle: "Astra Zaneca",
+                          subtitle: history.booking['schedule']['vaccine']
+                              ['vaccine_name'],
                           context: context),
                     ),
                     SizedBox(
@@ -286,7 +295,9 @@ class DetailHistoryScreen extends StatelessWidget {
                     SizedBox(
                       height: 75,
                       child: customColumnDetailTicket(
-                          title: "Dosis ke", subtitle: "1", context: context),
+                          title: "Dosis ke",
+                          subtitle: dosis.replaceAll('DOSIS_', ''),
+                          context: context),
                     ),
                   ],
                 ),
@@ -296,7 +307,8 @@ class DetailHistoryScreen extends StatelessWidget {
                       height: 75,
                       child: customColumnDetailTicket(
                           title: "Tanggal Vaksinasi",
-                          subtitle: "Kamis, 16 Juli 2022",
+                          subtitle: history.booking['schedule']
+                              ['vaccination_date'],
                           context: context),
                     ),
                     SizedBox(
@@ -306,7 +318,8 @@ class DetailHistoryScreen extends StatelessWidget {
                       height: 75,
                       child: customColumnDetailTicket(
                           title: "Waktu",
-                          subtitle: "08:00-09:00",
+                          subtitle:
+                              "${timeStart.substring(0, 5)}-${timeEnd.substring(0, 5)}",
                           context: context),
                     ),
                   ],
@@ -315,8 +328,8 @@ class DetailHistoryScreen extends StatelessWidget {
                   height: 85,
                   child: customColumnDetailTicket(
                       title: "Lokasi Vaksin",
-                      subtitle:
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                      subtitle: history.booking['schedule']['facility']
+                          ['street_name'],
                       context: context),
                 ),
               ],
@@ -327,7 +340,8 @@ class DetailHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget containerProgramVaccine(context) {
+  Widget containerProgramVaccine(
+      context, String dosis, String timeStart, String timeEnd) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -342,14 +356,15 @@ class DetailHistoryScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                detaiVaccine(
+                detailVaccine(
                     context: context,
-                    title: 'Astra Zaneca',
+                    title: history.booking['schedule']['vaccine']
+                        ['vaccine_name'],
                     assetIcon: 'assets/icons/syringe2.svg'),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.19),
-                detaiVaccine(
+                SizedBox(width: MediaQuery.of(context).size.width * 0.31),
+                detailVaccine(
                     context: context,
-                    title: 'Dosis 1',
+                    title: dosis.replaceAll('DOSIS_', 'Dosis '),
                     assetIcon: 'assets/icons/dose.svg'),
               ],
             ),
@@ -360,18 +375,19 @@ class DetailHistoryScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    detaiVaccine(
+                    detailVaccine(
                         context: context,
-                        title: 'Kamis, 16 Juli 2022',
+                        title: history.booking['schedule']['vaccination_date'],
                         assetIcon: 'assets/icons/datetime.svg'),
                   ],
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.11),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.23),
                 Row(
                   children: [
-                    detaiVaccine(
+                    detailVaccine(
                         context: context,
-                        title: '08:00 - 09:00',
+                        title:
+                            "${timeStart.substring(0, 5)} - ${timeEnd.substring(0, 5)}",
                         assetIcon: 'assets/icons/clock.svg'),
                   ],
                 ),
@@ -393,7 +409,7 @@ class DetailHistoryScreen extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in iaculis leo.",
+                    history.booking['schedule']['facility']['street_name'],
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -408,7 +424,7 @@ class DetailHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget detaiVaccine({context, assetIcon, title}) {
+  Widget detailVaccine({context, assetIcon, title}) {
     return Row(
       children: [
         SvgPicture.asset(
