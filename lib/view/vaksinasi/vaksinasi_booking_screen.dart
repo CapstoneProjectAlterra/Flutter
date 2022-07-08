@@ -72,6 +72,10 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
 
+    if (schedule.bookingList.isEmpty) {
+      Provider.of<VaksinasiViewModel>(context).getBookingList();
+    }
+
     Provider.of<VaksinasiViewModel>(context)
         .filterBooking(user.userData[0].profile!['user_id'], scheduleId);
 
@@ -228,9 +232,10 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                           DateTime.now(),
                                         );
                                         String timeNow =
-                                            DateFormat('H:m:s').format(
+                                            DateFormat('HH:mm:ss').format(
                                           DateTime.now(),
                                         );
+
                                         setState(
                                           () {
                                             vaksinA = false;
@@ -246,32 +251,48 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                               dataPerson: user.userData[0],
                                               id: scheduleId,
                                               userFamily: user.userFamily);
-
-                                          Future.delayed(
-                                            const Duration(seconds: 1),
-                                          )
-                                              .then(
-                                                (_) async =>
-                                                    await schedule.postBooking(
-                                                  booking: BookingModel(
-                                                    bookingDate:
-                                                        "$dateNow $timeNow",
-                                                    schedule: {
-                                                      "id": scheduleId
-                                                    },
-                                                    user: {
-                                                      "id": user
-                                                          .filterUserProfile[0]
-                                                          .profile['user_id'],
-                                                    },
+                                          try {
+                                            Future.delayed(
+                                              const Duration(seconds: 1),
+                                            )
+                                                .then(
+                                                  (_) async => await schedule
+                                                      .postBooking(
+                                                    booking: BookingModel(
+                                                      bookingDate:
+                                                          "$dateNow $timeNow",
+                                                      schedule: {
+                                                        "id": scheduleId
+                                                      },
+                                                      user: {
+                                                        "id": user
+                                                            .filterUserProfile[
+                                                                0]
+                                                            .profile['user_id'],
+                                                      },
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                              .then(
-                                                (value) => Fluttertoast.showToast(
-                                                    msg:
-                                                        "Berhasil Menyimpan Jadwal"),
-                                              );
+                                                )
+                                                .then(
+                                                  (_) => schedule.bookingList
+                                                      .clear(),
+                                                )
+                                                .then(
+                                                  (_) => schedule
+                                                      .filterBookingList
+                                                      .clear(),
+                                                )
+                                                .then(
+                                                  (value) => Fluttertoast.showToast(
+                                                      msg:
+                                                          "Berhasil Menyimpan Jadwal"),
+                                                );
+                                          } catch (e) {
+                                            Fluttertoast.showToast(
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              msg: e.toString(),
+                                            );
+                                          }
 
                                           if (tempString.isNotEmpty ||
                                               vaksinA != true ||

@@ -157,25 +157,31 @@ class _PanelWidgetState extends State<PanelWidget> {
                         try {
                           await Future.delayed(
                             const Duration(seconds: 1),
-                          )
-                              .then(
-                                (_) async => await vaksinasi.postDetailBooking(
+                          ).then(
+                            (_) async {
+                              for (int i = 0;
+                                  i <
+                                      vaksinasi
+                                          .selectBookingVaksinasiList.length;
+                                  i++) {
+                                await vaksinasi.postDetailBooking(
                                   DetailBookingModel(
                                       bookingId:
-                                          vaksinasi.filterBookingList[0].id,
+                                          vaksinasi.filterBookingList.last.id,
                                       familyId: vaksinasi
-                                          .selectBookingVaksinasiList[0].id,
+                                          .selectBookingVaksinasiList[i].id,
                                       bookingStatus: "COMPLETED"),
-                                ),
-                              )
-                              .then(
-                                (_) => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return modalSuccess();
-                                  },
-                                ),
-                              );
+                                );
+                              }
+                            },
+                          ).then(
+                            (_) => showDialog(
+                              context: context,
+                              builder: (context) {
+                                return modalSuccess();
+                              },
+                            ),
+                          );
                         } catch (e) {
                           Fluttertoast.showToast(msg: e.toString());
                         }
