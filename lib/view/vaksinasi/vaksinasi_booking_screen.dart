@@ -236,15 +236,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                           DateTime.now(),
                                         );
 
-                                        setState(
-                                          () {
-                                            vaksinA = false;
-                                            vaksinB = false;
-                                            vaksinC = false;
-                                            vaksinD = false;
-                                            tempString = '';
-                                          },
-                                        );
                                         if (schedule.scheduleIdBooking !=
                                             scheduleId) {
                                           schedule.addPersonBooking(
@@ -255,23 +246,43 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                                             Future.delayed(
                                               const Duration(seconds: 1),
                                             )
+                                                .then((_) {
+                                                  setState(
+                                                    () {
+                                                      vaksinA = false;
+                                                      vaksinB = false;
+                                                      vaksinC = false;
+                                                      vaksinD = false;
+                                                      tempString = '';
+                                                    },
+                                                  );
+                                                })
                                                 .then(
-                                                  (_) async => await schedule
-                                                      .postBooking(
-                                                    booking: BookingModel(
-                                                      bookingDate:
-                                                          "$dateNow $timeNow",
-                                                      schedule: {
-                                                        "id": scheduleId
-                                                      },
-                                                      user: {
-                                                        "id": user
-                                                            .filterUserProfile[
-                                                                0]
-                                                            .profile['user_id'],
-                                                      },
-                                                    ),
-                                                  ),
+                                                  (_) async {
+                                                    for (int i = 0;
+                                                        i <
+                                                            schedule
+                                                                .dataPersonVaksinasiList
+                                                                .length;
+                                                        i++) {
+                                                      await schedule
+                                                          .postBooking(
+                                                        booking: BookingModel(
+                                                          bookingDate:
+                                                              "$dateNow $timeNow",
+                                                          schedule: {
+                                                            "id": scheduleId
+                                                          },
+                                                          user: {
+                                                            "id": user
+                                                                .filterUserProfile[
+                                                                    0]
+                                                                .profile['user_id'],
+                                                          },
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
                                                 )
                                                 .then(
                                                   (_) => schedule.bookingList

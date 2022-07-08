@@ -159,17 +159,16 @@ class _PanelWidgetState extends State<PanelWidget> {
                             const Duration(seconds: 1),
                           ).then(
                             (_) async {
-                              for (int i = 0;
-                                  i <
-                                      vaksinasi
-                                          .selectBookingVaksinasiList.length;
-                                  i++) {
+                              for (int i = vaksinasi
+                                      .selectBookingVaksinasiList.length;
+                                  i > 0;
+                                  i--) {
                                 await vaksinasi.postDetailBooking(
                                   DetailBookingModel(
                                       bookingId:
-                                          vaksinasi.filterBookingList.last.id,
+                                          vaksinasi.filterBookingList[i - 1].id,
                                       familyId: vaksinasi
-                                          .selectBookingVaksinasiList[i].id,
+                                          .selectBookingVaksinasiList[i - 1].id,
                                       bookingStatus: "COMPLETED"),
                                 );
                               }

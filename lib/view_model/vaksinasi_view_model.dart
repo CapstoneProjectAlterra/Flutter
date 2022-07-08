@@ -26,6 +26,8 @@ class VaksinasiViewModel extends ChangeNotifier {
   List<FamilyModel> selectBookingVaksinasiList = [];
   List<BookingModel> bookingList = [];
   List<BookingModel> filterBookingList = [];
+  List<DetailBookingModel> detailBookingList = [];
+  List<DetailBookingModel> filterDetailBookingList = [];
 
   int scheduleIdBooking = 0;
 
@@ -92,6 +94,17 @@ class VaksinasiViewModel extends ChangeNotifier {
     await bookingApi.postBooking(booking: booking);
     notifyListeners();
   }
+
+  getDetailBooking() async {
+    final detailBooking = await bookingApi.getBooking();
+    detailBookingList = detailBooking;
+    notifyListeners();
+  }
+
+  // filterDetailBooking() async {
+  //   filterDetailBookingList =
+  //       detailBookingList.where((element) => ).toList();
+  // }
 
   postDetailBooking(DetailBookingModel? booking) async {
     await bookingApi.postDetailBooking(booking: booking);
