@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view/profile/detail_screen.dart';
+import 'package:vaccine_booking/view/profile/family_member_screen.dart';
 
 import '../model/profile/api/user_api.dart';
 import '../model/profile/family_model.dart';
@@ -26,7 +27,7 @@ class ProfileViewModel extends ChangeNotifier {
   final List iconsSvgDetailProfile = ['user', 'status', 'lock'];
   final List<Widget> wigetScreenDetailProfile = [
     const DetailScreen(),
-    const DetailScreen(),
+    const FamilyMemberScreen(),
     const ChangePasswordScreen(),
   ];
 
@@ -161,6 +162,11 @@ class ProfileViewModel extends ChangeNotifier {
 
   editPassword({UserModel? user, int? id}) async {
     await familyApi.editPasswordUser(user: user, id: id);
+  }
+
+  deleteFamily({int? id, int? index}) async {
+    familyApi.deleteFamily(id: id);
+    notifyListeners();
   }
 
   detailProfile() async {

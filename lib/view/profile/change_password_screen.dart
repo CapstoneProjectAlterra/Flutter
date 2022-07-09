@@ -415,7 +415,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Text(
-          "Profil",
+          "Ubah Password",
           style: Theme.of(context)
               .textTheme
               .headline1!
