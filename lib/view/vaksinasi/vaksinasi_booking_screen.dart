@@ -502,7 +502,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
             placeholder: (context, url) {
               return imageSkeleton();
             },
-            imageUrl: widget.facilities.imgUrl!,
+            imageUrl: widget.facilities.image['base64'],
             fit: BoxFit.cover,
           ),
         ),

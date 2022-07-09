@@ -11,13 +11,15 @@ class HistoryViewModel extends ChangeNotifier {
 
   getDetailBooking() async {
     final detailBooking = await historyApi.getDetailBooking();
-    detailBookingList = detailBooking;
+    if (detailBooking != null) {
+      detailBookingList = detailBooking;
+    }
     notifyListeners();
   }
 
   filterDetailBooking(int id) {
     filterDetailBookingList = detailBookingList
-        .where((element) => element.booking['user']['id'] == id)
+        .where((element) => element.booking!['user']['id'] == id)
         .toList();
   }
 
@@ -25,7 +27,7 @@ class HistoryViewModel extends ChangeNotifier {
     for (int i = 0; i < filterDetailBookingList.length; i++) {
       final contains = filterNameBooking.where(
         (element) =>
-            element.family['nik'] == filterDetailBookingList[i].family['nik'],
+            element.family!['nik'] == filterDetailBookingList[i].family!['nik'],
       );
       if (contains.isEmpty) {
         filterNameBooking.add(filterDetailBookingList[i]);
@@ -35,7 +37,7 @@ class HistoryViewModel extends ChangeNotifier {
 
   filterVaksinasiOrder(String nik) {
     filterDetailVaksinasiOrder = filterDetailBookingList
-        .where((element) => element.family['nik'] == nik)
+        .where((element) => element.family!['nik'] == nik)
         .toList();
   }
 }

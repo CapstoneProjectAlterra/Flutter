@@ -208,8 +208,8 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                         return imageSkeleton();
                       },
                       imageUrl: moreQuery.isEmpty
-                          ? healthFacilities.result[index].imgUrl!
-                          : healthFacilities.moreResult[index].imgUrl!,
+                          ? healthFacilities.result[index].image['base64']
+                          : healthFacilities.moreResult[index].image['base64'],
                       fit: BoxFit.cover,
                     ),
                   ),

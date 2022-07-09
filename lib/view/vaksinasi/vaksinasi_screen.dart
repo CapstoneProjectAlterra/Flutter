@@ -364,8 +364,9 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                                 },
                                 imageUrl: query.isEmpty
                                     ? healthFacilities
-                                        .facilityList[index].imgUrl!
-                                    : healthFacilities.result[index].imgUrl!,
+                                        .facilityList[index].image['base64']
+                                    : healthFacilities
+                                        .result[index].image['base64'],
                                 fit: BoxFit.cover,
                               ),
                             ),

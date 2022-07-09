@@ -16,9 +16,11 @@ class HistoryScreen extends StatelessWidget {
     if (history.detailBookingList.isEmpty) {
       Provider.of<HistoryViewModel>(context).getDetailBooking();
     }
-    Provider.of<HistoryViewModel>(context).filterDetailBooking(
-      user.filterUserProfile[0].profile['user_id'],
-    );
+    if (user.filterUserProfile.isNotEmpty) {
+      Provider.of<HistoryViewModel>(context).filterDetailBooking(
+        user.filterUserProfile[0].profile['user_id'],
+      );
+    }
 
     return Scaffold(
       body: Container(
@@ -124,7 +126,7 @@ class HistoryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      history.filterNameBooking[index].family['name'],
+                      history.filterNameBooking[index].family!['name'],
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),

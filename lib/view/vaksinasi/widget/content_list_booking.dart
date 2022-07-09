@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/components/constants.dart';
 
 import '../../../model/profile/family_model.dart';
@@ -155,54 +154,57 @@ class _ContentListBookingState extends State<ContentListBooking> {
                         ),
                       ),
                       child: SvgPicture.asset(
-                        'assets/icons/edit.svg',
+                        'assets/icons/edit2.svg',
                         color: Colors.black,
                         width: 25,
                         height: 25,
                       ),
                     ),
-                    widget.vaksinasi.dataPersonVaksinasiList[widget.index]
-                                .name ==
-                            widget.user.name
-                        ? IconButton(
-                            onPressed: () async {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      'Hanya Bisa Menghapus Anggota Keluargamu Saja');
-                            },
-                            icon: SvgPicture.asset(
-                              'assets/icons/delete.svg',
-                              color: Colors.black,
-                              width: 25,
-                              height: 25,
-                            ),
-                          )
-                        : IconButton(
-                            onPressed: () async {
-                              await Future.delayed(const Duration(seconds: 1))
-                                  .then(
-                                    (_) async => await widget.vaksinasi
-                                        .deleteFamily(
-                                            id: widget
-                                                .vaksinasi
-                                                .dataPersonVaksinasiList[
-                                                    widget.index]
-                                                .id,
-                                            index: widget.index),
-                                  )
-                                  .then(
-                                    (_) => Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        msg: "Family Member Berhasil Dihapus"),
-                                  );
-                            },
-                            icon: SvgPicture.asset(
-                              'assets/icons/delete.svg',
-                              color: Colors.black,
-                              width: 25,
-                              height: 25,
-                            ),
-                          )
+                    const SizedBox(
+                      width: 8,
+                    )
+                    // widget.vaksinasi.dataPersonVaksinasiList[widget.index]
+                    //             .name ==
+                    //         widget.user.name
+                    //     ? IconButton(
+                    //         onPressed: () async {
+                    //           Fluttertoast.showToast(
+                    //               msg:
+                    //                   'Hanya Bisa Menghapus Anggota Keluargamu Saja');
+                    //         },
+                    //         icon: SvgPicture.asset(
+                    //           'assets/icons/delete.svg',
+                    //           color: Colors.black,
+                    //           width: 25,
+                    //           height: 25,
+                    //         ),
+                    //       )
+                    //     : IconButton(
+                    //         onPressed: () async {
+                    //           await Future.delayed(const Duration(seconds: 1))
+                    //               .then(
+                    //                 (_) async => await widget.vaksinasi
+                    //                     .deleteFamily(
+                    //                         id: widget
+                    //                             .vaksinasi
+                    //                             .dataPersonVaksinasiList[
+                    //                                 widget.index]
+                    //                             .id,
+                    //                         index: widget.index),
+                    //               )
+                    //               .then(
+                    //                 (_) => Fluttertoast.showToast(
+                    //                     toastLength: Toast.LENGTH_SHORT,
+                    //                     msg: "Family Member Berhasil Dihapus"),
+                    //               );
+                    //         },
+                    //         icon: SvgPicture.asset(
+                    //           'assets/icons/delete.svg',
+                    //           color: Colors.black,
+                    //           width: 25,
+                    //           height: 25,
+                    //         ),
+                    //       )
                   ],
                 ),
               ],

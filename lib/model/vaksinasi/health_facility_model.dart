@@ -3,7 +3,7 @@ class HealthFacilityModel {
   String? district;
   String? facilityName;
   int? id;
-  String? imgUrl;
+  Map<String, dynamic> image;
   String? officeNumber;
   int? postalCode;
   String? province;
@@ -14,7 +14,7 @@ class HealthFacilityModel {
     required this.district,
     required this.facilityName,
     required this.id,
-    required this.imgUrl,
+    required this.image,
     required this.officeNumber,
     required this.postalCode,
     required this.province,
@@ -28,7 +28,7 @@ class HealthFacilityModel {
         district: json['district'],
         facilityName: json['facility_name'],
         id: json['id'],
-        imgUrl: json['img_url'],
+        image: json['image'],
         officeNumber: json['office_number'],
         postalCode: json['postal_code'],
         province: json['province'],
@@ -41,7 +41,7 @@ class HealthFacilityModel {
         "district": district,
         "facility_name": facilityName,
         "id": id,
-        "img_url": imgUrl,
+        "image": image,
         "office_number": officeNumber,
         "postal_code": postalCode,
         "province": province,

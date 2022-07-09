@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
+import 'package:vaccine_booking/view/profile/detail_screen.dart';
 
 import '../model/profile/api/user_api.dart';
 import '../model/profile/family_model.dart';
+import '../view/profile/change_password_screen.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   final familyApi = UserApi();
@@ -16,6 +17,18 @@ class ProfileViewModel extends ChangeNotifier {
 
   final itemsGender = ['laki_laki', 'perempuan'];
   final itemsStatus = ['ayah', 'ibu', 'anak', 'saudara'];
+  final List itemsProfile = [
+    'Profil Saya',
+    'Anggota Keluarga',
+    'Ubah Password',
+    'Keluar Akun'
+  ];
+  final List iconsSvgDetailProfile = ['user', 'status', 'lock'];
+  final List<Widget> wigetScreenDetailProfile = [
+    const DetailScreen(),
+    const DetailScreen(),
+    const ChangePasswordScreen(),
+  ];
 
   String name = '';
   String nik = '';
@@ -144,6 +157,10 @@ class ProfileViewModel extends ChangeNotifier {
 
   editFamily(FamilyModel profile, int id) async {
     await familyApi.editUser(profile: profile, id: id);
+  }
+
+  editPassword({UserModel? user, int? id}) async {
+    await familyApi.editPasswordUser(user: user, id: id);
   }
 
   detailProfile() async {

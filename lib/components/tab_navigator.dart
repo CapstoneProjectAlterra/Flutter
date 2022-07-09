@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
 import 'package:vaccine_booking/view/home/home_screen.dart';
-import 'package:vaccine_booking/view/profile/profile_screen.dart';
 import 'package:vaccine_booking/view/vaksinasi/vaksinasi_screen.dart';
+
+import '../view/profile/profile_screen.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;

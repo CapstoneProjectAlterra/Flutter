@@ -24,7 +24,7 @@ class _HistoryVaccineScreenState extends State<HistoryVaccineScreen> {
       Provider.of<HistoryViewModel>(context).getDetailBooking();
     }
     Provider.of<HistoryViewModel>(context).filterVaksinasiOrder(
-      widget.history.family['nik'],
+      widget.history.family!['nik'],
     );
     return Scaffold(
       body: Container(
@@ -106,7 +106,7 @@ class _HistoryVaccineScreenState extends State<HistoryVaccineScreen> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         String dosis = history
-            .filterDetailVaksinasiOrder[index].booking['schedule']['dose'];
+            .filterDetailVaksinasiOrder[index].booking!['schedule']['dose'];
         return Center(
           child: Container(
             height: 55,

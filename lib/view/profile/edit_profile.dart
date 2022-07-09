@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/view/authentikasi/login_screen.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import '../../components/constants.dart';
@@ -321,8 +320,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     setState(() => isLoading = false);
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
-                                      SharedPreferences? prefs =
-                                          await SharedPreferences.getInstance();
                                       List<FamilyModel> contains = user.userData
                                           .where(
                                             (element) => element.nik!.contains(
@@ -378,22 +375,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       "Berhasil mengubah data diri, silahkan login kembali"),
                                             )
                                             .then(
-                                              (_) => prefs.remove('token'),
-                                            )
-                                            .then(
                                               (_) => user.familyList.clear(),
                                             )
                                             .then(
                                               (_) => user.userData.clear(),
                                             )
-                                            .then(
-                                              (_) async => await prefs.remove(
-                                                'nik',
-                                              ),
-                                            )
                                             .then((_) => isTrue = true)
                                             .then(
-                                              (_) => Navigator.of(context)
+                                              (_) => Navigator.of(context,
+                                                      rootNavigator: true)
                                                   .pushAndRemoveUntil(
                                                 NavigatorFadeTransition(
                                                   child: const LoginScreen(),

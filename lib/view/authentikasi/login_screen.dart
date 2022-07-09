@@ -184,6 +184,10 @@ class _RegisterState extends State<LoginScreen> {
                                 'nik', _nikEditingController.text),
                           )
                           .then(
+                            (_) async => await prefs.setString(
+                                'password', _passwordEditingController.text),
+                          )
+                          .then(
                             (value) async => await login.postLogin(
                               LoginModel(
                                 nik: _nikEditingController.text,

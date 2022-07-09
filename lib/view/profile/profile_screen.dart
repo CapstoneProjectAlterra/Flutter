@@ -3,131 +3,73 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
-import 'package:vaccine_booking/view/profile/edit_profile.dart';
-import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
-import 'package:vaccine_booking/view_model/auth_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../components/constants.dart';
+import '../../view_model/auth_view_model.dart';
+import '../welcome/welcome_screen.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final deleteToken = Provider.of<AuthViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
+    final deleteToken = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(gradient: gradientHorizontal),
+      body: Container(
+        decoration: const BoxDecoration(gradient: gradientHorizontal),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 32,
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                height: MediaQuery.of(context).size.height * 0.12,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    "Profile",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: Colors.white),
-                  ),
+              headline(context),
+              Center(
+                child: SvgPicture.asset(
+                  'assets/icons/account.svg',
+                  width: 96,
+                  height: 96,
+                  color: Colors.white,
                 ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Center(
+                child: Text(
+                  user.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2!
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                height: 32,
               ),
               Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
                 ),
+                height: MediaQuery.of(context).size.height * 0.85,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      Center(
-                        child: SvgPicture.asset(
-                          'assets/icons/account.svg',
-                          width: 96,
-                          height: 96,
-                          color: secondColor,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      detailProfile(context, user),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Center(
-                        child: SizedBox(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: ElevatedButton(
-                            child: const Text(
-                              "Edit Profile",
-                            ),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                NavigatorFadeTransition(
-                                  child: const EditProfileScreen(),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/logout.svg',
-                            color: primaryColor,
-                            height: 28,
-                            width: 28,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              deleteToken.deleteToken();
-                              user.userData.clear();
-                              user.familyList.clear();
-                              Navigator.of(context, rootNavigator: true)
-                                  .pushReplacement(
-                                NavigatorFadeTransition(
-                                  child: const WelcomeScreen(),
-                                ),
-                              );
-                              Fluttertoast.showToast(msg: "Berhasil Keluar");
-                            },
-                            child: Text(
-                              "keluar akun",
-                              style: Theme.of(context).textTheme.subtitle1!,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 100,
-                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 190,
+                          child: historyNameList(user, user.itemsProfile)),
+                      logout(context, deleteToken, user),
                     ],
                   ),
                 ),
@@ -139,132 +81,156 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget customProfile({String? icon, String? title, context}) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SvgPicture.asset(
-              icon!,
-              width: 28,
-              height: 28,
-              color: primaryColor,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(
-              "$title",
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle1!
-                  .copyWith(color: Colors.grey.shade600),
-            ),
-          ],
+  Widget headline(context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      height: MediaQuery.of(context).size.height * 0.10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Text(
+          "Profil",
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(color: Colors.white),
         ),
-        Divider(
-          thickness: 2,
-          color: Colors.grey.shade300,
-        ),
-      ],
+      ),
     );
   }
 
-  Widget detailProfile(context, ProfileViewModel profile) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/user.svg',
-              title: profile.name.isEmpty ? "Nama Lengkap" : profile.name,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/badge.svg',
-              title: profile.nik.isEmpty ? 'Nomor NIK' : profile.nik,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/address.svg',
-              title: profile.placeBirth.isEmpty
-                  ? "Kota Lahir"
-                  : profile.placeBirth,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/datetime.svg',
-              title: profile.dateBirth.isEmpty
-                  ? "Tanggal Lahir"
-                  : profile.dateBirth,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/gender.svg',
-              title: profile.gender.isEmpty
-                  ? "Gender"
-                  : profile.gender
-                      .toLowerCase()
-                      .replaceFirst(
-                        profile.gender.toLowerCase()[0],
-                        profile.gender.toUpperCase()[0],
-                      )
-                      .replaceAll('_', ' - '),
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/envelop.svg',
-              title: profile.email.isEmpty ? "Alamat Email" : profile.email,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/phone.svg',
-              title: profile.phone.isEmpty ? "No hp" : profile.phone,
-              context: context),
-        ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/status.svg',
-              title: profile.status.isEmpty
-                  ? "Hubungan dalam keluarga"
-                  : profile.status.toLowerCase().replaceFirst(
-                        profile.status.toLowerCase()[0],
-                        profile.status.toUpperCase()[0],
+  Widget historyNameList(ProfileViewModel user, List title) {
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return const Divider(
+          color: Colors.white,
+          height: 0,
+        );
+      },
+      scrollDirection: Axis.vertical,
+      itemBuilder: (context, index) {
+        return Center(
+          child: Container(
+            height: 55,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  NavigatorFadeTransition(
+                    child: user.wigetScreenDetailProfile[index],
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/${user.iconsSvgDetailProfile[index]}.svg',
+                      height: 32,
+                      width: 32,
+                      color: primaryColor,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            title[index],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                          ),
+                          const Icon(
+                            Icons.keyboard_arrow_right,
+                            color: primaryColor,
+                            size: 36,
+                          ),
+                        ],
                       ),
-              context: context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      itemCount: 3,
+    );
+  }
+
+  Widget logout(context, AuthViewModel deleteToken, ProfileViewModel user) {
+    return Center(
+      child: Container(
+        height: 55,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
         ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/address.svg',
-              title: profile.idCardAddress.isEmpty
-                  ? "Alamat berdasarkan KTP"
-                  : profile.idCardAddress,
-              context: context),
+        child: TextButton(
+          onPressed: () {
+            deleteToken.deleteToken();
+            user.userData.clear();
+            user.familyList.clear();
+            Navigator.of(context, rootNavigator: true).pushReplacement(
+              NavigatorFadeTransition(
+                child: const WelcomeScreen(),
+              ),
+            );
+            Fluttertoast.showToast(msg: "Berhasil Keluar");
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/logout.svg',
+                  height: 32,
+                  width: 32,
+                  color: primaryColor,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Logout",
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: Colors.black, fontWeight: FontWeight.w500),
+                      ),
+                      const Icon(
+                        Icons.keyboard_arrow_right,
+                        color: primaryColor,
+                        size: 36,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        SizedBox(
-          height: 45,
-          child: customProfile(
-              icon: 'assets/icons/address.svg',
-              title:
-                  profile.address.isEmpty ? "Alamat domisili" : profile.address,
-              context: context),
-        ),
-      ],
+      ),
     );
   }
 }
