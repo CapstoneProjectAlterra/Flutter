@@ -63,11 +63,11 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: 115 * user.userFamily.length.toDouble(),
+                        height: 108 * user.userFamily.length.toDouble(),
                         child: listDaftarAnggota(user),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.03,
+                      const SizedBox(
+                        height: 12,
                       ),
                       addFamilyButton(),
                     ],
@@ -127,7 +127,7 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
       itemCount: user.userFamily.length,
       itemBuilder: (context, index) {
         return Container(
-          height: 85,
+          height: 78,
           decoration: BoxDecoration(
             color: secondColorLow,
             border: Border.all(color: secondColorLow, width: 0),
@@ -260,15 +260,12 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
       height: MediaQuery.of(context).size.height * 0.10,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: GestureDetector(
-          onTap: () => print(user.userFamily[0].name),
-          child: Text(
-            "Anggota Keluarga",
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(color: Colors.white),
-          ),
+        child: Text(
+          "Anggota Keluarga",
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(color: Colors.white),
         ),
       ),
     );

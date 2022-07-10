@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 const baseUrl = 'http://ec2-3-237-105-224.compute-1.amazonaws.com:8080';
@@ -16,6 +19,10 @@ const statusWarning = Color(0XFFFFAD14);
 const statusInfo = Color(0XFF1890FF);
 const pressedColor = Color(0xff03484E);
 const lowPressedColor = Color(0xffCDE9EB);
+
+Uint8List convertBase64Image(String base64String) {
+  return const Base64Decoder().convert(base64String.split(',').last);
+}
 
 bool isTrue = true;
 bool isInitBooking = true;

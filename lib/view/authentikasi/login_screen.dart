@@ -152,10 +152,7 @@ class _RegisterState extends State<LoginScreen> {
                 onPressed: () async {
                   if (isLoading) return;
                   setState(() => isLoading = true);
-                  await Future.delayed(
-                    const Duration(seconds: 2),
-                  );
-                  setState(() => isLoading = false);
+
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     SharedPreferences? prefs =
@@ -184,8 +181,12 @@ class _RegisterState extends State<LoginScreen> {
                                 'nik', _nikEditingController.text),
                           )
                           .then(
-                            (_) async => await prefs.setString(
-                                'password', _passwordEditingController.text),
+                            (_) async => await prefs
+                                .setString(
+                                    'password', _passwordEditingController.text)
+                                .then(
+                                  (_) => setState(() => isLoading = false),
+                                ),
                           )
                           .then(
                             (value) async => await login.postLogin(

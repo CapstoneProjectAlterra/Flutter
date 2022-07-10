@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
-    if (user.usersProfile.isNotEmpty) {
+    if (user.usersProfile.isNotEmpty && user.filterUserProfile.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
     }
     if (history.detailBookingList.isNotEmpty &&
@@ -62,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
           .filterDetailBooking(user.filterUserProfile[0].profile['user_id']);
     }
 
-    if (history.filterDetailBookingList.isNotEmpty) {
-      Provider.of<HistoryViewModel>(context).filterBookingName();
-    }
+    // if (history.filterDetailBookingList.isNotEmpty) {
+    //   Provider.of<HistoryViewModel>(context).filterBookingName();
+    // }
     schedule.scheduleIdBooking = 0;
 
     return Scaffold(

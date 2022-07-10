@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -352,21 +351,12 @@ class _VaksinasiScreenState extends State<VaksinasiScreen> {
                             aspectRatio: 3.5 / 4,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
-                              child: CachedNetworkImage(
-                                errorWidget: (context, url, error) {
-                                  return Image.asset(
-                                    'assets/images/default_facility.png',
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                                placeholder: (context, url) {
-                                  return imageSkeleton();
-                                },
-                                imageUrl: query.isEmpty
+                              child: Image.memory(
+                                convertBase64Image(query.isEmpty
                                     ? healthFacilities
                                         .facilityList[index].image['base64']
                                     : healthFacilities
-                                        .result[index].image['base64'],
+                                        .result[index].image['base64']),
                                 fit: BoxFit.cover,
                               ),
                             ),

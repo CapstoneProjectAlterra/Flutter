@@ -178,10 +178,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                       _formKey.currentState!.save();
                                       if (isLoading) return;
                                       setState(() => isLoading = true);
-                                      await Future.delayed(
-                                        const Duration(seconds: 2),
-                                      );
-                                      setState(() => isLoading = false);
+
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
                                         List<FamilyModel> contains =
@@ -200,6 +197,10 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                             Future.delayed(
                                               const Duration(seconds: 2),
                                             )
+                                                .then(
+                                                  (_) => setState(
+                                                      () => isLoading = false),
+                                                )
                                                 .then(
                                                   (_) => schedule.addFamily(
                                                     family: FamilyModel(

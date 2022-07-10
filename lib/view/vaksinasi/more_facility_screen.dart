@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -197,19 +196,10 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20)),
-                    child: CachedNetworkImage(
-                      errorWidget: (context, url, error) {
-                        return Image.asset(
-                          'assets/images/default_facility.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      placeholder: (context, url) {
-                        return imageSkeleton();
-                      },
-                      imageUrl: moreQuery.isEmpty
+                    child: Image.memory(
+                      convertBase64Image(moreQuery.isEmpty
                           ? healthFacilities.result[index].image['base64']
-                          : healthFacilities.moreResult[index].image['base64'],
+                          : healthFacilities.moreResult[index].image['base64']),
                       fit: BoxFit.cover,
                     ),
                   ),

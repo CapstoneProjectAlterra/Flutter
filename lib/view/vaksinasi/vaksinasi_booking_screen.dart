@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,7 +39,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
     if (isInit == true) {
       Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
       Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
@@ -61,7 +59,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     Provider.of<VaksinasiViewModel>(context)
         .filterScheduleSession(dateCtl.text, widget.id!);
     Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
-    Provider.of<ProfileViewModel>(context).filterUserFamily();
+    if (user.familyList.isNotEmpty && user.userFamily.isEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserFamily();
+    }
 
     if (dateCtl.text.isEmpty) {
       schedule.dataPersonVaksinasiList.clear();
@@ -492,17 +492,10 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
         width: MediaQuery.of(context).size.width * 0.9,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: CachedNetworkImage(
-            errorWidget: (context, url, error) {
-              return Image.asset(
-                'assets/images/default_facility.png',
-                fit: BoxFit.cover,
-              );
-            },
-            placeholder: (context, url) {
-              return imageSkeleton();
-            },
-            imageUrl: widget.facilities.image['base64'],
+          child: Image.memory(
+            convertBase64Image(
+              widget.facilities.image['base64'],
+            ),
             fit: BoxFit.cover,
           ),
         ),

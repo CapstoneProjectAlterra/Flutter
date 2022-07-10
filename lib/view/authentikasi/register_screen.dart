@@ -126,10 +126,7 @@ class _RegisterState extends State<RegisterScreen> {
                                     onPressed: () async {
                                       if (isLoading) return;
                                       setState(() => isLoading = true);
-                                      await Future.delayed(
-                                        const Duration(seconds: 2),
-                                      );
-                                      setState(() => isLoading = false);
+
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
                                         try {
@@ -137,7 +134,11 @@ class _RegisterState extends State<RegisterScreen> {
                                             const Duration(seconds: 2),
                                           )
                                               .then(
-                                                (value) async =>
+                                                (_) => setState(
+                                                    () => isLoading = false),
+                                              )
+                                              .then(
+                                                (_) async =>
                                                     await register.postRegister(
                                                   RegisterModel(
                                                     nik: _nikEditingController
