@@ -67,7 +67,7 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                         child: listDaftarAnggota(user),
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 24,
                       ),
                       addFamilyButton(),
                     ],
@@ -229,13 +229,13 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                     user.userFamily[index].name == user.name
                         ? Container()
                         : IconButton(
-                            onPressed: () async {
-                              await user.deleteFamily(
-                                  id: user.userFamily[index].id, index: index);
-                              user.familyList.clear();
-                              Fluttertoast.showToast(
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  msg: "Family Member Berhasil Dihapus");
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return modalDataAlert(context, index, user);
+                                },
+                              );
                             },
                             icon: SvgPicture.asset(
                               'assets/icons/delete.svg',
@@ -266,6 +266,97 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
               .textTheme
               .headline1!
               .copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget modalDataAlert(context, index, ProfileViewModel user) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 301,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child:
+                      Icon(Icons.close, color: Colors.grey.shade500, size: 32),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                height: MediaQuery.of(context).size.height * 0.08,
+                width: MediaQuery.of(context).size.width * 0.135,
+                child: Image.asset('assets/images/warning.png'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Jika tekan ya, operasi tidak dapat dibatalkan",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(color: Colors.black),
+              ),
+              const SizedBox(
+                height: 36,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      await user.deleteFamily(
+                          id: user.userFamily[index].id, index: index);
+                      user.familyList.clear();
+                      Fluttertoast.showToast(
+                          toastLength: Toast.LENGTH_SHORT,
+                          msg: "Family Member Berhasil Dihapus");
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Ya",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(color: primaryColor),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Text(
+                      "Tidak",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(color: primaryColor),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+            ],
+          ),
         ),
       ),
     );
