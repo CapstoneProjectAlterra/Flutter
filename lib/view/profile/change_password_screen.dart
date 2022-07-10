@@ -27,6 +27,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool obscureText2 = true;
   bool obscureText3 = true;
   bool isLoading = false;
+  bool isInvalid = false;
+  bool isInvalid2 = false;
+  bool isInvalid2Long = false;
+  bool isInvalid3 = false;
+
+  int heightTextField = 0;
+
   final TextEditingController oldPasswordEditingController =
       TextEditingController();
   final TextEditingController newPasswordEditingController =
@@ -57,6 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -134,7 +142,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: isInvalid ? 60 : 40,
               child: TextFormField(
                 obscureText: obscureText,
                 onChanged: (value) => setState(() => oldPassword = value),
@@ -197,12 +205,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: oldPasswordEditingController,
                 validator: (value) {
                   if (value!.isEmpty) {
+                    setState(() {
+                      isInvalid = true;
+                    });
                     return "Required";
                   } else if (value.length < 8) {
+                    setState(() {
+                      isInvalid = true;
+                    });
                     return "Minimum password 8 character";
                   } else if (getOldPassword != oldPassword) {
+                    setState(() {
+                      isInvalid = true;
+                    });
                     return "Password lamamu tidak sama";
                   }
+                  setState(() {
+                    isInvalid = false;
+                  });
                   return null;
                 },
               ),
@@ -231,7 +251,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: isInvalid2Long
+                  ? 75
+                  : isInvalid2
+                      ? 60
+                      : 40,
               child: TextFormField(
                 obscureText: obscureText2,
                 onChanged: (value) => setState(() => newPassword = value),
@@ -295,12 +319,27 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 validator: (value) {
                   RegExp regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*?[0-9])');
                   if (value!.isEmpty) {
+                    setState(() {
+                      isInvalid2 = true;
+                    });
                     return "Required";
                   } else if (value.length < 8) {
+                    setState(() {
+                      isInvalid2 = true;
+                      isInvalid2Long = false;
+                    });
                     return "Minimum password 8 character";
                   } else if (!regex.hasMatch(value)) {
+                    setState(() {
+                      isInvalid2Long = true;
+                      isInvalid2 = false;
+                    });
                     return "password harus mempunyai 1 huruf kapital\n, huruf kecil & angka";
                   }
+                  setState(() {
+                    isInvalid2 = false;
+                    isInvalid2Long = false;
+                  });
                   return null;
                 },
               ),
@@ -329,7 +368,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: isInvalid3 ? 60 : 40,
               child: TextFormField(
                 obscureText: obscureText3,
                 onChanged: (value) => setState(() => confirmPassword = value),
@@ -392,12 +431,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: confirmPasswordEditingController,
                 validator: (value) {
                   if (value!.isEmpty) {
+                    setState(() {
+                      isInvalid3 = true;
+                    });
                     return "Required";
                   } else if (value.length < 8) {
+                    setState(() {
+                      isInvalid3 = true;
+                    });
                     return "Minimum password 8 character";
                   } else if (newPassword != confirmPassword) {
+                    setState(() {
+                      isInvalid3 = true;
+                    });
                     return "Password tidak sama";
                   }
+                  setState(() {
+                    isInvalid3 = false;
+                  });
                   return null;
                 },
               ),
@@ -451,14 +502,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                 onPressed: () async {
                   if (isLoading) return;
-                  setState(() => isLoading = true);
-                  await Future.delayed(
-                    const Duration(seconds: 2),
-                  );
-                  setState(() => isLoading = false);
+
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-
+                    setState(() => isLoading = true);
+                    await Future.delayed(
+                      const Duration(seconds: 1),
+                    );
+                    setState(() => isLoading = false);
                     try {
                       await user.editPassword(
                           user: UserModel(

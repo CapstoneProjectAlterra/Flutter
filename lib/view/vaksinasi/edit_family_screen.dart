@@ -22,6 +22,9 @@ class _RegisterState extends State<EditFamilyScreen> {
   var obscureText = true;
   bool isLoad = true;
   bool isLoading = false;
+  bool isInvalid = false;
+  bool isInvalid2 = false;
+  bool isInvalid3 = false;
   String? name;
   String? nik;
   String? email;
@@ -206,15 +209,11 @@ class _RegisterState extends State<EditFamilyScreen> {
                                             "SIMPAN",
                                           ),
                                     onPressed: () async {
-                                      _formKey.currentState!.save();
-                                      if (isLoading) return;
-                                      setState(() => isLoading = true);
-                                      await Future.delayed(
-                                        const Duration(seconds: 2),
-                                      );
-                                      setState(() => isLoading = false);
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
+
+                                        if (isLoading) return;
+                                        setState(() => isLoading = true);
                                         List<FamilyModel> contains =
                                             user.familyList
                                                 .where(
@@ -229,8 +228,12 @@ class _RegisterState extends State<EditFamilyScreen> {
                                         if (contains.isEmpty) {
                                           try {
                                             Future.delayed(
-                                              const Duration(seconds: 2),
+                                              const Duration(seconds: 1),
                                             )
+                                                .then(
+                                                  (_) => setState(
+                                                      () => isLoading = false),
+                                                )
                                                 .then(
                                                   (_) => schedule.editFamily(
                                                       family: FamilyModel(
@@ -415,7 +418,7 @@ class _RegisterState extends State<EditFamilyScreen> {
 
   Widget nikField() {
     return SizedBox(
-      height: 45,
+      height: isInvalid ? 70 : 45,
       child: TextFormField(
         onChanged: (value) => setState(() => nik = value),
         style: Theme.of(context)
@@ -461,8 +464,14 @@ class _RegisterState extends State<EditFamilyScreen> {
         controller: nikEditingController,
         validator: (value) {
           if (value!.length < 16) {
+            setState(() {
+              isInvalid = true;
+            });
             return "use valid nik";
           }
+          setState(() {
+            isInvalid = false;
+          });
           return null;
         },
       ),
@@ -471,7 +480,7 @@ class _RegisterState extends State<EditFamilyScreen> {
 
   Widget phoneField() {
     return SizedBox(
-      height: 45,
+      height: isInvalid2 ? 70 : 45,
       child: TextFormField(
         onChanged: (value) => setState(() => phone = value),
         style: Theme.of(context)
@@ -517,8 +526,14 @@ class _RegisterState extends State<EditFamilyScreen> {
         controller: phoneEditingController,
         validator: (value) {
           if (value!.length < 11) {
+            setState(() {
+              isInvalid2 = true;
+            });
             return "use valid phone number";
           }
+          setState(() {
+            isInvalid2 = false;
+          });
           return null;
         },
       ),
@@ -527,7 +542,7 @@ class _RegisterState extends State<EditFamilyScreen> {
 
   Widget emailField({controller, hintText}) {
     return SizedBox(
-      height: 45,
+      height: isInvalid3 ? 70 : 45,
       child: TextFormField(
         onChanged: (value) => setState(() => email = value),
         style: Theme.of(context)
@@ -570,8 +585,14 @@ class _RegisterState extends State<EditFamilyScreen> {
         validator: (value) {
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
               .hasMatch(value!)) {
+            setState(() {
+              isInvalid3 = true;
+            });
             return "Use valid email";
           }
+          setState(() {
+            isInvalid3 = false;
+          });
           return null;
         },
       ),
@@ -582,6 +603,12 @@ class _RegisterState extends State<EditFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(25),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => name = value),
         style: Theme.of(context)
             .textTheme
@@ -634,6 +661,12 @@ class _RegisterState extends State<EditFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(25),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => placeBirth = value),
         style: Theme.of(context)
             .textTheme

@@ -124,11 +124,11 @@ class _RegisterState extends State<RegisterScreen> {
                                             "REGISTER",
                                           ),
                                     onPressed: () async {
-                                      if (isLoading) return;
-                                      setState(() => isLoading = true);
-
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
+
+                                        if (isLoading) return;
+                                        setState(() => isLoading = true);
                                         try {
                                           await Future.delayed(
                                             const Duration(seconds: 2),

@@ -150,11 +150,11 @@ class _RegisterState extends State<LoginScreen> {
                         "LOGIN",
                       ),
                 onPressed: () async {
-                  if (isLoading) return;
-                  setState(() => isLoading = true);
-
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+
+                    if (isLoading) return;
+                    setState(() => isLoading = true);
                     SharedPreferences? prefs =
                         await SharedPreferences.getInstance();
 
