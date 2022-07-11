@@ -43,6 +43,7 @@ class HistoryViewModel extends ChangeNotifier {
   }
 
   filterVaksinasiOrder(String nik) {
+    filterDetailVaksinasiOrder.clear();
     filterDetailVaksinasiOrder = filterDetailBookingList
         .where((element) => element.family!['nik'] == nik)
         .toList();

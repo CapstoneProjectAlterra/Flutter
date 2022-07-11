@@ -58,18 +58,12 @@ class _HistoryVaccineScreenState extends State<HistoryVaccineScreen> {
                       const SizedBox(
                         height: 22,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          print(history.filterDetailVaksinasiOrder);
-                          print(widget.history.family!['nik']);
-                        },
-                        child: Text(
-                          "Tiket Vaksin",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(color: Colors.black),
-                        ),
+                      Text(
+                        "Tiket Vaksin",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2!
+                            .copyWith(color: Colors.black),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,

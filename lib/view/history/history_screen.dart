@@ -122,11 +122,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
             child: TextButton(
               onPressed: () {
-                history.filterDetailVaksinasiOrder.clear();
+                setState(() {
+                  history.filterDetailVaksinasiOrder.clear();
+                });
                 Navigator.of(context).push(
                   NavigatorFadeTransition(
                     child: HistoryVaccineScreen(
-                      history: history.filterDetailBookingList[index],
+                      history: history.filterNameBooking[index],
                     ),
                   ),
                 );

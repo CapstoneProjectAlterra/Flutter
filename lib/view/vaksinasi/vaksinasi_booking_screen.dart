@@ -647,22 +647,27 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
   }
 
   Widget selectDate(VaksinasiViewModel schedule) {
-    DateTime initialDate = DateTime.now();
+    DateTime date = DateTime.now();
+    DateTime initialDate = DateTime(
+      date.year,
+      date.month,
+      date.day + 1,
+    );
     DateTime firstDate = DateTime(
-      initialDate.year,
-      initialDate.month,
-      initialDate.day,
+      date.year,
+      date.month,
+      date.day + 1,
     );
     DateTime lastDate = DateTime(
-      initialDate.year,
-      initialDate.month,
-      initialDate.day + 7,
+      date.year,
+      date.month,
+      date.day + 7,
     );
     return GestureDetector(
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: initialDate,
             firstDate: firstDate,
             lastDate: lastDate);
 

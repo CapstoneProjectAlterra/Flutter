@@ -11,6 +11,9 @@ import 'package:vaccine_booking/view_model/auth_view_model.dart';
 
 import '../../components/constants.dart';
 import '../../model/authentikasi/login_model.dart';
+import '../../view_model/history_view_model.dart';
+import '../../view_model/profile_view_model.dart';
+import '../../view_model/vaksinasi_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -38,6 +41,9 @@ class _RegisterState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final login = Provider.of<AuthViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context);
+    final schedule = Provider.of<VaksinasiViewModel>(context);
+    final history = Provider.of<HistoryViewModel>(context);
     return Scaffold(
       body: Padding(
         padding:
@@ -91,7 +97,7 @@ class _RegisterState extends State<LoginScreen> {
                 const SizedBox(
                   height: 32,
                 ),
-                loginButton(login),
+                loginButton(login, user, schedule, history),
                 const SizedBox(
                   height: 32,
                 ),
@@ -124,7 +130,8 @@ class _RegisterState extends State<LoginScreen> {
     );
   }
 
-  Widget loginButton(login) {
+  Widget loginButton(login, ProfileViewModel user, VaksinasiViewModel schedule,
+      HistoryViewModel history) {
     return Center(
       child: SizedBox(
         height: 50,
@@ -200,6 +207,16 @@ class _RegisterState extends State<LoginScreen> {
                             (_) =>
                                 Fluttertoast.showToast(msg: "Berhasil Login"),
                           )
+                          .then((_) {
+                            user.familyList.clear();
+                            user.userFamily.clear();
+                            user.userData.clear();
+                            user.usersProfile.clear();
+                            user.filterUserProfile.clear();
+                            history.detailBookingList.clear();
+                            history.filterDetailBookingList.clear();
+                            history.filterNameBooking.clear();
+                          })
                           .then((_) => isTrue = true)
                           .then(
                             (_) => Navigator.of(context).pushAndRemoveUntil(
