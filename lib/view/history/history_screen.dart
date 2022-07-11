@@ -7,8 +7,14 @@ import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
 import '../../components/constants.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final history = Provider.of<HistoryViewModel>(context);
@@ -16,10 +22,14 @@ class HistoryScreen extends StatelessWidget {
     if (history.detailBookingList.isEmpty) {
       Provider.of<HistoryViewModel>(context).getDetailBooking();
     }
-    if (user.filterUserProfile.isNotEmpty) {
+    if (history.filterDetailBookingList.isEmpty &&
+        user.filterUserProfile.isNotEmpty) {
       Provider.of<HistoryViewModel>(context).filterDetailBooking(
         user.filterUserProfile[0].profile['user_id'],
       );
+    }
+    if (history.filterNameBooking.isEmpty) {
+      Provider.of<HistoryViewModel>(context).filterBookingName();
     }
 
     return Scaffold(
@@ -112,6 +122,7 @@ class HistoryScreen extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
+                history.filterDetailVaksinasiOrder.clear();
                 Navigator.of(context).push(
                   NavigatorFadeTransition(
                     child: HistoryVaccineScreen(

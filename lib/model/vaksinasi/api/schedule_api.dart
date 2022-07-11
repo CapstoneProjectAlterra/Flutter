@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../schedule_model.dart';
@@ -25,7 +24,7 @@ class ScheduleApi {
         return schedules;
       }
     } on Exception catch (_) {
-      Fluttertoast.showToast(msg: 'Ada masalah dengan koneksi ke server');
+      throw "Gagal mendapatkan data schedule";
     }
   }
 }

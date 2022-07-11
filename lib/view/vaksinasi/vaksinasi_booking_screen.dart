@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
-import 'package:vaccine_booking/model/vaksinasi/booking_model.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/panel_widget.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
@@ -27,25 +25,13 @@ class VaksinasiBookingScreen extends StatefulWidget {
 }
 
 class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
-  bool isInit = true;
   final TextEditingController dateCtl = TextEditingController();
   final PanelController panelController = PanelController();
   int scheduleId = 0;
-  String tempString = '';
   bool vaksinA = false;
   bool vaksinB = false;
   bool vaksinC = false;
   bool vaksinD = false;
-
-  @override
-  void didChangeDependencies() {
-    if (isInit == true) {
-      Provider.of<ProfileViewModel>(context, listen: false).getAllFamilies();
-      Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,30 +40,34 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     if (user.familyList.isEmpty) {
       Provider.of<ProfileViewModel>(context).getAllFamilies();
     }
-
-    Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
-    Provider.of<VaksinasiViewModel>(context)
-        .filterScheduleSession(dateCtl.text, widget.id!);
-    Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
-    if (user.familyList.isNotEmpty && user.userFamily.isEmpty) {
-      Provider.of<ProfileViewModel>(context).filterUserFamily();
-    }
-
-    if (dateCtl.text.isEmpty) {
-      schedule.dataPersonVaksinasiList.clear();
-      schedule.scheduleIdBooking = 0;
-    }
-
-    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
-      Provider.of<ProfileViewModel>(context).filterUserFamily();
-    }
-
     if (schedule.bookingList.isEmpty) {
       Provider.of<VaksinasiViewModel>(context).getBookingList();
     }
+    if (schedule.scheduleList.isEmpty) {
+      Provider.of<VaksinasiViewModel>(context).getAllSchedule();
+    }
+    if (dateCtl.text.isEmpty) {
+      schedule.scheduleIdBooking = 0;
+      schedule.scheduleList.clear();
+      schedule.filterScheduleList.clear();
+      schedule.filterScheduleSessionList.clear();
+    }
+
+    if (user.userFamily.isEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserFamily();
+    }
+
+    Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
 
     Provider.of<VaksinasiViewModel>(context)
-        .filterBooking(user.userData[0].profile!['user_id'], scheduleId);
+        .filterScheduleSession(dateCtl.text, widget.id!);
+
+    if (schedule.filterBookingList.isEmpty) {
+      Provider.of<VaksinasiViewModel>(context)
+          .filterBooking(user.userData[0].profile!['user_id'], scheduleId);
+    }
+
+    Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
 
     return Scaffold(
       body: SlidingUpPanel(
@@ -205,124 +195,50 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          Center(
-                            child: SizedBox(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: tempString.isEmpty
-                                  ? const ElevatedButton(
-                                      onPressed: null,
-                                      child: Text(
-                                        "Pesan",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : ElevatedButton(
-                                      child: const Text(
-                                        "Pesan",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      onPressed: () async {
-                                        String dateNow =
-                                            DateFormat('dd-MM-yyyy').format(
-                                          DateTime.now(),
-                                        );
-                                        String timeNow =
-                                            DateFormat('HH:mm:ss').format(
-                                          DateTime.now(),
-                                        );
+                          // Center(
+                          //   child: SizedBox(
+                          //     height: 50,
+                          //     width: MediaQuery.of(context).size.width * 0.9,
+                          //     child: tempString.isEmpty
+                          //         ? const ElevatedButton(
+                          //             onPressed: null,
+                          //             child: Text(
+                          //               "Pesan",
+                          //               style: TextStyle(
+                          //                 color: Colors.white,
+                          //               ),
+                          //             ),
+                          //           )
+                          //         : ElevatedButton(
+                          //             child: const Text(
+                          //               "Pesan",
+                          //               style: TextStyle(
+                          //                 color: Colors.white,
+                          //               ),
+                          //             ),
+                          //             onPressed: () async {
 
-                                        if (schedule.scheduleIdBooking !=
-                                            scheduleId) {
-                                          schedule.addPersonBooking(
-                                              dataPerson: user.userData[0],
-                                              id: scheduleId,
-                                              userFamily: user.userFamily);
-                                          try {
-                                            Future.delayed(
-                                              const Duration(seconds: 1),
-                                            )
-                                                .then(
-                                                  (_) async {
-                                                    for (int i = 0;
-                                                        i <
-                                                            schedule
-                                                                .dataPersonVaksinasiList
-                                                                .length;
-                                                        i++) {
-                                                      await schedule
-                                                          .postBooking(
-                                                        booking: BookingModel(
-                                                          bookingDate:
-                                                              "$dateNow $timeNow",
-                                                          schedule: {
-                                                            "id": scheduleId
-                                                          },
-                                                          user: {
-                                                            "id": user
-                                                                .filterUserProfile[
-                                                                    0]
-                                                                .profile['user_id'],
-                                                          },
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                )
-                                                .then(
-                                                  (_) => schedule.bookingList
-                                                      .clear(),
-                                                )
-                                                .then(
-                                                  (_) => schedule
-                                                      .filterBookingList
-                                                      .clear(),
-                                                )
-                                                .then(
-                                                  (value) => Fluttertoast.showToast(
-                                                      msg:
-                                                          "Berhasil Menyimpan Jadwal"),
-                                                )
-                                                .then(
-                                                  (_) {
-                                                    setState(
-                                                      () {
-                                                        vaksinA = false;
-                                                        vaksinB = false;
-                                                        vaksinC = false;
-                                                        vaksinD = false;
-                                                        tempString = '';
-                                                      },
-                                                    );
-                                                  },
-                                                );
-                                          } catch (e) {
-                                            Fluttertoast.showToast(
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              msg: e.toString(),
-                                            );
-                                          }
+                          //               setState(
+                          //                 () {
+                          //                   vaksinA = false;
+                          //                   vaksinB = false;
+                          //                   vaksinC = false;
+                          //                   vaksinD = false;
+                          //
+                          //                 },
+                          //               );
 
-                                          if (tempString.isNotEmpty ||
-                                              vaksinA != true ||
-                                              vaksinB != true ||
-                                              vaksinC != true ||
-                                              vaksinD != true) {
-                                            panelController.open();
-                                          }
-                                        } else {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  'Kamu sudah menambahkan jadwal ini');
-                                        }
-                                      },
-                                    ),
-                            ),
-                          ),
+                          //               if (tempString.isNotEmpty ||
+                          //                   vaksinA != true ||
+                          //                   vaksinB != true ||
+                          //                   vaksinC != true ||
+                          //                   vaksinD != true) {
+                          //                 panelController.open();
+                          //               }
+                          //             },
+                          //           ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -518,9 +434,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinB == true ||
                               vaksinC == true ||
                               vaksinD == true) {
-                            tempString = 'a';
                             setState(() {
                               scheduleId = schedule.scheduleId1;
+                              panelController.open();
                             });
                             vaksinA = true;
                             vaksinB = false;
@@ -531,7 +447,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinB = false;
                             vaksinC = false;
                             vaksinD = false;
-                            tempString = '';
+                            panelController.close();
                             scheduleId = 0;
                           }
                         },
@@ -571,9 +487,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinA == true ||
                               vaksinC == true ||
                               vaksinD == true) {
-                            tempString = 'a';
                             setState(() {
                               scheduleId = schedule.scheduleId2;
+                              panelController.open();
                             });
                             vaksinB = true;
                             vaksinA = false;
@@ -584,7 +500,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinB = false;
                             vaksinC = false;
                             vaksinD = false;
-                            tempString = '';
+                            panelController.close();
                             scheduleId = 0;
                           }
                         },
@@ -631,8 +547,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinD == true) {
                             setState(() {
                               scheduleId = schedule.scheduleId3;
+                              panelController.open();
                             });
-                            tempString = 'a';
+
                             vaksinC = true;
                             vaksinA = false;
                             vaksinB = false;
@@ -642,7 +559,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinB = false;
                             vaksinC = false;
                             vaksinD = false;
-                            tempString = '';
+                            panelController.close();
                             scheduleId = 0;
                           }
                         },
@@ -684,9 +601,9 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinA == true ||
                               vaksinB == true ||
                               vaksinC == true) {
-                            tempString = 'a';
                             setState(() {
                               scheduleId = schedule.scheduleId4;
+                              panelController.open();
                             });
                             vaksinD = true;
                             vaksinA = false;
@@ -697,7 +614,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                             vaksinB = false;
                             vaksinC = false;
                             vaksinD = false;
-                            tempString = '';
+                            panelController.close();
                             scheduleId = 0;
                           }
                         },

@@ -24,6 +24,8 @@ class HistoryApi {
             .toList();
         return detailBookingList;
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      throw "Gagal mendapatkan data detail booking";
+    }
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/constants.dart';
 import '../../model/profile/family_model.dart';
@@ -46,7 +45,6 @@ class _RegisterState extends State<RegisterFamilyScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
-    final schedule = Provider.of<VaksinasiViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -202,7 +200,7 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                       () => isLoading = false),
                                                 )
                                                 .then(
-                                                  (_) => schedule.addFamily(
+                                                  (_) => user.addFamily(
                                                     family: FamilyModel(
                                                       name:
                                                           nameEditingController
@@ -237,11 +235,6 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                 .then(
                                                   (_) =>
                                                       user.familyList.clear(),
-                                                )
-                                                .then(
-                                                  (_) => schedule
-                                                      .dataPersonVaksinasiList
-                                                      .clear(),
                                                 )
                                                 .then(
                                                   (_) =>
@@ -560,6 +553,12 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(25),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => name = value),
         style: Theme.of(context)
             .textTheme
@@ -612,6 +611,12 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(25),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => placeBirth = value),
         style: Theme.of(context)
             .textTheme
@@ -664,6 +669,12 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(255),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z0-9 ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => idCardAddress = value),
         style: Theme.of(context)
             .textTheme
@@ -716,6 +727,12 @@ class _RegisterState extends State<RegisterFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(255),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z0-9 ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => address = value),
         style: Theme.of(context)
             .textTheme

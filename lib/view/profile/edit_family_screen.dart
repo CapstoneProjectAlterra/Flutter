@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:vaccine_booking/view_model/vaksinasi_view_model.dart';
 
 import '../../components/constants.dart';
 import '../../model/profile/family_model.dart';
@@ -49,7 +48,6 @@ class _RegisterState extends State<EditFamilyScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
-    final schedule = Provider.of<VaksinasiViewModel>(context);
 
     if (isLoad == true) {
       name = widget.family.name;
@@ -108,7 +106,7 @@ class _RegisterState extends State<EditFamilyScreen> {
                     height: 16,
                   ),
                   Text(
-                    "Tambah Anggota Keluarga",
+                    "Edit Data Anggota Keluarga",
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                           color: Colors.black,
                         ),
@@ -235,8 +233,8 @@ class _RegisterState extends State<EditFamilyScreen> {
                                                       () => isLoading = false),
                                                 )
                                                 .then(
-                                                  (_) => schedule.editFamily(
-                                                      family: FamilyModel(
+                                                  (_) => user.editFamily(
+                                                      FamilyModel(
                                                         name:
                                                             nameEditingController
                                                                 .text,
@@ -268,12 +266,11 @@ class _RegisterState extends State<EditFamilyScreen> {
                                                           "user_id": id
                                                         },
                                                       ),
-                                                      id: widget.family.id!),
+                                                      widget.family.id!),
                                                 )
                                                 .then(
-                                                  (_) => schedule
-                                                      .dataPersonVaksinasiList
-                                                      .clear(),
+                                                  (_) =>
+                                                      user.familyList.clear(),
                                                 )
                                                 .then(
                                                   (_) =>
@@ -615,7 +612,6 @@ class _RegisterState extends State<EditFamilyScreen> {
             .bodyText1!
             .copyWith(color: Colors.grey.shade700),
         cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 8),
@@ -719,6 +715,12 @@ class _RegisterState extends State<EditFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(255),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z0-9 ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => idCardAddress = value),
         style: Theme.of(context)
             .textTheme
@@ -771,6 +773,12 @@ class _RegisterState extends State<EditFamilyScreen> {
     return SizedBox(
       height: 45,
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(255),
+          FilteringTextInputFormatter.allow(
+            RegExp("[a-zA-Z0-9 ]"),
+          ),
+        ],
         onChanged: (value) => setState(() => address = value),
         style: Theme.of(context)
             .textTheme

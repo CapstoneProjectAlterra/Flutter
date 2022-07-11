@@ -154,6 +154,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
+                  FilteringTextInputFormatter.allow(
+                    RegExp("[a-zA-Z0-9 ]"),
+                  ),
                 ],
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(
@@ -267,6 +270,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
+                  FilteringTextInputFormatter.allow(
+                    RegExp("[a-zA-Z0-9 ]"),
+                  ),
                 ],
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(
@@ -380,6 +386,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
+                  FilteringTextInputFormatter.allow(
+                    RegExp("[a-zA-Z0-9 ]"),
+                  ),
                 ],
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(

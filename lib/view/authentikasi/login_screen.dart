@@ -280,6 +280,9 @@ class _RegisterState extends State<LoginScreen> {
       textInputAction: TextInputAction.next,
       inputFormatters: [
         LengthLimitingTextInputFormatter(13),
+        FilteringTextInputFormatter.allow(
+          RegExp("[a-zA-Z0-9 ]"),
+        ),
       ],
       controller: _passwordEditingController,
       validator: (value) {

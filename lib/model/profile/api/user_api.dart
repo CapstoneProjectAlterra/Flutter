@@ -27,7 +27,9 @@ class UserApi {
             .toList();
         return familyList;
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      throw "Gagal mendapatkan data family";
+    }
   }
 
   editUser({int? id, FamilyModel? profile}) async {
@@ -135,7 +137,7 @@ class UserApi {
         return usersProfile;
       }
     } catch (_) {
-      throw "Gagal Mendapatkan Profile User";
+      throw "Gagal mendapatkan data user";
     }
   }
 

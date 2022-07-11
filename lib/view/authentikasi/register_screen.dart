@@ -374,6 +374,9 @@ class _RegisterState extends State<RegisterScreen> {
       textInputAction: TextInputAction.next,
       inputFormatters: [
         LengthLimitingTextInputFormatter(13),
+        FilteringTextInputFormatter.allow(
+          RegExp("[a-zA-Z0-9 ]"),
+        ),
       ],
       controller: _passwordEditingController,
       validator: (value) {

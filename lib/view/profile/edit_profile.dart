@@ -912,6 +912,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             height: 45,
             child: TextFormField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(255),
+                FilteringTextInputFormatter.allow(
+                  RegExp("[a-zA-Z0-9 ]"),
+                ),
+              ],
               onChanged: (value) => setState(() => idCardAddress = value),
               style: Theme.of(context)
                   .textTheme
@@ -980,6 +986,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SizedBox(
             height: 45,
             child: TextFormField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(255),
+                FilteringTextInputFormatter.allow(
+                  RegExp("[a-zA-Z0-9 ]"),
+                ),
+              ],
               onChanged: (value) => setState(() => address = value),
               style: Theme.of(context)
                   .textTheme

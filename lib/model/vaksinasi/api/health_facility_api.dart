@@ -23,6 +23,8 @@ class HealthFacilityApi {
             .toList();
         return healthFacilitiesList;
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      throw "Gagal mendapatkan data health facility";
+    }
   }
 }

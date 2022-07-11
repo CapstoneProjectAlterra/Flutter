@@ -6,7 +6,6 @@ import 'package:vaccine_booking/model/vaksinasi/datail_booking_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/health_facility_model.dart';
 import 'package:vaccine_booking/model/vaksinasi/schedule_model.dart';
 
-import '../model/profile/api/user_api.dart';
 import '../model/profile/family_model.dart';
 import '../model/vaksinasi/api/health_facility_api.dart';
 import '../model/vaksinasi/booking_model.dart';
@@ -15,14 +14,12 @@ class VaksinasiViewModel extends ChangeNotifier {
   final vaksinasiApi = HealthFacilityApi();
   final scheduleApi = ScheduleApi();
   final bookingApi = BookingApi();
-  final userApi = UserApi();
   List<HealthFacilityModel> facilityList = [];
   List<HealthFacilityModel> result = [];
   List<HealthFacilityModel> moreResult = [];
   List<ScheduleModel> scheduleList = [];
   List<ScheduleModel> filterScheduleList = [];
   List<ScheduleModel> filterScheduleSessionList = [];
-  List<FamilyModel> dataPersonVaksinasiList = [];
   List<FamilyModel> selectBookingVaksinasiList = [];
   List<BookingModel> bookingList = [];
   List<BookingModel> filterBookingList = [];
@@ -54,22 +51,6 @@ class VaksinasiViewModel extends ChangeNotifier {
   int stock3 = 0;
   int stock4 = 0;
 
-  addFamily({FamilyModel? family}) async {
-    userApi.addFamily(profile: family);
-    notifyListeners();
-  }
-
-  editFamily({FamilyModel? family, int? id}) async {
-    userApi.editFamily(profile: family, id: id);
-    notifyListeners();
-  }
-
-  deleteFamily({int? id, int? index}) async {
-    userApi.deleteFamily(id: id);
-    dataPersonVaksinasiList.removeAt(index!);
-    notifyListeners();
-  }
-
   addSelectBookingVaksinasi(FamilyModel? family) {
     if (family != null) {
       selectBookingVaksinasiList.add(family);
@@ -98,40 +79,6 @@ class VaksinasiViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addPersonBooking(
-      {FamilyModel? dataPerson, int? id, List<FamilyModel>? userFamily}) {
-    List<FamilyModel> contains = [];
-    List<FamilyModel> contains2 = [];
-    contains = dataPersonVaksinasiList
-        .where(
-          (element) => element.nik!.contains(dataPerson!.nik!),
-        )
-        .toList();
-
-    if (contains.isEmpty && dataPerson != null) {
-      dataPersonVaksinasiList.add(dataPerson);
-    }
-
-    if (userFamily != null) {
-      for (int i = 0; i < userFamily.length; i++) {
-        contains2 = dataPersonVaksinasiList
-            .where(
-              (element) => element.nik!.contains(userFamily[i].nik!),
-            )
-            .toList();
-        if (contains.isEmpty && contains2.isEmpty) {
-          dataPersonVaksinasiList.add(
-            userFamily[i],
-          );
-        }
-      }
-    }
-    if (id != null) {
-      scheduleIdBooking = id;
-    }
-    notifyListeners();
-  }
-
   getAllHealthFacilities() async {
     final getAllFacilities = await vaksinasiApi.getAllHealthFacilities();
 
@@ -141,9 +88,15 @@ class VaksinasiViewModel extends ChangeNotifier {
   }
 
   getBookingList() async {
-    final bookings = await bookingApi.getBooking();
-    bookingList = bookings;
-    notifyListeners();
+    try {
+      final bookings = await bookingApi.getBooking();
+      bookingList = bookings;
+      notifyListeners();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
   }
 
   filterBooking(int? userId, int? scheduleId) {
@@ -210,9 +163,15 @@ class VaksinasiViewModel extends ChangeNotifier {
   }
 
   getAllSchedule() async {
-    final getAllSchedule = await scheduleApi.getAllSchedules();
-    scheduleList = getAllSchedule;
-    notifyListeners();
+    try {
+      final getAllSchedule = await scheduleApi.getAllSchedules();
+      scheduleList = getAllSchedule;
+      notifyListeners();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
   }
 
   filterSchedule(int id) {

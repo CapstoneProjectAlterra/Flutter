@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vaccine_booking/components/constants.dart';
@@ -8,10 +9,11 @@ import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/model/vaksinasi/datail_booking_model.dart';
 import 'package:vaccine_booking/view/vaksinasi/widget/content_list_booking.dart';
 import 'package:vaccine_booking/view/history/history_screen.dart';
-import 'package:vaccine_booking/view/vaksinasi/register_family_screen.dart';
+import 'package:vaccine_booking/view/profile/register_family_screen.dart';
 import 'package:vaccine_booking/view_model/history_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
 
+import '../../../model/vaksinasi/booking_model.dart';
 import '../../../model/vaksinasi/health_facility_model.dart';
 import '../../../view_model/vaksinasi_view_model.dart';
 
@@ -38,13 +40,12 @@ class PanelWidget extends StatefulWidget {
 
 class _PanelWidgetState extends State<PanelWidget> {
   bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     final vaksinasi = Provider.of<VaksinasiViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
     final history = Provider.of<HistoryViewModel>(context);
-    Provider.of<VaksinasiViewModel>(context)
-        .filterBooking(user.userData[0].profile!['user_id'], widget.scheduleId);
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: Column(
@@ -117,14 +118,11 @@ class _PanelWidgetState extends State<PanelWidget> {
                   ],
                 ),
                 onPressed: () {
-                  widget.scheduleId == 0
-                      ? Fluttertoast.showToast(
-                          msg: "Pilih Jadwal Terlebih Dahulu")
-                      : Navigator.of(context).push(
-                          NavigatorFadeTransition(
-                            child: const RegisterFamilyScreen(),
-                          ),
-                        );
+                  Navigator.of(context).push(
+                    NavigatorFadeTransition(
+                      child: const RegisterFamilyScreen(),
+                    ),
+                  );
                   widget.panelController.close();
                 },
               ),
@@ -156,48 +154,107 @@ class _PanelWidgetState extends State<PanelWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       onPressed: () async {
-                        try {
-                          await Future.delayed(
-                            const Duration(seconds: 1),
-                          )
-                              .then(
-                                (_) async {
-                                  for (int i = vaksinasi
-                                          .selectBookingVaksinasiList.length;
-                                      i > 0;
-                                      i--) {
-                                    await vaksinasi.postDetailBooking(
-                                      DetailBookingModel(
-                                          bookingId: vaksinasi
-                                              .filterBookingList[i - 1].id,
-                                          familyId: vaksinasi
-                                              .selectBookingVaksinasiList[i - 1]
-                                              .id,
-                                          bookingStatus: "COMPLETED"),
-                                    );
-                                  }
-                                },
-                              )
-                              .then(
-                                (_) => history.detailBookingList.clear(),
-                              )
-                              .then(
-                                (_) => history.filterDetailBookingList.clear(),
-                              )
-                              .then(
-                                (_) =>
-                                    history.filterDetailVaksinasiOrder.clear(),
-                              )
-                              .then(
-                                (_) => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return modalSuccess();
+                        String dateNow = DateFormat('dd-MM-yyyy').format(
+                          DateTime.now(),
+                        );
+                        String timeNow = DateFormat('HH:mm:ss').format(
+                          DateTime.now(),
+                        );
+
+                        if (widget.scheduleId == 0) {
+                          Fluttertoast.showToast(
+                              toastLength: Toast.LENGTH_LONG,
+                              msg: "Pilih jadwal terlebih dahulu");
+                        } else {
+                          try {
+                            await Future.delayed(
+                              const Duration(seconds: 0),
+                            )
+                                .then(
+                                  (_) async {
+                                    for (int i = 0;
+                                        i < user.userFamily.length;
+                                        i++) {
+                                      await vaksinasi.postBooking(
+                                        booking: BookingModel(
+                                          bookingDate: "$dateNow $timeNow",
+                                          schedule: {"id": widget.scheduleId},
+                                          user: {
+                                            "id": user.filterUserProfile[0]
+                                                .profile['user_id'],
+                                          },
+                                        ),
+                                      );
+                                    }
                                   },
-                                ),
-                              );
-                        } catch (e) {
-                          Fluttertoast.showToast(msg: e.toString());
+                                )
+                                .then(
+                                  (value) => vaksinasi.bookingList.clear(),
+                                )
+                                .then(
+                                  (value) =>
+                                      vaksinasi.filterBookingList.clear(),
+                                )
+                                .then((_) => setState(() {}))
+                                .then(
+                                  (_) async => await Future.delayed(
+                                    const Duration(seconds: 3),
+                                  ),
+                                )
+                                .then((_) => setState(() {}))
+                                .then(
+                                  (_) async => await Future.delayed(
+                                    const Duration(seconds: 3),
+                                  ),
+                                )
+                                .then(
+                                  (_) async {
+                                    for (int i = vaksinasi
+                                            .selectBookingVaksinasiList.length;
+                                        i > 0;
+                                        i--) {
+                                      await vaksinasi.postDetailBooking(
+                                        DetailBookingModel(
+                                            bookingId: vaksinasi
+                                                .filterBookingList[i - 1].id,
+                                            familyId: vaksinasi
+                                                .selectBookingVaksinasiList[
+                                                    i - 1]
+                                                .id,
+                                            bookingStatus: "COMPLETED"),
+                                      );
+                                    }
+                                  },
+                                )
+                                .then(
+                                  (_) => history.detailBookingList.clear(),
+                                )
+                                .then(
+                                  (_) =>
+                                      history.filterDetailBookingList.clear(),
+                                )
+                                .then(
+                                  (_) => history.filterDetailVaksinasiOrder
+                                      .clear(),
+                                )
+                                .then(
+                                  (_) => history.filterNameBooking.clear(),
+                                )
+                                .then(
+                                  (_) => history.filterDetailVaksinasiOrder
+                                      .clear(),
+                                )
+                                .then(
+                                  (_) => showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return modalSuccess();
+                                    },
+                                  ),
+                                );
+                          } catch (e) {
+                            Fluttertoast.showToast(msg: e.toString());
+                          }
                         }
                       },
                     ),
@@ -306,10 +363,10 @@ class _PanelWidgetState extends State<PanelWidget> {
           color: Colors.white,
         );
       },
-      itemCount: vaksinasi.dataPersonVaksinasiList.length,
+      itemCount: user.userFamily.length,
       itemBuilder: (context, index) {
         return ContentListBooking(
-          family: vaksinasi.dataPersonVaksinasiList[index],
+          family: user.userFamily[index],
           isPressed: isPressed,
           index: index,
           vaksinasi: vaksinasi,

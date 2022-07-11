@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vaccine_booking/model/history/api/history_api.dart';
 import 'package:vaccine_booking/model/history/history_model.dart';
 
@@ -10,11 +11,17 @@ class HistoryViewModel extends ChangeNotifier {
   final historyApi = HistoryApi();
 
   getDetailBooking() async {
-    final detailBooking = await historyApi.getDetailBooking();
-    if (detailBooking != null) {
-      detailBookingList = detailBooking;
+    try {
+      final detailBooking = await historyApi.getDetailBooking();
+      if (detailBooking != null) {
+        detailBookingList = detailBooking;
+      }
+      notifyListeners();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
     }
-    notifyListeners();
   }
 
   filterDetailBooking(int id) {

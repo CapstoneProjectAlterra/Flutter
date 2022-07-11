@@ -7,8 +7,8 @@ import 'package:vaccine_booking/view/profile/edit_profile.dart';
 import '../../components/constants.dart';
 import '../../components/navigator_fade_transition.dart';
 import '../../view_model/profile_view_model.dart';
-import '../vaksinasi/edit_family_screen.dart';
-import '../vaksinasi/register_family_screen.dart';
+import 'edit_family_screen.dart';
+import 'register_family_screen.dart';
 
 class FamilyMemberScreen extends StatefulWidget {
   const FamilyMemberScreen({Key? key}) : super(key: key);
@@ -18,19 +18,15 @@ class FamilyMemberScreen extends StatefulWidget {
 }
 
 class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
-  bool isInit = true;
-
-  @override
-  void didChangeDependencies() {
-    Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context);
     if (user.familyList.isEmpty) {
       Provider.of<ProfileViewModel>(context).getAllFamilies();
+    }
+    if (user.userFamily.isEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserFamily();
+      setState(() {});
     }
     return Scaffold(
       body: Container(
@@ -321,9 +317,9 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      await user.deleteFamily(
-                          id: user.userFamily[index].id, index: index);
+                      await user.deleteFamily(id: user.userFamily[index].id);
                       user.familyList.clear();
+                      user.userFamily.clear();
                       Fluttertoast.showToast(
                           toastLength: Toast.LENGTH_SHORT,
                           msg: "Family Member Berhasil Dihapus");

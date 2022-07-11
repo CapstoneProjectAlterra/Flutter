@@ -32,9 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
           .getAllHealthFacilities();
       Provider.of<VaksinasiViewModel>(context, listen: false).getBookingList();
       Provider.of<HistoryViewModel>(context, listen: false).getDetailBooking();
-      Provider.of<ProfileViewModel>(context, listen: false).filterUserData();
-      Provider.of<ProfileViewModel>(context, listen: false).filterUser();
-      Provider.of<ProfileViewModel>(context, listen: false).filterUserFamily();
       Provider.of<VaksinasiViewModel>(context, listen: false).getAllSchedule();
       isTrue = false;
     }
@@ -56,15 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.usersProfile.isNotEmpty && user.filterUserProfile.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
     }
-    if (history.detailBookingList.isNotEmpty &&
+    if (history.detailBookingList.isEmpty) {
+      Provider.of<HistoryViewModel>(context).getDetailBooking();
+    }
+    if (history.filterDetailBookingList.isEmpty &&
         user.filterUserProfile.isNotEmpty) {
-      Provider.of<HistoryViewModel>(context)
-          .filterDetailBooking(user.filterUserProfile[0].profile['user_id']);
+      Provider.of<HistoryViewModel>(context).filterDetailBooking(
+        user.filterUserProfile[0].profile['user_id'],
+      );
+    }
+    if (history.filterNameBooking.isEmpty) {
+      Provider.of<HistoryViewModel>(context).filterBookingName();
     }
 
-    // if (history.filterDetailBookingList.isNotEmpty) {
-    //   Provider.of<HistoryViewModel>(context).filterBookingName();
-    // }
+    Provider.of<HistoryViewModel>(context).filterBookingName();
     schedule.scheduleIdBooking = 0;
 
     return Scaffold(

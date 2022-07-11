@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vaccine_booking/components/constants.dart';
 
 import '../../../model/profile/family_model.dart';
-import '../edit_family_screen.dart';
+import '../../profile/edit_family_screen.dart';
 import '../../../view_model/profile_view_model.dart';
 import '../../../view_model/vaksinasi_view_model.dart';
 import '../../../components/navigator_fade_transition.dart';
@@ -75,8 +75,7 @@ class _ContentListBookingState extends State<ContentListBooking> {
                     Row(
                       children: [
                         Text(
-                          widget.vaksinasi.dataPersonVaksinasiList[widget.index]
-                              .name!,
+                          widget.user.userFamily[widget.index].name!,
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1!
@@ -86,24 +85,17 @@ class _ContentListBookingState extends State<ContentListBooking> {
                           width: 8,
                         ),
                         Text(
-                          widget.vaksinasi.dataPersonVaksinasiList[widget.index]
-                                      .name ==
+                          widget.user.userFamily[widget.index].name ==
                                   widget.user.name
                               ? "Saya"
                               : widget
-                                  .vaksinasi
-                                  .dataPersonVaksinasiList[widget.index]
-                                  .statusFamily!
+                                  .user.userFamily[widget.index].statusFamily!
                                   .toLowerCase()
                                   .replaceFirst(
-                                    widget
-                                        .vaksinasi
-                                        .dataPersonVaksinasiList[widget.index]
+                                    widget.user.userFamily[widget.index]
                                         .statusFamily!
                                         .toLowerCase()[0],
-                                    widget
-                                        .vaksinasi
-                                        .dataPersonVaksinasiList[widget.index]
+                                    widget.user.userFamily[widget.index]
                                         .statusFamily!
                                         .toUpperCase()[0],
                                   ),
@@ -130,8 +122,7 @@ class _ContentListBookingState extends State<ContentListBooking> {
                           width: 4,
                         ),
                         Text(
-                          widget.vaksinasi.dataPersonVaksinasiList[widget.index]
-                              .nik!,
+                          widget.user.userFamily[widget.index].nik!,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!
@@ -148,8 +139,7 @@ class _ContentListBookingState extends State<ContentListBooking> {
                       onTap: () => Navigator.of(context).push(
                         NavigatorFadeTransition(
                           child: EditFamilyScreen(
-                            family: widget.vaksinasi
-                                .dataPersonVaksinasiList[widget.index],
+                            family: widget.user.userFamily[widget.index],
                           ),
                         ),
                       ),
@@ -163,48 +153,6 @@ class _ContentListBookingState extends State<ContentListBooking> {
                     const SizedBox(
                       width: 8,
                     )
-                    // widget.vaksinasi.dataPersonVaksinasiList[widget.index]
-                    //             .name ==
-                    //         widget.user.name
-                    //     ? IconButton(
-                    //         onPressed: () async {
-                    //           Fluttertoast.showToast(
-                    //               msg:
-                    //                   'Hanya Bisa Menghapus Anggota Keluargamu Saja');
-                    //         },
-                    //         icon: SvgPicture.asset(
-                    //           'assets/icons/delete.svg',
-                    //           color: Colors.black,
-                    //           width: 25,
-                    //           height: 25,
-                    //         ),
-                    //       )
-                    //     : IconButton(
-                    //         onPressed: () async {
-                    //           await Future.delayed(const Duration(seconds: 1))
-                    //               .then(
-                    //                 (_) async => await widget.vaksinasi
-                    //                     .deleteFamily(
-                    //                         id: widget
-                    //                             .vaksinasi
-                    //                             .dataPersonVaksinasiList[
-                    //                                 widget.index]
-                    //                             .id,
-                    //                         index: widget.index),
-                    //               )
-                    //               .then(
-                    //                 (_) => Fluttertoast.showToast(
-                    //                     toastLength: Toast.LENGTH_SHORT,
-                    //                     msg: "Family Member Berhasil Dihapus"),
-                    //               );
-                    //         },
-                    //         icon: SvgPicture.asset(
-                    //           'assets/icons/delete.svg',
-                    //           color: Colors.black,
-                    //           width: 25,
-                    //           height: 25,
-                    //         ),
-                    //       )
                   ],
                 ),
               ],

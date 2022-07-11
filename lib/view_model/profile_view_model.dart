@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view/profile/detail_screen.dart';
@@ -43,14 +44,44 @@ class ProfileViewModel extends ChangeNotifier {
   String status = '';
 
   getAllFamilies() async {
-    final getAllFamilies = await familyApi.getAllFamilies();
-    familyList = getAllFamilies;
-    notifyListeners();
+    try {
+      final getAllFamilies = await familyApi.getAllFamilies();
+      familyList = getAllFamilies;
+      notifyListeners();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
   }
 
   getUsersProfile() async {
-    final getProfiles = await familyApi.getUserProfile();
-    usersProfile = getProfiles;
+    try {
+      final getProfiles = await familyApi.getUserProfile();
+      usersProfile = getProfiles;
+      notifyListeners();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
+  }
+
+  addFamily({FamilyModel? family}) async {
+    familyApi.addFamily(profile: family);
+    notifyListeners();
+  }
+
+  editFamily(FamilyModel profile, int id) async {
+    await familyApi.editUser(profile: profile, id: id);
+  }
+
+  editPassword({UserModel? user, int? id}) async {
+    await familyApi.editPasswordUser(user: user, id: id);
+  }
+
+  deleteFamily({int? id}) async {
+    familyApi.deleteFamily(id: id);
     notifyListeners();
   }
 
@@ -153,19 +184,6 @@ class ProfileViewModel extends ChangeNotifier {
       prefs.setInt('userId', userData[0].profile!['user_id']);
     }
 
-    notifyListeners();
-  }
-
-  editFamily(FamilyModel profile, int id) async {
-    await familyApi.editUser(profile: profile, id: id);
-  }
-
-  editPassword({UserModel? user, int? id}) async {
-    await familyApi.editPasswordUser(user: user, id: id);
-  }
-
-  deleteFamily({int? id, int? index}) async {
-    familyApi.deleteFamily(id: id);
     notifyListeners();
   }
 
