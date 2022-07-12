@@ -23,8 +23,6 @@ class ScheduleApi {
             .toList();
         return schedules;
       }
-    } on Exception catch (_) {
-      throw "Gagal mendapatkan data schedule";
-    }
+    } catch (_) {}
   }
 }

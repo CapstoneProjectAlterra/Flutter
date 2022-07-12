@@ -44,9 +44,7 @@ class BookingApi {
             .toList();
         return bookingList;
       }
-    } on Exception catch (_) {
-      throw "Gagal mendapatkan data booking";
-    }
+    } catch (_) {}
   }
 
   postDetailBooking({DetailBookingModel? booking}) async {

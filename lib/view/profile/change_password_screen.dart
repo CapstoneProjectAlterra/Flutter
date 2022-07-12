@@ -151,7 +151,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     .bodyText1!
                     .copyWith(color: Colors.grey.shade700),
                 cursorColor: Colors.white,
-                keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
                   FilteringTextInputFormatter.allow(
@@ -267,7 +266,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     .bodyText1!
                     .copyWith(color: Colors.grey.shade700),
                 cursorColor: Colors.white,
-                keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
                   FilteringTextInputFormatter.allow(
@@ -383,7 +381,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     .bodyText1!
                     .copyWith(color: Colors.grey.shade700),
                 cursorColor: Colors.white,
-                keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(13),
                   FilteringTextInputFormatter.allow(

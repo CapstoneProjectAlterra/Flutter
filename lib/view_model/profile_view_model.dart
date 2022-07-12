@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaccine_booking/model/profile/user_model.dart';
 import 'package:vaccine_booking/view/profile/detail_screen.dart';
@@ -44,27 +43,15 @@ class ProfileViewModel extends ChangeNotifier {
   String status = '';
 
   getAllFamilies() async {
-    try {
-      final getAllFamilies = await familyApi.getAllFamilies();
-      familyList = getAllFamilies;
-      notifyListeners();
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
-    }
+    final getAllFamilies = await familyApi.getAllFamilies();
+    familyList = getAllFamilies;
+    notifyListeners();
   }
 
   getUsersProfile() async {
-    try {
-      final getProfiles = await familyApi.getUserProfile();
-      usersProfile = getProfiles;
-      notifyListeners();
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
-    }
+    final getProfiles = await familyApi.getUserProfile();
+    usersProfile = getProfiles;
+    notifyListeners();
   }
 
   addFamily({FamilyModel? family}) async {

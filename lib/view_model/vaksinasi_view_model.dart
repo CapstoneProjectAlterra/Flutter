@@ -82,21 +82,17 @@ class VaksinasiViewModel extends ChangeNotifier {
   getAllHealthFacilities() async {
     final getAllFacilities = await vaksinasiApi.getAllHealthFacilities();
 
-    facilityList = getAllFacilities;
+    if (getAllFacilities != null) {
+      facilityList = getAllFacilities;
+    }
 
     notifyListeners();
   }
 
   getBookingList() async {
-    try {
-      final bookings = await bookingApi.getBooking();
-      bookingList = bookings;
-      notifyListeners();
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
-    }
+    final bookings = await bookingApi.getBooking();
+    bookingList = bookings;
+    notifyListeners();
   }
 
   filterBooking(int? userId, int? scheduleId) {
@@ -163,15 +159,9 @@ class VaksinasiViewModel extends ChangeNotifier {
   }
 
   getAllSchedule() async {
-    try {
-      final getAllSchedule = await scheduleApi.getAllSchedules();
-      scheduleList = getAllSchedule;
-      notifyListeners();
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
-    }
+    final getAllSchedule = await scheduleApi.getAllSchedules();
+    scheduleList = getAllSchedule;
+    notifyListeners();
   }
 
   filterSchedule(int id) {

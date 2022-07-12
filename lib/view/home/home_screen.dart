@@ -265,11 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: viewModel.newsList[index].urlToImage.isEmpty
-                        ? const AssetImage('assets/images/default_facility.png')
-                            as ImageProvider
-                        : CachedNetworkImageProvider(
-                            viewModel.newsList[index].urlToImage),
+                    image: CachedNetworkImageProvider(
+                        viewModel.newsList[index].urlToImage),
                     fit: BoxFit.cover),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(15),

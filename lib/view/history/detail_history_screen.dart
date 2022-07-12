@@ -355,13 +355,13 @@ class DetailHistoryScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 detailVaccine(
                     context: context,
                     title: history.booking!['schedule']['vaccine']
                         ['vaccine_name'],
                     assetIcon: 'assets/icons/syringe2.svg'),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.31),
                 detailVaccine(
                     context: context,
                     title: dosis.replaceAll('DOSIS_', 'Dosis '),
@@ -372,6 +372,7 @@ class DetailHistoryScreen extends StatelessWidget {
               height: 8,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
@@ -381,7 +382,6 @@ class DetailHistoryScreen extends StatelessWidget {
                         assetIcon: 'assets/icons/datetime.svg'),
                   ],
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.23),
                 Row(
                   children: [
                     detailVaccine(
