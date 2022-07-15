@@ -661,7 +661,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     DateTime lastDate = DateTime(
       date.year,
       date.month,
-      date.day + 7,
+      date.day + 8,
     );
     return GestureDetector(
       onTap: () async {

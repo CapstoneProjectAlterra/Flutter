@@ -88,7 +88,7 @@ class ProfileViewModel extends ChangeNotifier {
     if (userData.isNotEmpty && userId != null) {
       userFamily = familyList
           .where(
-            (element) => element.profile!.containsValue(userId),
+            (element) => element.profile!['user_id'] == userId,
           )
           .toList();
     }

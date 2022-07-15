@@ -11,9 +11,7 @@ class HistoryViewModel extends ChangeNotifier {
 
   getDetailBooking() async {
     final detailBooking = await historyApi.getDetailBooking();
-    if (detailBooking != null) {
-      detailBookingList = detailBooking;
-    }
+    detailBookingList = detailBooking;
     notifyListeners();
   }
 

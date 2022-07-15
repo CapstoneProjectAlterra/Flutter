@@ -406,7 +406,7 @@ class _MoreFacilityScreenState extends State<MoreFacilityScreen> {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 380,
+        height: 385,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(

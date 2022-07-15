@@ -160,7 +160,9 @@ class VaksinasiViewModel extends ChangeNotifier {
 
   getAllSchedule() async {
     final getAllSchedule = await scheduleApi.getAllSchedules();
-    scheduleList = getAllSchedule;
+    if (getAllSchedule != null) {
+      scheduleList = getAllSchedule;
+    }
     notifyListeners();
   }
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
+import 'package:vaccine_booking/view_model/history_view_model.dart';
 
 import '../../../model/profile/family_model.dart';
 import '../../profile/edit_family_screen.dart';
@@ -14,8 +17,10 @@ class ContentListBooking extends StatefulWidget {
   final int index;
   final bool isPressed;
   final FamilyModel family;
+  final int scheduleId;
   const ContentListBooking(
       {Key? key,
+      required this.scheduleId,
       required this.isPressed,
       required this.user,
       required this.vaksinasi,
@@ -37,21 +42,41 @@ class _ContentListBookingState extends State<ContentListBooking> {
 
   @override
   Widget build(BuildContext context) {
+    final history = Provider.of<HistoryViewModel>(context);
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       color: isPressed! ? Colors.blueAccent : Colors.white,
       child: InkWell(
         onTap: () {
-          setState(
-            () {
-              isPressed = !isPressed!;
-              if (isPressed == true) {
-                widget.vaksinasi.addSelectBookingVaksinasi(widget.family);
-              } else {
-                widget.vaksinasi.deleteSelectBookingVaksinasi(widget.family);
-              }
-            },
-          );
+          if (widget.scheduleId == 0) {
+            Fluttertoast.showToast(
+                toastLength: Toast.LENGTH_SHORT,
+                msg: "Pilih jadwal terlebih dahulu");
+          } else {
+            final contains = history.detailBookingList.where(
+              (element) =>
+                  element.family!['nik'] == widget.family.nik &&
+                  element.booking!['schedule']['id'] == widget.scheduleId,
+            );
+            setState(
+              () {
+                if (contains.isEmpty) {
+                  isPressed = !isPressed!;
+                  if (isPressed == true) {
+                    widget.vaksinasi.addSelectBookingVaksinasi(widget.family);
+                  } else {
+                    widget.vaksinasi
+                        .deleteSelectBookingVaksinasi(widget.family);
+                  }
+                } else {
+                  Fluttertoast.showToast(
+                      toastLength: Toast.LENGTH_SHORT,
+                      msg:
+                          "${widget.family.name} sudah daftar di schedule ini");
+                }
+              },
+            );
+          }
         },
         child: Container(
           height: 85,

@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/components/navigator_fade_transition.dart';
 import 'package:vaccine_booking/components/skeleton_container.dart';
+import 'package:vaccine_booking/view/vaksinasi/vaksinasi_screen.dart';
 import 'package:vaccine_booking/view_model/history_view_model.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
 import 'package:vaccine_booking/view_model/profile_view_model.dart';
@@ -47,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.userData.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUser();
     }
-    if (user.userFamily.isEmpty && user.userData.isNotEmpty) {
+    if (user.userFamily.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
     }
-    if (user.usersProfile.isNotEmpty && user.filterUserProfile.isEmpty) {
+    if (user.filterUserProfile.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
     }
     if (history.detailBookingList.isEmpty) {
@@ -145,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 32,
                         ),
                         Center(
-                          child: bannerVaksinasi(),
+                          child: bannerVaksinasi(user),
                         ),
                         const SizedBox(
                           height: 32,
@@ -177,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget bannerVaksinasi() {
+  Widget bannerVaksinasi(ProfileViewModel profile) {
     return Container(
       height: 200,
       width: MediaQuery.of(context).size.width * 0.9,
@@ -207,17 +208,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Text(
-                      "Harap lengkapi data diri anda sebelum melakukan pemesanan.",
-                      style: Theme.of(context).textTheme.bodyText2!),
+                  profile.userData[0].gender!.isEmpty
+                      ? Text(
+                          "Harap lengkapi data diri anda sebelum melakukan pemesanan.",
+                          style: Theme.of(context).textTheme.bodyText2!)
+                      : Text("Kamu sudah dapat melakukan pemesanan vaksinasi.",
+                          style: Theme.of(context).textTheme.bodyText2!),
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    height: 25,
-                    width: 145,
-                    child: lengkapiDataButton(),
-                  ),
+                  profile.userData[0].gender!.isEmpty
+                      ? SizedBox(
+                          height: 25,
+                          width: 145,
+                          child: lengkapiDataButton(),
+                        )
+                      : SizedBox(
+                          height: 25,
+                          width: 155,
+                          child: vaksinasiButton(),
+                        ),
                 ],
               ),
             ),
@@ -305,6 +315,25 @@ class _HomeScreenState extends State<HomeScreen> {
       child: const Text(
         "Lengkapi Data Diri",
         style: TextStyle(fontSize: 12),
+      ),
+    );
+  }
+
+  Widget vaksinasiButton() {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).push(
+          NavigatorFadeTransition(
+            child: const VaksinasiScreen(),
+          ),
+        );
+      },
+      child: const SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Text(
+          "Pesan Vaksinasi Disini",
+          style: TextStyle(fontSize: 12),
+        ),
       ),
     );
   }

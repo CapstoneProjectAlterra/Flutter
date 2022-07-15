@@ -371,6 +371,7 @@ class _PanelWidgetState extends State<PanelWidget> {
           index: index,
           vaksinasi: vaksinasi,
           user: user,
+          scheduleId: widget.scheduleId,
         );
       },
     );

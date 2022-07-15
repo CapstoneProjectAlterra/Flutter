@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vaccine_booking/components/constants.dart';
 import 'package:vaccine_booking/view/splash/splash_screen.dart';
-import 'package:vaccine_booking/view/home/home_screen.dart';
+import 'package:vaccine_booking/view/welcome/welcome_screen.dart';
 import 'package:vaccine_booking/view_model/auth_view_model.dart';
 import 'package:vaccine_booking/view_model/history_view_model.dart';
 import 'package:vaccine_booking/view_model/home_view_model.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
-          '/home': (context) => const HomeScreen(),
+          '/home': (context) => const WelcomeScreen(),
         },
         theme: ThemeData(
           appBarTheme: appBarTheme,
