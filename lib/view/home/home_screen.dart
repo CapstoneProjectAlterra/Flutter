@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  profile.userData[0].gender!.isEmpty
+                  profile.gender == "Gender"
                       ? Text(
                           "Harap lengkapi data diri anda sebelum melakukan pemesanan.",
                           style: Theme.of(context).textTheme.bodyText2!)
@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  profile.userData[0].gender!.isEmpty
+                  profile.gender == "Gender"
                       ? SizedBox(
                           height: 25,
                           width: 145,
