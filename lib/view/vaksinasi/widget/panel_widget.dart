@@ -211,21 +211,26 @@ class _PanelWidgetState extends State<PanelWidget> {
                                 )
                                 .then(
                                   (_) async {
-                                    for (int i = vaksinasi
-                                            .selectBookingVaksinasiList.length;
-                                        i > 0;
-                                        i--) {
+                                    for (int i = 0;
+                                        i <
+                                            vaksinasi.selectBookingVaksinasiList
+                                                .length;
+                                        i++) {
                                       int filterBookingLength =
                                           vaksinasi.filterBookingList.length;
                                       await vaksinasi.postDetailBooking(
                                         DetailBookingModel(
                                             bookingId: vaksinasi
                                                 .filterBookingList[
-                                                    filterBookingLength - 1]
+                                                    filterBookingLength - i - 1]
                                                 .id,
                                             familyId: vaksinasi
                                                 .selectBookingVaksinasiList[
-                                                    i - 1]
+                                                    vaksinasi
+                                                            .selectBookingVaksinasiList
+                                                            .length -
+                                                        i -
+                                                        1]
                                                 .id,
                                             bookingStatus: "COMPLETED"),
                                       );
