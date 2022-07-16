@@ -197,6 +197,9 @@ class _PanelWidgetState extends State<PanelWidget> {
                                 .then(
                                   (_) => vaksinasi.filterBookingList.clear(),
                                 )
+                                .then(
+                                  (_) => vaksinasi.getBookingList(),
+                                )
                                 .then((_) => setState(() {}))
                                 .then(
                                   (_) async => await Future.delayed(
@@ -262,6 +265,12 @@ class _PanelWidgetState extends State<PanelWidget> {
                                 .then(
                                   (_) => user.userFamily.clear(),
                                 )
+                                .then(
+                                  (_) => history.getDetailBooking(),
+                                )
+                                .then((_) => Future.delayed(
+                                      const Duration(seconds: 1),
+                                    ))
                                 .then(
                                   (_) => showDialog(
                                     context: context,

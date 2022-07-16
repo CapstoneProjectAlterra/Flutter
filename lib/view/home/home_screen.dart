@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final news = Provider.of<HomeViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
     final schedule = Provider.of<VaksinasiViewModel>(context);
-    final history = Provider.of<HistoryViewModel>(context);
     if (user.userData.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUser();
     }
@@ -54,20 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.filterUserProfile.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
     }
-    if (history.detailBookingList.isEmpty) {
-      Provider.of<HistoryViewModel>(context).getDetailBooking();
-    }
-    if (history.filterDetailBookingList.isEmpty &&
-        user.filterUserProfile.isNotEmpty) {
-      Provider.of<HistoryViewModel>(context).filterDetailBooking(
-        user.filterUserProfile[0].profile['user_id'],
-      );
-    }
-    if (history.filterNameBooking.isEmpty) {
-      Provider.of<HistoryViewModel>(context).filterBookingName();
-    }
-
-    Provider.of<HistoryViewModel>(context).filterBookingName();
     schedule.scheduleIdBooking = 0;
 
     return Scaffold(

@@ -40,12 +40,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     if (user.familyList.isEmpty) {
       Provider.of<ProfileViewModel>(context).getAllFamilies();
     }
-    if (schedule.bookingList.isEmpty) {
-      Provider.of<VaksinasiViewModel>(context).getBookingList();
-    }
-    if (schedule.scheduleList.isEmpty) {
-      Provider.of<VaksinasiViewModel>(context).getAllSchedule();
-    }
     if (dateCtl.text.isEmpty) {
       schedule.scheduleIdBooking = 0;
       schedule.scheduleList.clear();
@@ -626,6 +620,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     );
     return GestureDetector(
       onTap: () async {
+        schedule.getAllSchedule();
         DateTime? pickedDate = await showDatePicker(
             context: context,
             initialDate: initialDate,

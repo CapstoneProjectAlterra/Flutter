@@ -19,9 +19,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     final history = Provider.of<HistoryViewModel>(context);
     final user = Provider.of<ProfileViewModel>(context);
-    if (history.detailBookingList.isEmpty) {
-      Provider.of<HistoryViewModel>(context).getDetailBooking();
-    }
     if (history.filterDetailBookingList.isEmpty &&
         user.filterUserProfile.isNotEmpty) {
       Provider.of<HistoryViewModel>(context).filterDetailBooking(
