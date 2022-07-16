@@ -191,54 +191,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          selectVaccine(schedule),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          // Center(
-                          //   child: SizedBox(
-                          //     height: 50,
-                          //     width: MediaQuery.of(context).size.width * 0.9,
-                          //     child: tempString.isEmpty
-                          //         ? const ElevatedButton(
-                          //             onPressed: null,
-                          //             child: Text(
-                          //               "Pesan",
-                          //               style: TextStyle(
-                          //                 color: Colors.white,
-                          //               ),
-                          //             ),
-                          //           )
-                          //         : ElevatedButton(
-                          //             child: const Text(
-                          //               "Pesan",
-                          //               style: TextStyle(
-                          //                 color: Colors.white,
-                          //               ),
-                          //             ),
-                          //             onPressed: () async {
-
-                          //               setState(
-                          //                 () {
-                          //                   vaksinA = false;
-                          //                   vaksinB = false;
-                          //                   vaksinC = false;
-                          //                   vaksinD = false;
-                          //
-                          //                 },
-                          //               );
-
-                          //               if (tempString.isNotEmpty ||
-                          //                   vaksinA != true ||
-                          //                   vaksinB != true ||
-                          //                   vaksinC != true ||
-                          //                   vaksinD != true) {
-                          //                 panelController.open();
-                          //               }
-                          //             },
-                          //           ),
-                          //   ),
-                          // ),
+                          selectVaccine(schedule, user),
                         ],
                       ),
                     ),
@@ -419,7 +372,7 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     );
   }
 
-  Widget selectVaccine(VaksinasiViewModel schedule) {
+  Widget selectVaccine(VaksinasiViewModel schedule, ProfileViewModel family) {
     return Column(
       children: [
         Row(
@@ -435,6 +388,8 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             setState(() {
+                              schedule.selectBookingVaksinasiList.clear();
+                              family.userFamily.clear();
                               scheduleId = schedule.scheduleId1;
                               panelController.open();
                             });
@@ -488,6 +443,8 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinC == true ||
                               vaksinD == true) {
                             setState(() {
+                              schedule.selectBookingVaksinasiList.clear();
+                              family.userFamily.clear();
                               scheduleId = schedule.scheduleId2;
                               panelController.open();
                             });
@@ -546,6 +503,8 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinB == true ||
                               vaksinD == true) {
                             setState(() {
+                              schedule.selectBookingVaksinasiList.clear();
+                              family.userFamily.clear();
                               scheduleId = schedule.scheduleId3;
                               panelController.open();
                             });
@@ -602,6 +561,8 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
                               vaksinB == true ||
                               vaksinC == true) {
                             setState(() {
+                              schedule.selectBookingVaksinasiList.clear();
+                              family.userFamily.clear();
                               scheduleId = schedule.scheduleId4;
                               panelController.open();
                             });

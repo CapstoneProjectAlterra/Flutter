@@ -67,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: 200,
+                          height: 188,
                           child: historyNameList(user, user.itemsProfile)),
                       logout(context, deleteToken, user),
                     ],

@@ -103,6 +103,9 @@ class VaksinasiViewModel extends ChangeNotifier {
               element.schedule.containsValue(scheduleId),
         )
         .toList();
+    filterBookingList.sort(
+      (a, b) => a.bookingPass!.compareTo(b.bookingPass!),
+    );
   }
 
   searchFacility({String? query}) async {

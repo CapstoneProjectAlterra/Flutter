@@ -144,7 +144,8 @@ class _PanelWidgetState extends State<PanelWidget> {
                             .textTheme
                             .headline4!
                             .copyWith(color: Colors.white),
-                      ))
+                      ),
+                    )
                   : ElevatedButton(
                       child: Text(
                         "Pesan",
@@ -173,7 +174,9 @@ class _PanelWidgetState extends State<PanelWidget> {
                                 .then(
                                   (_) async {
                                     for (int i = 0;
-                                        i < user.userFamily.length;
+                                        i <
+                                            vaksinasi.selectBookingVaksinasiList
+                                                .length;
                                         i++) {
                                       await vaksinasi.postBooking(
                                         booking: BookingModel(
@@ -189,22 +192,21 @@ class _PanelWidgetState extends State<PanelWidget> {
                                   },
                                 )
                                 .then(
-                                  (value) => vaksinasi.bookingList.clear(),
+                                  (_) => vaksinasi.bookingList.clear(),
                                 )
                                 .then(
-                                  (value) =>
-                                      vaksinasi.filterBookingList.clear(),
+                                  (_) => vaksinasi.filterBookingList.clear(),
                                 )
                                 .then((_) => setState(() {}))
                                 .then(
                                   (_) async => await Future.delayed(
-                                    const Duration(seconds: 3),
+                                    const Duration(seconds: 2),
                                   ),
                                 )
                                 .then((_) => setState(() {}))
                                 .then(
                                   (_) async => await Future.delayed(
-                                    const Duration(seconds: 3),
+                                    const Duration(seconds: 2),
                                   ),
                                 )
                                 .then(
@@ -213,10 +215,14 @@ class _PanelWidgetState extends State<PanelWidget> {
                                             .selectBookingVaksinasiList.length;
                                         i > 0;
                                         i--) {
+                                      int filterBookingLength =
+                                          vaksinasi.filterBookingList.length;
                                       await vaksinasi.postDetailBooking(
                                         DetailBookingModel(
                                             bookingId: vaksinasi
-                                                .filterBookingList[i - 1].id,
+                                                .filterBookingList[
+                                                    filterBookingLength - 1]
+                                                .id,
                                             familyId: vaksinasi
                                                 .selectBookingVaksinasiList[
                                                     i - 1]
@@ -243,6 +249,13 @@ class _PanelWidgetState extends State<PanelWidget> {
                                 .then(
                                   (_) => history.filterDetailVaksinasiOrder
                                       .clear(),
+                                )
+                                .then(
+                                  (_) => vaksinasi.selectBookingVaksinasiList
+                                      .clear(),
+                                )
+                                .then(
+                                  (_) => user.userFamily.clear(),
                                 )
                                 .then(
                                   (_) => showDialog(

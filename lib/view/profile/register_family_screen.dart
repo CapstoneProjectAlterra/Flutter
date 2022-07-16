@@ -173,12 +173,10 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                             "REGISTER",
                                           ),
                                     onPressed: () async {
-                                      _formKey.currentState!.save();
-                                      if (isLoading) return;
-                                      setState(() => isLoading = true);
-
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
+                                        if (isLoading) return;
+                                        setState(() => isLoading = true);
                                         List<FamilyModel> contains =
                                             user.familyList
                                                 .where(
