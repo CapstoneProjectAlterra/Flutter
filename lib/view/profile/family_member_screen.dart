@@ -26,8 +26,8 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
     }
     if (user.userFamily.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserFamily();
-      setState(() {});
     }
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: gradientHorizontal),
@@ -271,7 +271,7 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,
-        height: 301,
+        height: 305,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -317,13 +317,43 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      await user.deleteFamily(id: user.userFamily[index].id);
-                      user.familyList.clear();
-                      user.userFamily.clear();
-                      Fluttertoast.showToast(
-                          toastLength: Toast.LENGTH_SHORT,
-                          msg: "Family Member Berhasil Dihapus");
-                      Navigator.pop(context);
+                      await Future.delayed(
+                        const Duration(seconds: 0),
+                      )
+                          .then(
+                            (_) async => await user.deleteFamily(
+                                id: user.userFamily[index].id),
+                          )
+                          .then(
+                            (_) => user.familyList.clear(),
+                          )
+                          .then(
+                            (_) => user.userFamily.clear(),
+                          )
+                          .then(
+                            (_) => user.getAllFamilies(),
+                          )
+                          .then(
+                            (_) => Future.delayed(
+                              const Duration(seconds: 1),
+                            ),
+                          )
+                          .then(
+                            (_) => user.filterUserFamily(),
+                          )
+                          .then(
+                            (_) => Future.delayed(
+                              const Duration(seconds: 1),
+                            ),
+                          )
+                          .then(
+                        (_) {
+                          Fluttertoast.showToast(
+                              toastLength: Toast.LENGTH_SHORT,
+                              msg: "Family Member Berhasil Dihapus");
+                          Navigator.pop(context);
+                        },
+                      );
                     },
                     child: Text(
                       "Ya",

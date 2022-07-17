@@ -223,17 +223,15 @@ class _RegisterState extends State<EditFamilyScreen> {
                                                 .toList();
                                         final id = user
                                             .userData[0].profile!['user_id'];
-                                        if (contains.isEmpty) {
+                                        if (contains.isEmpty ||
+                                            nikEditingController.text ==
+                                                widget.family.nik) {
                                           try {
                                             Future.delayed(
-                                              const Duration(seconds: 1),
-                                            )
-                                                .then(
-                                                  (_) => setState(
-                                                      () => isLoading = false),
-                                                )
-                                                .then(
-                                                  (_) => user.editFamily(
+                                              const Duration(seconds: 0),
+                                            ).then(
+                                              (_) => user
+                                                  .editFamily(
                                                       FamilyModel(
                                                         name:
                                                             nameEditingController
@@ -266,27 +264,51 @@ class _RegisterState extends State<EditFamilyScreen> {
                                                           "user_id": id
                                                         },
                                                       ),
-                                                      widget.family.id!),
-                                                )
-                                                .then(
-                                                  (_) =>
-                                                      user.familyList.clear(),
-                                                )
-                                                .then(
-                                                  (_) =>
-                                                      user.userFamily.clear(),
-                                                )
-                                                .then(
-                                                  (_) => Fluttertoast.showToast(
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      msg:
-                                                          "Berhasil Mengubah Data Anggota Keluarga"),
-                                                )
-                                                .then(
-                                                  (_) async =>
-                                                      Navigator.pop(context),
-                                                );
+                                                      widget.family.id!)
+                                                  .then(
+                                                    (_) =>
+                                                        user.familyList.clear(),
+                                                  )
+                                                  .then(
+                                                    (_) =>
+                                                        user.userFamily.clear(),
+                                                  )
+                                                  .then(
+                                                    (_) =>
+                                                        user.getAllFamilies(),
+                                                  )
+                                                  .then(
+                                                    (_) => Future.delayed(
+                                                      const Duration(
+                                                          seconds: 1),
+                                                    ),
+                                                  )
+                                                  .then(
+                                                    (_) =>
+                                                        user.filterUserFamily(),
+                                                  )
+                                                  .then(
+                                                    (_) => Future.delayed(
+                                                      const Duration(
+                                                          seconds: 1),
+                                                    ),
+                                                  )
+                                                  .then(
+                                                    (_) => setState(() =>
+                                                        isLoading = false),
+                                                  )
+                                                  .then(
+                                                    (_) => Fluttertoast.showToast(
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        msg:
+                                                            "Berhasil Mengubah Data Anggota Keluarga"),
+                                                  )
+                                                  .then(
+                                                    (_) async =>
+                                                        Navigator.pop(context),
+                                                  ),
+                                            );
                                           } catch (e) {
                                             Fluttertoast.showToast(
                                               msg: e.toString(),

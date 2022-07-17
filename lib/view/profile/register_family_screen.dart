@@ -191,12 +191,8 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                         if (contains.isEmpty) {
                                           try {
                                             Future.delayed(
-                                              const Duration(seconds: 2),
+                                              const Duration(seconds: 0),
                                             )
-                                                .then(
-                                                  (_) => setState(
-                                                      () => isLoading = false),
-                                                )
                                                 .then(
                                                   (_) => user.addFamily(
                                                     family: FamilyModel(
@@ -239,11 +235,25 @@ class _RegisterState extends State<RegisterFamilyScreen> {
                                                       user.userFamily.clear(),
                                                 )
                                                 .then(
-                                                  (_) => setState(
-                                                    () {
-                                                      isInitBooking = true;
-                                                    },
+                                                  (_) => user.getAllFamilies(),
+                                                )
+                                                .then(
+                                                  (_) => Future.delayed(
+                                                    const Duration(seconds: 1),
                                                   ),
+                                                )
+                                                .then(
+                                                  (_) =>
+                                                      user.filterUserFamily(),
+                                                )
+                                                .then(
+                                                  (_) => Future.delayed(
+                                                    const Duration(seconds: 1),
+                                                  ),
+                                                )
+                                                .then(
+                                                  (_) => setState(
+                                                      () => isLoading = true),
                                                 )
                                                 .then(
                                                   (_) => Fluttertoast.showToast(

@@ -40,17 +40,15 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
     if (user.familyList.isEmpty) {
       Provider.of<ProfileViewModel>(context).getAllFamilies();
     }
+    if (user.userFamily.isEmpty) {
+      Provider.of<ProfileViewModel>(context).filterUserFamily();
+    }
     if (dateCtl.text.isEmpty) {
       schedule.scheduleIdBooking = 0;
       schedule.scheduleList.clear();
       schedule.filterScheduleList.clear();
       schedule.filterScheduleSessionList.clear();
     }
-
-    if (user.userFamily.isEmpty) {
-      Provider.of<ProfileViewModel>(context).filterUserFamily();
-    }
-
     Provider.of<VaksinasiViewModel>(context).filterSchedule(widget.id!);
 
     Provider.of<VaksinasiViewModel>(context)
@@ -60,7 +58,6 @@ class _VaksinasiBookingScreenState extends State<VaksinasiBookingScreen> {
       Provider.of<VaksinasiViewModel>(context)
           .filterBooking(user.userData[0].profile!['user_id'], scheduleId);
     }
-
     Provider.of<VaksinasiViewModel>(context).filterSelectVaccine();
 
     return Scaffold(

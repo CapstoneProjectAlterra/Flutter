@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user.filterUserProfile.isEmpty) {
       Provider.of<ProfileViewModel>(context).filterUserData();
     }
+
     schedule.scheduleIdBooking = 0;
 
     return Scaffold(

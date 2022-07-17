@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-const baseUrl = 'http://192.168.1.11:8080';
+const baseUrl = 'http://ec2-3-237-105-224.compute-1.amazonaws.com:8080';
 
 const textColor = Color(0xFF35364F);
 const primaryColor = Color(0xFF06919D);
