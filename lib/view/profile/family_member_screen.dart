@@ -271,7 +271,7 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,
-        height: 305,
+        height: 330,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -315,8 +315,8 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
+                  TextButton(
+                    onPressed: () async {
                       await Future.delayed(
                         const Duration(seconds: 0),
                       )
@@ -328,22 +328,22 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                             (_) => user.familyList.clear(),
                           )
                           .then(
-                            (_) => user.userFamily.clear(),
-                          )
-                          .then(
                             (_) => user.getAllFamilies(),
                           )
                           .then(
                             (_) => Future.delayed(
-                              const Duration(seconds: 1),
+                              const Duration(milliseconds: 500),
                             ),
+                          )
+                          .then(
+                            (_) => user.userFamily.clear(),
                           )
                           .then(
                             (_) => user.filterUserFamily(),
                           )
                           .then(
                             (_) => Future.delayed(
-                              const Duration(seconds: 1),
+                              const Duration(milliseconds: 500),
                             ),
                           )
                           .then(
@@ -366,8 +366,8 @@ class _FamilyMemberScreenState extends State<FamilyMemberScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
                     child: Text(
                       "Tidak",
                       style: Theme.of(context)
